@@ -215,20 +215,23 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         //Get view that requests a save of the new site
         findViewById(R.id.add_site_save).setOnClickListener(this);
 
-        //Get button that requests a photo
-        findViewById(R.id.add_site_button_get_location).setOnClickListener(this);
+        //Get button that takes a photo
+        findViewById(R.id.add_site_button_take_photo).setOnClickListener(this);
 
-        //Get button that requests photo delete
+        //Get button that selects a photo
+        findViewById(R.id.add_site_button_grab_photo).setOnClickListener(this);
+
+        //Get button that requests a photo delete
         findViewById(R.id.add_site_button_delete_photo).setOnClickListener(this);
 
-        //Get button that requests location
+        //Get button that gets latitude and longitude
+        findViewById(R.id.add_site_button_get_location).setOnClickListener(this);
+
+        //Get button that requests address look up for the latitude and longitude
         findViewById(R.id.add_site_button_get_address).setOnClickListener(this);
 
-        //Get button that requests address
+        //Get button that requests a map with location marker for latitude and longitude
         findViewById(R.id.add_site_button_show_map).setOnClickListener(this);
-
-        //Get button that requests show map
-        findViewById(R.id.add_site_button_take_photo).setOnClickListener(this);
 
         // Do the facilities
         dumppointImageView = findViewById(R.id.dumppoint);
@@ -658,11 +661,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     * Callback result from the camera.
-     * If ok, calls method that scales the photo to the size of the thumbnail and the site photo.
-     * Then stores scaled images in the thumbnail and site photo ImageViews.
-     * Images are not saved in Firestore storage at this stage, because the
-     * user may choose a different image or abandon the edit/entry of the site.
+     * Callback result from the intents
+     * <p>
      * <p>
      * Camera intent started in {@link #takePhotoDispatchIntent()}.
      *
@@ -675,64 +675,97 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, intent);
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onActivityResult()");
 
-
         switch (requestCode) {
             case Constants.REQUEST_IMAGE_CAPTURE:
-                /* Camera return with image file in mPhotoPath,
-                 * scale & display image in thumbnail and sitePhoto ImageViews */
-                if (resultCode == Activity.RESULT_OK && intent != null) {
-                    boolean result = updateImageViews();
+                /* Camera return with image file in mPhotoPath.
+                 * Scales and then displays the photo in the thumbnail & site photo ImageViews.
+                 * Files of the scaled images are not saved in Firestore storage at this stage,
+                 * because the user may choose a different image or abandon the edit of the site. */
 
-                    if (!result) { // Warn the user
-                        makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
-                    }
-                } else // Warn the user
+                if (resultCode != Activity.RESULT_OK || intent == null) {    // Warn the user
                     makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                if (updateImageViewsFile(mPhotoPath)) {     //process the file
+                    mSiteHasChanged = true;                 //Ok, set flag site details have changed
+                } else { // Warn the user
+                    makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case Constants.PICK_IMAGE:
-                // For the chosen image, scale & display in thumbnail and sitePhoto ImageViews
-                if (resultCode == Activity.RESULT_OK && intent != null) {
-                    InputStream in = null;
-                    try {
-                        in = this.getContentResolver().openInputStream(intent.getData());
-                        scaleImageInputStream(in, mThumbnailImageView);
-                    } catch (IOException e) {  // Warn the user
-                        makeText(this, getString(R.string.ERROR_Photos_not_available), Toast.LENGTH_SHORT).show();
-                    } finally {
-                        try {
-                            in.close();
-                        } catch (IOException e) {  // Warn the user
-                            makeText(this, getString(R.string.ERROR_Photos_not_available), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                } else { // Warn the user
+                // For the chosen image, scale & display in thumbnail and sitePhoto ImageViews.
+                if (resultCode != Activity.RESULT_OK || intent == null) {    // Warn the user
                     makeText(this, getString(R.string.ERROR_Photos_not_available), Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                InputStream in = null;
+                boolean result;
+                try {
+                    in = this.getContentResolver().openInputStream(intent.getData());
+                    result = updateImageViewsStream(in);
+                } catch (IOException e) {  // Warn the user
+                    makeText(this, getString(R.string.ERROR_Photos_not_available), Toast.LENGTH_SHORT).show();
+                    break;
+                } finally {
+                    try {
+                        if (in != null) in.close();
+                    } catch (IOException e) {  // Warn the user
+                        Log.e(TAG, getString(R.string.ERROR_File_Error));
+                    }
+                }
+                if (result) {
+                    mSiteHasChanged = true;                 //Ok, set flag site details have changed
+                } else { // Warn the user
+                    makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
     }
 
     /**
-     * Scales image from file in mPhotoPath to thumbnail and sitePhoto ImageViews
+     * Scales image from file in photoPath to thumbnail and sitePhoto ImageViews
      * then displays scaled image in thumbnail and sitePhoto ImageViews
      *
+     * @param photoPath file containing image to be processed
      * @return true if operation successful
      */
-    private boolean updateImageViews() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "updateImageViews()");
+    private boolean updateImageViewsFile(String photoPath) {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "updateImageViewsFile()");
 
-        Bitmap bitmap = scaleImageFile(mPhotoPath, mThumbnailImageView);
+        Bitmap bitmap = scaleImageFile(photoPath, mThumbnailImageView);
         if (bitmap == null) return false;
 
         mThumbnailImageView.setImageBitmap(bitmap);
 
         //scale site photo
-        bitmap = scaleImageFile(mPhotoPath, mSitePhotoImageView);
-        if (bitmap != null) mSitePhotoImageView.setImageBitmap(bitmap);
+        bitmap = scaleImageFile(photoPath, mSitePhotoImageView);
+        if (bitmap == null) return false;
 
-        //Set flag to say site details have changed
-        mSiteHasChanged = true;
+        mSitePhotoImageView.setImageBitmap(bitmap);
+        return true;
+    }
+
+    /**
+     * Scales image from the InputStream to thumbnail and sitePhoto ImageViews
+     * then displays scaled image in thumbnail and sitePhoto ImageViews
+     *
+     * @param inputStream stream containing image to be processed
+     * @return true if operation successful
+     */
+    private boolean updateImageViewsStream(InputStream inputStream) {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "updateImageStream()");
+
+        Bitmap bitmap = scaleImageInputStream(inputStream, mThumbnailImageView);
+        if (bitmap == null) return false;
+
+        mThumbnailImageView.setImageBitmap(bitmap);
+
+        //scale site photo
+        bitmap = scaleImageInputStream(inputStream, mSitePhotoImageView);
+        if (bitmap == null) return false;
+
+        mSitePhotoImageView.setImageBitmap(bitmap);
         return true;
     }
 
@@ -1072,7 +1105,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             case R.id.add_site_button_grab_photo:
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(intent, Constants.PICK_IMAGE);
+                if (intent.resolveActivity(getPackageManager()) != null)
+                    startActivityForResult(intent, Constants.PICK_IMAGE);
                 break;
 
             case R.id.add_site_button_delete_photo:

@@ -27,8 +27,8 @@ public class OperationsImage {
      * Creates a collision resistance file in the public storage directory for pictures in a
      * sub-directory with the same name as the application name.
      *
-     * @return              newly created file
-     * @throws IOException  I/O error occurred
+     * @return newly created file
+     * @throws IOException I/O error occurred
      */
     public static File createImageFile(Context context) throws IOException {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "createImageFile()");
@@ -50,40 +50,38 @@ public class OperationsImage {
     /**
      * Saves a bitmap to a jpeg file.
      *
-     * @param bitmap        bitmap to save to file
-     * @param photoPath     save to file pointed to by this pathname
-     * @return              true if no errors
+     * @param bitmap    bitmap to save to file
+     * @param photoPath save to file pointed to by this pathname
+     * @return true if no errors
      */
     public static boolean saveBitmapToFile(Bitmap bitmap, String photoPath) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "saveBitmapToFile()");
 
-    //convert the decoded bitmap to stream
-    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try
-    {
-        FileOutputStream fileOutputStream = new FileOutputStream(photoPath);
+        //convert the decoded bitmap to stream
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(photoPath);
 
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-        fileOutputStream.write(byteArrayOutputStream.toByteArray());
-        fileOutputStream.flush();
-        fileOutputStream.close();
-    } catch(
-    IOException e)
-    {
-        Log.e(TAG, "File I/O error");
-        return false;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.write(byteArrayOutputStream.toByteArray());
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (
+                IOException e) {
+            Log.e(TAG, "File I/O error");
+            return false;
+        }
+        return true;
     }
-    return true;
-}
 
     /**
      * Scales the file in the photoPath into a bit map to suit the size of the imageView.
      * Checks valid photo and imageView first.
-     * Does not write the file to the imageView
+     * Does not write the scaled photo to the imageView, but returns a bitmap of the scaled image.
      *
-     * @param photoPath     path to photo to scale
-     * @param imageView     view to use to determine scale size
-     * @return bitmap       representing the scaled photo
+     * @param photoPath path to photo to scale
+     * @param imageView view to use to determine scale size
+     * @return bitmap       the new scaled image
      */
     public static Bitmap scaleImageFile(String photoPath, ImageView imageView) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "scaleImageFile()");
@@ -102,9 +100,9 @@ public class OperationsImage {
         // Decode the photo
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoPath, bmOptions);
 
         // Determine how much to scale down the imageView
-        // int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
         int scaleFactor = calculateInSampleSize(bmOptions, targetW, targetH);
 
         // Decode the imageView file into a Bitmap sized to fill the View
@@ -119,17 +117,18 @@ public class OperationsImage {
     /**
      * Scales the InputStream image to suit the size of the imageView.
      * Checks valid bitmap and imageView first.
+     * Does not write the scaled photo to the imageView, but returns a bitmap of the scaled image.
      *
-     * @param in            InputStream image to scale
-     * @param imageView     view to use to determine scale size
-     * @return bitmap       representing the scaled photo
+     * @param in        InputStream image to scale
+     * @param imageView view to use to determine scale size
+     * @return bitmap       the new scaled image
      */
     public static Bitmap scaleImageInputStream(InputStream in, ImageView imageView) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "scaleImageInputStream()");
 
         //Check we have bitmap and image View
         if ((imageView == null) || (in == null)) {
-            if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "ERROR invalid image");
+            if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.e(TAG, "ERROR invalid image");
             return null;
         }
         // Get the dimensions of the View
@@ -140,8 +139,8 @@ public class OperationsImage {
 
         // Decode the photo
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        //?? kk
         bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(in, null, bmOptions);
 
         // Determine how much to scale down the imageView
         // int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
@@ -159,10 +158,10 @@ public class OperationsImage {
     /**
      * Calculates the scaling from an image to the required width and height
      *
-     * @param options           bitmap with options
-     * @param reqWidth          target width
-     * @param reqHeight         target height
-     * @return                  the scaling required
+     * @param options   bitmap with options
+     * @param reqWidth  target width
+     * @param reqHeight target height
+     * @return the scaling required
      */
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "calculateInSampleSize()");
