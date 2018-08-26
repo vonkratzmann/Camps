@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/comment_author_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="#757575"
+        android:scaleType="centerCrop"
+        android:src="@drawable/eyresrock" />
+
+    <TextView
+        android:id="@+id/comment_date"
+        style="@style/AppTheme.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/comment_author_image"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="-2dp"
+        android:layout_toRightOf="@+id/comment_author_image"
+        android:maxLines="1"
+        tools:text="01/01/1001" />
+
+    <TextView
+        android:id="@+id/divider"
+        style="@style/AppTheme.TextDivider"
+        android:layout_alignTop="@+id/comment_date"
+        android:layout_toRightOf="@+id/comment_date"
+        android:text="@string/divider_bullet" />
+
+    <TextView
+        android:id="@+id/comment_author"
+        style="@style/AppTheme.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/divider"
+        android:layout_alignTop="@+id/comment_author_image"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="-2dp"
+        tools:text="Vonnie" />
+
+    <TextView
+        android:id="@+id/comment_text"
+        style="@style/AppTheme.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/comment_date"
+        android:layout_toRightOf="@+id/comment_author_image"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="-2dp"
+        tools:text="Comment text" />
+
+</RelativeLayout>

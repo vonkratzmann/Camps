@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/add_site_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:logo="@drawable/caravan"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
+        app:title="@string/app_name"
+        app:titleMarginStart="24dp"/>
+
+    <Button
+        android:id="@+id/add_site_button_grab_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.7"
+        android:text="Select photo"
+        android:textAppearance="?android:textAppearanceSmall"
+        app:layout_constraintBottom_toBottomOf="@+id/guidelineimage"
+        app:layout_constraintEnd_toStartOf="@+id/add_site_button_take_photo"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guideline"/>
+
+    <Button
+        android:id="@+id/add_site_button_take_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.7"
+        android:text="Take a picture"
+        android:textAppearance="?android:textAppearanceSmall"
+        app:layout_constraintBottom_toBottomOf="@+id/guidelineimage"
+        app:layout_constraintEnd_toStartOf="@+id/add_site_button_delete_photo"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/add_site_button_grab_photo"/>
+
+    <Button
+        android:id="@+id/add_site_button_delete_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.7"
+        android:text="Delete image"
+        android:textAppearance="?android:textAppearanceSmall"
+        app:layout_constraintBottom_toBottomOf="@+id/guidelineimage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/add_site_button_take_photo"/>
+
+
+    <ImageView
+        android:id="@+id/add_site_photo"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:alpha="1.0"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_site_toolbar"
+        app:layout_constraintStart_toStartOf="@+id/guideline"/>
+
+    <TextView
+        android:id="@+id/add_site_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:background="@drawable/circle_background"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="Ok"
+        android:textColor="#FFF"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/add_site_photo"
+        app:layout_constraintEnd_toEndOf="@+id/add_site_photo"
+        app:layout_constraintHorizontal_bias="0.94"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/add_site_photo"
+        app:layout_constraintVertical_bias="0.13"/>
+
+    <ImageView
+        android:id="@+id/add_site_thumbnail"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerInside"
+        app:layout_constraintEnd_toStartOf="@+id/add_site_name_text"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/guidelinesitename"
+        app:srcCompat="@mipmap/ic_launcher"/>
+
+    <EditText
+        android:id="@+id/add_site_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:hint="@string/add_site_name_hint"
+        android:imeOptions="actionDone"
+        android:inputType="textShortMessage"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
+        app:layout_constraintTop_toTopOf="@+id/guidelinesitename"
+        tools:text="enter name"/>
+
+    <EditText
+        android:id="@+id/add_site_street_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:hint="@string/add_site_street_hint"
+        android:imeOptions="actionDone"
+        android:inputType="textShortMessage"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintBottom_toTopOf="@+id/add_site_city_text"
+        app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_name_text"
+        tools:text="street text"/>
+
+    <EditText
+        android:id="@+id/add_site_city_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:hint="@string/add_site_city_hint"
+        android:imeOptions="actionDone"
+        android:inputType="textShortMessage"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
+        app:layout_constraintBottom_toBottomOf="@+id/add_site_thumbnail"
+        tools:text="city text"/>
+
+    <EditText
+        android:id="@+id/add_site_state_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:hint="@string/add_site_state_hint"
+        android:imeOptions="actionDone"
+        android:inputType="textShortMessage"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintStart_toEndOf="@+id/add_site_city_text"
+        app:layout_constraintTop_toTopOf="@+id/add_site_city_text"
+        tools:text="state text"/>
+
+    <TextView
+        android:id="@+id/add_site_map_latitude_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:text="Latitude"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/add_site_map_longitude_heading"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/guidelinelocation"/>
+
+    <EditText
+        android:id="@+id/add_site_map_coordinates_lat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:hint="@string/coordinateformat"
+        android:imeOptions="actionDone"
+        android:inputType="textShortMessage"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintEnd_toStartOf="@+id/add_site_map_coordinates_long"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_map_latitude_heading"/>
+
+    <TextView
+        android:id="@+id/add_site_map_longitude_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:text="Longitude"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/add_site_map_latitude_heading"
+        app:layout_constraintTop_toTopOf="@+id/guidelinelocation"/>
+
+    <EditText
+        android:id="@+id/add_site_map_coordinates_long"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:hint="@string/coordinateformat"
+        android:imeOptions="actionDone"
+        android:inputType="textShortMessage"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/add_site_map_coordinates_lat"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_map_longitude_heading"/>
+
+    <Button
+        android:id="@+id/add_site_button_get_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get location"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintEnd_toStartOf="@+id/add_site_button_get_address"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_map_coordinates_lat"/>
+
+    <Button
+        android:id="@+id/add_site_button_get_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get address"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintEnd_toStartOf="@+id/add_site_button_show_map"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/add_site_button_get_location"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_map_coordinates_long"/>
+
+    <Button
+        android:id="@+id/add_site_button_show_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/site_detail_map_show"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/add_site_button_get_address"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_map_coordinates_long"/>
+
+
+    <ImageView
+        android:id="@+id/dumppoint"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/dumppoint"
+        android:src="@mipmap/dumppoint"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintEnd_toStartOf="@+id/free"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@id/guideline"/>
+
+    <ImageView
+        android:id="@+id/dumppointpresent"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/dumppoint"
+        android:src="@mipmap/cross"
+        app:layout_constraintEnd_toStartOf="@+id/freepresent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_facilities"/>
+
+    <ImageView
+        android:id="@+id/free"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/free"
+        android:src="@mipmap/free"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintEnd_toStartOf="@+id/mobile"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/dumppoint"/>
+
+    <ImageView
+        android:id="@+id/freepresent"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/free"
+        android:src="@mipmap/cross"
+        app:layout_constraintEnd_toStartOf="@+id/mobilepresent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/dumppointpresent"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_facilities"/>
+
+    <ImageView
+        android:id="@+id/mobile"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/mobile"
+        android:src="@mipmap/mobile"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintEnd_toStartOf="@+id/playequipment"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/free"/>
+
+    <ImageView
+        android:id="@+id/mobilepresent"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/mobile"
+        android:src="@mipmap/cross"
+        app:layout_constraintEnd_toStartOf="@+id/playequipmentpresent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/freepresent"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_facilities"/>
+
+    <ImageView
+        android:id="@+id/playequipment"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/playequipment"
+        android:src="@mipmap/playequipment"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintEnd_toStartOf="@+id/scenic"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/mobile"/>
+
+    <ImageView
+        android:id="@+id/playequipmentpresent"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/playequipment"
+        android:src="@mipmap/cross"
+        app:layout_constraintEnd_toStartOf="@+id/scenicpresent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/mobilepresent"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_facilities"/>
+
+    <ImageView
+        android:id="@+id/scenic"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/scenic"
+        android:src="@mipmap/scenic"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintEnd_toStartOf="@+id/showers"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/playequipment"/>
+
+    <ImageView
+        android:id="@+id/scenicpresent"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/scenic"
+        android:src="@mipmap/cross"
+        app:layout_constraintEnd_toStartOf="@+id/showerspresent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/playequipmentpresent"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_facilities"/>
+
+    <ImageView
+        android:id="@+id/showers"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/showers"
+        android:src="@mipmap/shower"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintEnd_toStartOf="@+id/swimming"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/scenic"/>
+
+    <ImageView
+        android:id="@+id/showerspresent"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/showers"
+        android:src="@mipmap/cross"
+        app:layout_constraintEnd_toStartOf="@+id/swimmingpresent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/scenicpresent"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_facilities"/>
+
+    <ImageView
+        android:id="@+id/swimming"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/swimming"
+        android:src="@mipmap/swimming"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintEnd_toStartOf="@+id/toilets"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/showers"/>
+
+    <ImageView
+        android:id="@+id/swimmingpresent"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/swimming"
+        android:src="@mipmap/cross"
+        app:layout_constraintEnd_toStartOf="@+id/toiletspresent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/showerspresent"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_facilities"/>
+
+    <ImageView
+        android:id="@+id/toilets"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/toilets"
+        android:src="@mipmap/toilets"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintEnd_toStartOf="@+id/tvreception"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/swimming"/>
+
+    <ImageView
+        android:id="@+id/toiletspresent"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/toilets"
+        android:src="@mipmap/cross"
+        app:layout_constraintEnd_toStartOf="@+id/tvreceptionpresent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/swimmingpresent"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_facilities"/>
+
+    <ImageView
+        android:id="@+id/tvreception"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/tvreception"
+        android:src="@mipmap/tvreception"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintEnd_toStartOf="@+id/water"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/toilets"/>
+
+    <ImageView
+        android:id="@+id/tvreceptionpresent"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/tvreception"
+        android:src="@mipmap/cross"
+        app:layout_constraintEnd_toStartOf="@+id/waterpresent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/toiletspresent"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_facilities"/>
+
+    <ImageView
+        android:id="@+id/water"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/water"
+        android:src="@mipmap/water"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/tvreception"/>
+
+    <ImageView
+        android:id="@+id/waterpresent"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:background="#FFF5E6E6"
+        android:contentDescription="@string/water"
+        android:src="@mipmap/cross"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/tvreceptionpresent"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_facilities"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintGuide_begin="0dp"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelinesitename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.56"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelinelocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.68"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/site_details_guideline_facilities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.91"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineimage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.46"/>
+
+    <view
+        class="android.support.v7.widget.LinearLayoutCompat"
+        id="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/add_site_photo"/>
+
+</android.support.constraint.ConstraintLayout>

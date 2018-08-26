@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "229460877776",
+    "firebase_url": "https://camps-483e9.firebaseio.com",
+    "project_id": "camps-483e9",
+    "storage_bucket": "camps-483e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229460877776:android:c9885a4c6860269a",
+        "android_client_info": {
+          "package_name": "au.com.mysites.camps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "229460877776-qj6c20vfubs67siffscjaam43d8on827.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "au.com.mysites.camps",
+            "certificate_hash": "5ce5dd839e4af2be6c3fa5aae386d31f731394dc"
+          }
+        },
+        {
+          "client_id": "229460877776-nt7fjopbqmokn02og7bkp40tto5jb40d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxfcweMb0-00eRB0NdbTU493WIO2mjt_k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "229460877776-nt7fjopbqmokn02og7bkp40tto5jb40d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

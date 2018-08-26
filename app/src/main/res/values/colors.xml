@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="greyPrimary">#DE000000</color>
+    <color name="greySecondary">#8B000000</color>
+    <color name="greyDisabled">#61000000</color>
+
+    <!-- Colours for an item -->
+    <color name="list_item_text">#7b3792</color>
+    <color name="list_item_background">#ffffff</color>
+
+    <!-- Colours for Detailed Screen -->
+
+    <!-- Tints the input fields like checkboxes and text fields -->
+    <color name="cursorAccent">#379237</color>
+    <!-- Applies to views in their normal state. -->
+    <color name="controlNormal">#4A312A</color>
+    <!-- Applies to views in their activated state (i.e checked or switches) -->
+    <color name="controlActivated">#4A312A</color>
+    <!-- Applied to framework control highlights (i.e ripples or list selectors) -->
+
+
+
+
+    <color name="White">#FFFFFFFF</color>
+    <color name="Silver">#FFC0C0C0</color>
+    <color name="Gray">#FF808080</color>
+    <color name="Black">#FF000000</color>
+    <color name="Red">#FFFF0000</color>
+    <color name="Maroon">#FF800000</color>
+    <color name="Yellow">#FFFFFF00</color>
+    <color name="Olive">#FF808000</color>
+    <color name="Lime">#FF00FF00</color>
+    <color name="Green">#FF008000</color>
+    <color name="Aqua">#FF00FFFF</color>
+    <color name="Teal">#FF008080</color>
+    <color name="Blue">#FF0000FF</color>
+    <color name="Navy">#FF000080</color>
+    <color name="Fuchsia">#FFFF00FF</color>
+    <color name="Purple">#FF800080</color>
+
+
+</resources>
