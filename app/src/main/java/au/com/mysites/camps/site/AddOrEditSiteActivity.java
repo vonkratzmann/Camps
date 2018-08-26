@@ -2,6 +2,7 @@ package au.com.mysites.camps.site;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
@@ -45,6 +46,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -61,6 +63,7 @@ import static android.widget.Toast.makeText;
 import static au.com.mysites.camps.util.Constants.TOASTTIMEFACILITIES;
 import static au.com.mysites.camps.util.OperationsFile.isExternalStorageAvailable;
 import static au.com.mysites.camps.util.OperationsImage.scaleImageFile;
+import static au.com.mysites.camps.util.OperationsImage.scaleImageInputStream;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 /**
@@ -128,10 +131,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         // do not use this one
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
+
         @Override
         // do not use this one
         public void onTextChanged(CharSequence s, int start, int before, int count) {
         }
+
         @Override
         public void afterTextChanged(Editable s) {
             // record the site has been changed
@@ -670,31 +675,65 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, intent);
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onActivityResult()");
 
-        try {
-            switch (requestCode) {
 
-                case Constants.REQUEST_IMAGE_CAPTURE:
-                    //returns the photo, scales and stores to thumbnail and sitePhoto ImageViews.
-                    if (resultCode == RESULT_OK) {
-                        Bitmap bitmap;
-                        //scale thumbnail
-                        bitmap = scaleImageFile(mPhotoPath, mThumbnailImageView);
-                        if (bitmap != null) mThumbnailImageView.setImageBitmap(bitmap);
+        switch (requestCode) {
+            case Constants.REQUEST_IMAGE_CAPTURE:
+                /* Camera return with image file in mPhotoPath,
+                 * scale & display image in thumbnail and sitePhoto ImageViews */
+                if (resultCode == Activity.RESULT_OK && intent != null) {
+                    boolean result = updateImageViews();
 
-                        //scale site photo
-                        bitmap = scaleImageFile(mPhotoPath, mSitePhotoImageView);
-                        if (bitmap != null) mSitePhotoImageView.setImageBitmap(bitmap);
-
-                        //Set flag to say site details have changed
-                        mSiteHasChanged = true;
+                    if (!result) { // Warn the user
+                        makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
                     }
-                    break;
-            }
-        } catch (Exception error) {
-            //tell the user
-            Toast.makeText(this, getString(R.string.ERROR_Camera_image_unavailable)
-                    , Toast.LENGTH_SHORT).show();
+                } else // Warn the user
+                    makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.PICK_IMAGE:
+                // For the chosen image, scale & display in thumbnail and sitePhoto ImageViews
+                if (resultCode == Activity.RESULT_OK && intent != null) {
+                    InputStream in = null;
+                    try {
+                        in = this.getContentResolver().openInputStream(intent.getData());
+                        scaleImageInputStream(in, mThumbnailImageView);
+                    } catch (IOException e) {  // Warn the user
+                        makeText(this, getString(R.string.ERROR_Photos_not_available), Toast.LENGTH_SHORT).show();
+                    } finally {
+                        try {
+                            in.close();
+                        } catch (IOException e) {  // Warn the user
+                            makeText(this, getString(R.string.ERROR_Photos_not_available), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } else { // Warn the user
+                    makeText(this, getString(R.string.ERROR_Photos_not_available), Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
+    }
+
+    /**
+     * Scales image from file in mPhotoPath to thumbnail and sitePhoto ImageViews
+     * then displays scaled image in thumbnail and sitePhoto ImageViews
+     *
+     * @return true if operation successful
+     */
+    private boolean updateImageViews() {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "updateImageViews()");
+
+        Bitmap bitmap = scaleImageFile(mPhotoPath, mThumbnailImageView);
+        if (bitmap == null) return false;
+
+        mThumbnailImageView.setImageBitmap(bitmap);
+
+        //scale site photo
+        bitmap = scaleImageFile(mPhotoPath, mSitePhotoImageView);
+        if (bitmap != null) mSitePhotoImageView.setImageBitmap(bitmap);
+
+        //Set flag to say site details have changed
+        mSiteHasChanged = true;
+        return true;
     }
 
     public void displayStatusOfAllFacilities(final Site site) {
@@ -727,11 +766,11 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * at the site. Setups a listener, if the site icon is touched toggles the status of the site
      * being present or not and updates the UI.
      *
-     * @param site              site to be displayed
-     * @param imageViewIcon     icon for this facility
-     * @param imageViewPresent  flag indicating if the facility is present or not
-     * @param description       a short description of the facility
-     * @param type              the type of facility
+     * @param site             site to be displayed
+     * @param imageViewIcon    icon for this facility
+     * @param imageViewPresent flag indicating if the facility is present or not
+     * @param description      a short description of the facility
+     * @param type             the type of facility
      */
     private void displayFacility(final Site site,
                                  final ImageView imageViewIcon, final ImageView imageViewPresent,
@@ -1028,6 +1067,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
             case R.id.add_site_button_take_photo:
                 takePhoto();
+                break;
+
+            case R.id.add_site_button_grab_photo:
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, Constants.PICK_IMAGE);
                 break;
 
             case R.id.add_site_button_delete_photo:

@@ -4,12 +4,10 @@ public class Constants {
 
     //Storage Permissions request identifier
     public static final int REQUEST_EXTERNAL_STORAGE = 10;
-    //Storage Permissions request identifier
-    public static final int REQUEST_CONTACTS_ACCESS = 20;
 
-    //Image request codes
-    public static final int REQUEST_THUMBNAIL_IMAGE_CAPTURE = 30;
-    public static final int REQUEST_IMAGE_CAPTURE = 40;
+    //Requests codes used in intents
+    public static final int REQUEST_IMAGE_CAPTURE = 20;
+    public static final int PICK_IMAGE = 30;
 
     public static final int RC_SIGN_IN = 9001;
 
@@ -28,9 +26,4 @@ public class Constants {
     public final static int PERMISSIONS_REQUEST_EXTERNAL_STORAGE_CAMERA = 20;
     public final static int PERMISSIONS_REQUEST_EXTERNAL_STORAGE_GETPHOTO = 30;
     public final static int PERMISSIONS_REQUEST_LOCATION = 40;
-
-    // Size of photos to store in Firebase storage
-    public final static int SIZEPHOTOWIDTH = 1080;
-    public final static int SIZEPHOTOHEIGHT = 1080;
-
 }

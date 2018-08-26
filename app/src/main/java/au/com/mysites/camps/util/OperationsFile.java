@@ -12,11 +12,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOError;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import au.com.mysites.camps.R;
 
 /**
- * Methods to read and write char files
+ * Methods to read and write files
  */
 public class OperationsFile {
     private final static String TAG = OperationsFile.class.getSimpleName();
@@ -33,7 +35,7 @@ public class OperationsFile {
      * @return boolean
      */
 
-    public boolean write(Context context, String path, String name, String content, boolean append) {
+    public boolean write(Context context, String path, String name, String content, boolean append){
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "write()");
 
         try {
@@ -65,7 +67,6 @@ public class OperationsFile {
             return false;
         }
     }
-
 
     /**
      * Reads a text file
@@ -106,10 +107,7 @@ public class OperationsFile {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "isExternalStorageAvailable()");
 
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     /*
@@ -119,10 +117,22 @@ public class OperationsFile {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "isExternalStorageReadable()");
 
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
+        return Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
+    }
+
+    /**
+     * Simple function to convert InputStream to OutputStream.
+     *
+     * @param in
+     * @param out
+     * @throws IOException
+     */
+    public static void copyStream(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
         }
-        return false;
     }
 }

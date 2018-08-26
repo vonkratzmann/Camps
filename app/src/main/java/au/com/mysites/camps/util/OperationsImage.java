@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -85,7 +86,7 @@ public class OperationsImage {
      * @return bitmap       representing the scaled photo
      */
     public static Bitmap scaleImageFile(String photoPath, ImageView imageView) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "OperationsScaleImageFile()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "scaleImageFile()");
 
         //Check we have valid photo and image View
         if ((imageView == null) || (photoPath == null) || photoPath.isEmpty()) {
@@ -113,6 +114,47 @@ public class OperationsImage {
         //generate the bitmap
         return BitmapFactory.decodeFile(photoPath, bmOptions);
     }
+
+
+    /**
+     * Scales the InputStream image to suit the size of the imageView.
+     * Checks valid bitmap and imageView first.
+     *
+     * @param in            InputStream image to scale
+     * @param imageView     view to use to determine scale size
+     * @return bitmap       representing the scaled photo
+     */
+    public static Bitmap scaleImageInputStream(InputStream in, ImageView imageView) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "scaleImageInputStream()");
+
+        //Check we have bitmap and image View
+        if ((imageView == null) || (in == null)) {
+            if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "ERROR invalid image");
+            return null;
+        }
+        // Get the dimensions of the View
+        int targetW = imageView.getWidth();
+        int targetH = imageView.getHeight();
+
+        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+        // Decode the photo
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        //?? kk
+        bmOptions.inJustDecodeBounds = true;
+
+        // Determine how much to scale down the imageView
+        // int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+        int scaleFactor = calculateInSampleSize(bmOptions, targetW, targetH);
+
+        // Decode the imageView file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+
+        //generate the bitmap
+        return BitmapFactory.decodeStream(in, null, bmOptions);
+    }
+
 
     /**
      * Calculates the scaling from an image to the required width and height
