@@ -457,7 +457,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
                     //Get comments as they are in a sub-collection, then delete
                     deleteCommentsForSite(docRefId, (String) objects[0], (String) objects[1]);
-                    deleteSite(docRefId, (String) objects[0]);
+                    OperationsDatabase.deleteSite(docRefId, (String) objects[0]);
                 }
 
             } catch (ExecutionException | InterruptedException e) {
@@ -516,20 +516,6 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 // An interrupt occurred while waiting for the task to complete.
                 e.printStackTrace();
             }
-        }
-
-        /**
-         * @param docRefId
-         * @param collectionRefSites
-         */
-        void deleteSite(String docRefId, String collectionRefSites) {
-            if (Debug.DEBUG_DBMAINT_BACKUP) Log.d(TAG, "deleteStite");
-
-            FirebaseFirestore siteDocRef = FirebaseFirestore.getInstance();
-            siteDocRef
-                    .collection(collectionRefSites)
-                    .document(docRefId)
-                    .delete();
         }
     }
 }

@@ -24,10 +24,10 @@
     <ImageView
         android:id="@+id/site_detail_photo"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="240dp"
         android:alpha="1.0"
         android:contentDescription="@string/site_detail_photo_hint"
-        android:scaleType="centerCrop"
+        android:scaleType="centerInside"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -188,7 +188,7 @@
     <LinearLayout
         android:id="@+id/site_detail_facility_icons"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="32dp"
         android:layout_alignBottom="@+id/site_detail_photo"
         android:layout_margin="2dp"
         android:background="@drawable/detail_border"
@@ -235,21 +235,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25"/>
+        app:layout_constraintGuide_percent="0.32"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/site_details_guideline_coordinates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.42"/>
+        app:layout_constraintGuide_percent="0.46"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/site_details_guideline_facilities"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.52"/>
+        app:layout_constraintGuide_percent="0.58"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/site_details_guideline_fab"

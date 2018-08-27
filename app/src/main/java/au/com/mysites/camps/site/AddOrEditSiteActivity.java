@@ -54,6 +54,7 @@ import au.com.mysites.camps.model.Site;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
 import au.com.mysites.camps.util.OperationsDatabase;
+import au.com.mysites.camps.util.OperationsGeneral;
 import au.com.mysites.camps.util.OperationsImage;
 import au.com.mysites.camps.util.OperationsMap;
 import au.com.mysites.camps.viewmodel.DetailSiteViewModel;
@@ -272,7 +273,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             Log.w(TAG, "site:onEvent", e);
             return;
         }
-        onSiteLoaded(Objects.requireNonNull(snapshot.toObject(Site.class)));
+        if (snapshot.exists()) {
+            onSiteLoaded(Objects.requireNonNull(snapshot.toObject(Site.class)));
+        }
     }
 
     /**
@@ -376,7 +379,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     /**
      * Checks a name has been entered, if not returns false.
-     * Must have a name asused as the key for documents in the database.
+     * Must have a name as used as the key for documents in the database.
      * <p>
      * Called by {@link #getSite()}.
      *
@@ -396,15 +399,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     * Get the text input by user to the UI views and store in Site instance
+     * Get the text input by user to the UI views and store in the Site instance
      * <p>
      * Called by {@link #getSite()}.
      */
     private void getSiteStoreTextFromViews() {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getSiteStoreTextFromViews()");
-
-        //get the name
-        mSite.setName(mNameEditText.getText().toString());
 
         // get site street
         mSite.setStreet(mStreetEditText.getText().toString());
@@ -414,6 +414,21 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         // get site state
         mSite.setState(mStateEditText.getText().toString());
+
+        /* get the site name, check if it has changed.
+         * As siteName is used as the reference to a document in the Firestore database,
+         * a new site name will create a new document and the old document has to be deleted */
+
+        // If site name is empty, just copy over the new name from the EditText
+        if (OperationsGeneral.stringEmpty(mSite.getName())) {
+            mSite.setName(mNameEditText.getText().toString());
+
+            //If site name and the new name from the EditText are different, delete old document
+        } else if (!mSite.getName().equals(mNameEditText.getText().toString())) {
+            OperationsDatabase.deleteSite(getString(R.string.collection_sites), mSite.getName());
+            //save the new SiteName
+            mSite.setName(mNameEditText.getText().toString());
+        }
     }
 
     /**
@@ -637,6 +652,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Called from {@link #onClick(View)} which is a general handler of listeners from the buttons.
      */
     @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+
     private void selectPhoto() {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "selectPhoto()");
 
@@ -652,7 +668,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     * Start an intent to selct a photo
+     * Start an intent to select a photo
      */
     private void selectPhotoUpdateImageViews() {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "selectPhotoUpdateImageView()");
@@ -689,8 +705,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
                     break;
                 }
-                if (updateImageViewsFile(mPhotoPath)) {  //process the file
-                    mSiteHasChanged = true;              //if Ok, set flag site details have changed
+                if (updateImageViewsFromFile(mPhotoPath)) {  // Process the file
+                    mSiteHasChanged = true;              // If Ok, set flag site details have changed
                 } else { // Warn the user
                     makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
                 }
@@ -700,19 +716,22 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 // For the chosen image, scale & display in thumbnail and sitePhoto ImageViews.
                 if (resultCode != Activity.RESULT_OK || data == null) {    // Warn the user
                     makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
+                    if (Debug.DEBUG_SITE) Log.d(TAG, "Result code failure or data = null");
                     break;
                 }
-                //extract the file path from the returned data
+                // Extract the file path from the returned data
                 String filePath = OperationsImage.getRealPathFromUri(this, data.getData());
 
                 if (filePath == null) {
                     makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
+                    if (Debug.DEBUG_SITE) Log.d(TAG, "filePath = null");
                     break;
                 }
-                if (updateImageViewsFile(filePath)) {  //process the file
+                if (updateImageViewsFromFile(filePath)) {  // Process the file
                     mSiteHasChanged = true;            // If Ok, set flag site details have changed
                 } else { // Warn the user
                     makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
+                    if (Debug.DEBUG_SITE) Log.d(TAG, "Update image views failure");
                 }
                 break;
         }
@@ -725,19 +744,23 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @param photoPath file containing image to be processed
      * @return true if operation successful
      */
-    private boolean updateImageViewsFile(String photoPath) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "updateImageViewsFile()");
+    private boolean updateImageViewsFromFile(String photoPath) {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "updateImageViewsFromFile()");
 
         // Scale thumbnail
         Bitmap bitmap = scaleImageFile(photoPath, mThumbnailImageView);
-        if (bitmap == null) return false;
-
+        if (bitmap == null) {
+            if (Debug.DEBUG_SITE) Log.d(TAG, "Thumbnail image scaling failure");
+            return false;
+        }
         mThumbnailImageView.setImageBitmap(bitmap);
 
         // Scale site photo
         bitmap = scaleImageFile(photoPath, mSitePhotoImageView);
-        if (bitmap == null) return false;
-
+        if (bitmap == null) {
+            if (Debug.DEBUG_SITE) Log.d(TAG, "Site photo image scaling failure");
+            return false;
+        }
         mSitePhotoImageView.setImageBitmap(bitmap);
         return true;
     }
@@ -911,6 +934,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         // Clear the links to where the images files are stored
         mSite.setThumbnail(null);
         mSite.setSitePhoto(null);
+
+        mSiteHasChanged = true;
     }
 
     /**

@@ -58,7 +58,7 @@ public class OperationsImage {
      * @return true if no errors
      */
     public static boolean saveBitmapToFile(Bitmap bitmap, String photoPath) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "saveBitmapToFile()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE) Log.d(TAG, "saveBitmapToFile()");
 
         //convert the decoded bitmap to stream
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -87,7 +87,7 @@ public class OperationsImage {
      * @return bitmap       the new scaled image
      */
     public static Bitmap scaleImageFile(String photoPath, ImageView imageView) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "scaleImageFile()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE) Log.d(TAG, "scaleImageFile()");
 
         //Check we have valid photo and image View
         if ((imageView == null) || (photoPath == null) || photoPath.isEmpty()) {
@@ -125,7 +125,7 @@ public class OperationsImage {
      * @return the scaling required
      */
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "calculateInSampleSize()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE) Log.d(TAG, "calculateInSampleSize()");
 
         // Raw height and width of image
         final int height = options.outHeight;
@@ -154,7 +154,7 @@ public class OperationsImage {
      * @return
      */
     public static String getRealPathFromUri(Context context, Uri contentUri) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "getRealPathFromUri()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE) Log.d(TAG, "getRealPathFromUri()");
 
         Cursor cursor = null;
         try {

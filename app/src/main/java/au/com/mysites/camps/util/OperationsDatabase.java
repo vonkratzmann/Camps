@@ -44,7 +44,7 @@ public class OperationsDatabase {
      * @param context  of calling activity
      */
     public static void addMultipleSitesAndComments(ArrayList<Site> siteList, Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "addSitesAndComments()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addSitesAndComments()");
 
         //for each site write to the database
         int siteCount = siteList.size();
@@ -61,7 +61,7 @@ public class OperationsDatabase {
      * @param context of calling activity
      */
     public static void addOneSiteAndComments(final Site site, final Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "addOneSiteAndComments()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addOneSiteAndComments()");
 
         //use the site name as the ID for the database document
         String siteName = site.getName();
@@ -102,7 +102,7 @@ public class OperationsDatabase {
      * @param context of calling activity
      */
     private static void addComments(final Site site, final Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "addComments()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addComments()");
 
         String siteName = site.getName(); //use the site name as the ID for the database document
 
@@ -142,7 +142,7 @@ public class OperationsDatabase {
      */
     public static void saveFileFirestore(final Context context, final File file,
                                          final String path) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "saveFileFirestore()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "saveFileFirestore()");
 
         //Now store scaled image files in Firestore storage
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
@@ -179,7 +179,7 @@ public class OperationsDatabase {
      * @param imageView    view where image is to be displayed
      */
     public static void getImageAndDisplay(String fileName, ImageView imageView) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getImageAndDisplay()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getImageAndDisplay()");
 
         // Get the local storage directory
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
@@ -198,6 +198,8 @@ public class OperationsDatabase {
             // Get the file from storage and display it
             OperationsDatabase.getFileOffFirebaseStorageAndDisplay(fileName, localFile,
                     storageDir, imageView);
+            if (Debug.DEBUG_UTIL) Log.d(TAG, "getImageAndDisplay() get file from Firebase storage: "
+                    + localFile.toString());
         }
     }
 
@@ -214,7 +216,7 @@ public class OperationsDatabase {
     private static void
     getFileOffFirebaseStorageAndDisplay(final String fileName, final File localFile,
                                         final File storageDir, final ImageView imageView) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getFileFirebaseOffStorageDisplay()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getFileFirebaseOffStorageDisplay()");
 
         // Check the local storage directory exits
         if (!storageDir.exists()) {
@@ -247,6 +249,32 @@ public class OperationsDatabase {
         });
     }
 
+    /**
+     * @param docRefId              Document to be deleted
+     * @param collectionRefSites    Reference to collection
+     */
+   public static void deleteSite( final String collectionRefSites, final String docRefId) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "deleteSite");
+
+        FirebaseFirestore siteDocRef = FirebaseFirestore.getInstance();
+        siteDocRef
+                .collection(collectionRefSites)
+                .document(docRefId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if (Debug.DEBUG_UTIL) Log.d(TAG, "Document successfully deleted!: "
+                                + docRefId);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if (Debug.DEBUG_UTIL) Log.w(TAG, "Error deleting document: "+ docRefId, e);
+                    }
+                });
+    }
 
     /**
      * Display a short toast, where the time of displayed is specified
