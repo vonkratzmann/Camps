@@ -27,7 +27,6 @@ import au.com.mysites.camps.model.Comment;
 import au.com.mysites.camps.model.Site;
 
 import static android.widget.Toast.makeText;
-import static au.com.mysites.camps.util.Constants.TOASTTIMEDATABASE;
 
 /**
  * Methods to read and write firestore database
@@ -78,8 +77,8 @@ public class OperationsDatabase {
                     public void onSuccess(Void avoid) {
                         //if no comments, tell caller Ok, otherwise let comments tell caller
                         if (numberComments <= 0)
-                            OperationsDatabase.shortToast(context.getString(R.string.Site_saved)
-                                    , TOASTTIMEDATABASE, context);
+                            OperationsDatabase.shortToast(context.getString(R.string.Site_saved),
+                                    Constants.TOASTTIMEDATABASE, context);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -87,8 +86,8 @@ public class OperationsDatabase {
                     public void onFailure(@NonNull Exception e) {
                         //if no comments, tell caller Not Ok, otherwise let comments tell caller
                         if (numberComments <= 0)
-                            OperationsDatabase.shortToast(context.getString(R.string.ERROR_Database)
-                                    , TOASTTIMEDATABASE, context);
+                            OperationsDatabase.shortToast(context.getString(R.string.ERROR_Database),
+                                    Constants.TOASTTIMEDATABASE, context);
                     }
                 });
         //check if any comments to write to the database
@@ -121,15 +120,15 @@ public class OperationsDatabase {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void avoid) {
-                            OperationsDatabase.shortToast(context.getString(R.string.Comment_saved)
-                                    , TOASTTIMEDATABASE, context);
+                            OperationsDatabase.shortToast(context.getString(R.string.Comment_saved),
+                                    Constants.TOASTTIMEDATABASE, context);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            OperationsDatabase.shortToast(context.getString(R.string.ERROR_Database)
-                                    , TOASTTIMEDATABASE, context);
+                            OperationsDatabase.shortToast(context.getString(R.string.ERROR_Database),
+                                    Constants.TOASTTIMEDATABASE, context);
                         }
                     });
         }

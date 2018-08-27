@@ -80,8 +80,6 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
             if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "bind()");
 
             Site site = snapshot.toObject(Site.class);
-            if (Debug.DEBUG_MODEL) Log.d(TAG, "bind() site: " + site.getName());
-            if (Debug.DEBUG_MODEL) Log.d(TAG, "bind() thumbnail: " + site.getThumbnail());
 
             if (site == null) return;
 
@@ -97,6 +95,9 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
             if (site.getThumbnail() != null && !site.getThumbnail().isEmpty()) {
                 OperationsDatabase.getImageAndDisplay(site.getThumbnail(), thumbnailView);
             }
+            else  // Clear imageView
+                thumbnailView.setImageDrawable(null);
+
             // Photo is not displayed on this layout, only thumbnail.
             //todo fix
             // numRatingsView.setText(resources.getString(R.string.fmt_num_ratings,site.getNumRatings()));

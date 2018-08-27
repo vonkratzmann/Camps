@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -414,7 +413,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         mSite.setCity(mCityEditText.getText().toString());
 
         // get site state
-        mSite.setCity(mStateEditText.getText().toString());
+        mSite.setState(mStateEditText.getText().toString());
     }
 
     /**
@@ -430,7 +429,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * of the database will pull the files off the external storage if available,
      * rather than from the Firebase storage.
      * <p>
-     * Checks original photo exists and external storage is available.
+     * Checks external storage is available.
      * <p>
      * Called by {@link #getSite()}.
      */
@@ -443,8 +442,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             return;
         }
         File file;
-        // Scale image and store it in a new file
-        file = imageViewToNewFile(mThumbnailImageView);
+        // Store thumbnail image in a new file
+        file = OperationsImage.imageViewToNewFile(this, mThumbnailImageView);
 
         if (file != null) {
             //save new file to firestore storage
@@ -453,8 +452,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             //save path in storage to the database
             mSite.setThumbnail(file.getName());
         }
-        // Scale image and store it in a new file
-        file = imageViewToNewFile(mSitePhotoImageView);
+        // Store site photo image in a new file
+        file = OperationsImage.imageViewToNewFile(this, mSitePhotoImageView);
 
         if (file != null) {
             //save new file to firestore storage
@@ -463,37 +462,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             //save path in storage to the database
             mSite.setSitePhoto(file.getName());
         }
-    }
-
-    /**
-     * Extracts bitmap from an ImageView and stores the bitmap in a new file.
-     * The new file has a unique system generated name.
-     * <p>
-     * Called by {@link #getSiteSaveImages()}
-     *
-     * @param imageView    target image to be used in sizing
-     * @return new file with scaled image, otherwise return null
-     */
-    private File imageViewToNewFile(ImageView imageView) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "imageViewToNewFile()");
-
-        File file;
-        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-
-        if (bitmap == null) return null;
-
-        //create a new file
-        try {
-            file = OperationsImage.createImageFile(this);
-        } catch (IOException e) {
-            Log.e(TAG, " IOexception");
-            return null;
-        }
-        if (OperationsImage.saveBitmapToFile(bitmap, file.getAbsolutePath()))
-            return file;
-        else
-            return null;
     }
 
     /**
@@ -801,35 +769,37 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     /**
      * Displays all facilities on the UI, indicating if the facility is present or not
-     * at the site. Setups a listener, if the site icon is touched toggles the status of the site
-     * being present or not and updates the UI.
+     * at the site. Setups a listener, if the site icon is touched, shows a short message
+     * specifying the type of facility, toggles the status of the site
+     * ie present or not and updates the UI.
      *
-     * @param site             site to be displayed
-     * @param imageViewIcon    icon for this facility
-     * @param imageViewPresent flag indicating if the facility is present or not
-     * @param description      a short description of the facility
-     * @param type             the type of facility
+     * @param site                     site to be displayed
+     * @param imageViewFacilityIcon    icon for this facility
+     * @param imageViewFacilityPresent flag indicating if the facility is present or not
+     * @param description              a short description of the facility
+     * @param type                     the type of facility
      */
     private void displayFacility(final Site site,
-                                 final ImageView imageViewIcon, final ImageView imageViewPresent,
+                                 final ImageView imageViewFacilityIcon,
+                                 final ImageView imageViewFacilityPresent,
                                  final int description, final Site.Facility type) {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "displayFacility()");
 
         //Show if facility is present or not, by displaying a tick or cross
-        imageViewPresent.setImageResource((site.checkIfFacilityPresent(type))
+        imageViewFacilityPresent.setImageResource((site.checkIfFacilityPresent(type))
                 ? R.mipmap.tick : R.mipmap.cross);
 
         //Set up listener for changes to the facility
-        imageViewIcon.setOnClickListener(new View.OnClickListener() {
+        imageViewFacilityIcon.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Free icon pressed
                 // Short message to show type of facility
-                OperationsDatabase.shortToast(getString(description)
-                        , TOASTTIMEFACILITIES, AddOrEditSiteActivity.this);
+                OperationsDatabase.shortToast(getString(description),
+                        TOASTTIMEFACILITIES, AddOrEditSiteActivity.this);
+
                 // Toggle status of the facility
                 site.setFacility(type, !site.checkIfFacilityPresent(type));
                 // update display
-                imageViewPresent.setImageResource((site.checkIfFacilityPresent(type))
+                imageViewFacilityPresent.setImageResource((site.checkIfFacilityPresent(type))
                         ? R.mipmap.tick : R.mipmap.cross);
                 // record the site has been changed
                 mSiteHasChanged = true;

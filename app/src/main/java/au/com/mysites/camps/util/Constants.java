@@ -13,7 +13,8 @@ public class Constants {
 
     public static final int LIMIT = 50;
 
-    // used to set the time for toasts
+
+    // used to set the display time for toasts
     public static int TOASTTIMEFACILITIES = 500;
     public static int TOASTTIMEDATABASE = 1000;
 

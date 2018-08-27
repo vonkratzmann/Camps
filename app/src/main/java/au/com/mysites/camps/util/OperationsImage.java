@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -167,5 +168,35 @@ public class OperationsImage {
                 cursor.close();
             }
         }
+    }
+
+    /**
+     * Extracts bitmap from an ImageView and stores the bitmap in a new file.
+     * The new file has a unique system generated name.
+     *
+     * @param imageView    target image to be saved
+     * @return             new file with image, otherwise return null
+     */
+    public static File imageViewToNewFile( Context context, ImageView imageView) {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "imageViewToNewFile()");
+
+        File file;
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        if (drawable == null) return null;
+
+        Bitmap bitmap = drawable.getBitmap();
+        if (bitmap == null) return null;
+
+        //create a new file
+        try {
+            file = OperationsImage.createImageFile(context);
+        } catch (IOException e) {
+            Log.e(TAG, " IOexception");
+            return null;
+        }
+        if (OperationsImage.saveBitmapToFile(bitmap, file.getAbsolutePath()))
+            return file;
+        else
+            return null;
     }
 }
