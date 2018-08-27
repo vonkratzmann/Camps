@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -359,7 +360,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
         getSiteStoreTextFromViews();
 
-        getSiteSaveImages(mPhotoPath);
+        getSiteSaveImages();
 
         // facilities already stored in site object, so need for anything
 
@@ -417,13 +418,13 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     * Save images here, as images are not save to the remote database when first selected or
-     * photo taken, in case user abandons the site editing or site entry.
+     * Save site thumbnail and site images here, as images are not save to the remote database
+     * when first selected or photo taken, in case user abandons the site editing or site entry.
      * <p>
-     * Gets the size of the thumbnail ImageView, scales the original image or photo to the size
-     * of the ImageView, stores this scaled image in a newly created file in external storage and
-     * saves the file in FireBase storage, then puts a link in the Firestore database to where
-     * the file is saved in FireBase storage. Repeats for the sitePhoto ImageView.
+     * Extracts the image from the thumbnail ImageView, stores this image in a newly created file
+     * in external storage and saves the file in FireBase storage, then puts a link in the
+     * Firestore database to where the file is saved in FireBase storage.
+     * Repeats for the sitePhoto ImageView.
      * <p>
      * Upon successful save to database the files are not deleted, so that a future load
      * of the database will pull the files off the external storage if available,
@@ -433,10 +434,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * <p>
      * Called by {@link #getSite()}.
      */
-    private void getSiteSaveImages(String filePath) {
+    private void getSiteSaveImages() {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getSiteSaveImages()");
-
-        if (filePath == null) return;
 
         // Check external storage is available
         if (!isExternalStorageAvailable()) {  // Warn the user.
@@ -445,7 +444,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
         File file;
         // Scale image and store it in a new file
-        file = scaleImageFileToNewFile(filePath, mThumbnailImageView);
+        file = imageViewToNewFile(mThumbnailImageView);
 
         if (file != null) {
             //save new file to firestore storage
@@ -455,7 +454,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             mSite.setThumbnail(file.getName());
         }
         // Scale image and store it in a new file
-        file = scaleImageFileToNewFile(filePath, mSitePhotoImageView);
+        file = imageViewToNewFile(mSitePhotoImageView);
 
         if (file != null) {
             //save new file to firestore storage
@@ -467,23 +466,24 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     * Takes an image file, scales the image to the size of the ImageView
-     * and stores the scaled image in a new file. The new file has a unique
-     * system generated name.
+     * Extracts bitmap from an ImageView and stores the bitmap in a new file.
+     * The new file has a unique system generated name.
      * <p>
-     * Called by {@link #getSiteSaveImages(String)}
+     * Called by {@link #getSiteSaveImages()}
      *
-     * @param srcPhotoPath source file
      * @param imageView    target image to be used in sizing
      * @return new file with scaled image, otherwise return null
      */
-    private File scaleImageFileToNewFile(String srcPhotoPath, ImageView imageView) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "scaleImageFileToNewFile()");
+    private File imageViewToNewFile(ImageView imageView) {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "imageViewToNewFile()");
 
         File file;
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
 
-        Bitmap bitmap = scaleImageFile(srcPhotoPath, imageView);
         if (bitmap == null) return null;
+
+        //create a new file
         try {
             file = OperationsImage.createImageFile(this);
         } catch (IOException e) {
@@ -495,7 +495,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         else
             return null;
     }
-
 
     /**
      * Get latitude and longitude, if ok store in site instance.
