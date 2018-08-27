@@ -2,9 +2,12 @@ package au.com.mysites.camps.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -12,7 +15,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -113,48 +115,6 @@ public class OperationsImage {
         return BitmapFactory.decodeFile(photoPath, bmOptions);
     }
 
-
-    /**
-     * Scales the InputStream image to suit the size of the imageView.
-     * Checks valid bitmap and imageView first.
-     * Does not write the scaled photo to the imageView, but returns a bitmap of the scaled image.
-     *
-     * @param in        InputStream image to scale
-     * @param imageView view to use to determine scale size
-     * @return bitmap       the new scaled image
-     */
-    public static Bitmap scaleImageInputStream(InputStream in, ImageView imageView) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "scaleImageInputStream()");
-
-        //Check we have bitmap and image View
-        if ((imageView == null) || (in == null)) {
-            if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.e(TAG, "ERROR invalid image");
-            return null;
-        }
-        // Get the dimensions of the View
-        int targetW = imageView.getWidth();
-        int targetH = imageView.getHeight();
-
-        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-
-        // Decode the photo
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(in, null, bmOptions);
-
-        // Determine how much to scale down the imageView
-        // int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-        int scaleFactor = calculateInSampleSize(bmOptions, targetW, targetH);
-
-        // Decode the imageView file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-
-        //generate the bitmap
-        return BitmapFactory.decodeStream(in, null, bmOptions);
-    }
-
-
     /**
      * Calculates the scaling from an image to the required width and height
      *
@@ -184,5 +144,28 @@ public class OperationsImage {
             }
         }
         return inSampleSize;
+    }
+
+    /**
+     *
+     * @param context
+     * @param contentUri
+     * @return
+     */
+    public static String getRealPathFromUri(Context context, Uri contentUri) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_IMAGEOPERATIONS) Log.d(TAG, "getRealPathFromUri()");
+
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 }

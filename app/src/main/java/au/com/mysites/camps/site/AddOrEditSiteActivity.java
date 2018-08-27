@@ -46,7 +46,6 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -63,7 +62,6 @@ import static android.widget.Toast.makeText;
 import static au.com.mysites.camps.util.Constants.TOASTTIMEFACILITIES;
 import static au.com.mysites.camps.util.OperationsFile.isExternalStorageAvailable;
 import static au.com.mysites.camps.util.OperationsImage.scaleImageFile;
-import static au.com.mysites.camps.util.OperationsImage.scaleImageInputStream;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 /**
@@ -337,8 +335,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * User has requested a save of the newly entered site or edit of existing site.
      * Gets the entered data for the new site or edited site, if entered data ok,
      * puts the data into a Site object, then saves it to the Firestore database and
-     * saves the image files to theFirebase storage.
-     * Uses external storag to store image files.
+     * saves the image files to Firebase storage.
+     * Images files also saved in external storage so next time the site is loaded, they do not
+     * have to be downloaded from Firebase storage.
      * <p>
      * Does not reflect if database write was successful as database write is done asynchronously.
      * Called by a press of the "ok" button.
@@ -360,7 +359,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
         getSiteStoreTextFromViews();
 
-        getSiteSaveImages();
+        getSiteSaveImages(mPhotoPath);
 
         // facilities already stored in site object, so need for anything
 
@@ -418,8 +417,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     * Images are not save to the remote database when first selected or photo taken, in case user
-     * abandons the photo selected or abandons the photo taken.
+     * Save images here, as images are not save to the remote database when first selected or
+     * photo taken, in case user abandons the site editing or site entry.
      * <p>
      * Gets the size of the thumbnail ImageView, scales the original image or photo to the size
      * of the ImageView, stores this scaled image in a newly created file in external storage and
@@ -434,21 +433,19 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * <p>
      * Called by {@link #getSite()}.
      */
-    private void getSiteSaveImages() {
+    private void getSiteSaveImages(String filePath) {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getSiteSaveImages()");
 
-        if (mPhotoPath == null) return;
+        if (filePath == null) return;
 
         // Check external storage is available
-        if (!isExternalStorageAvailable()) {
-            // Warn the user.
-            makeText(this, getString(R.string.ERROR_Storage_external_unavailable),
-                    Toast.LENGTH_SHORT).show();
+        if (!isExternalStorageAvailable()) {  // Warn the user.
+            makeText(this, getString(R.string.ERROR_Storage_external_unavailable), Toast.LENGTH_SHORT).show();
             return;
         }
         File file;
         // Scale image and store it in a new file
-        file = scaleImageFileToNewFile(mPhotoPath, mThumbnailImageView);
+        file = scaleImageFileToNewFile(filePath, mThumbnailImageView);
 
         if (file != null) {
             //save new file to firestore storage
@@ -458,7 +455,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             mSite.setThumbnail(file.getName());
         }
         // Scale image and store it in a new file
-        file = scaleImageFileToNewFile(mPhotoPath, mSitePhotoImageView);
+        file = scaleImageFileToNewFile(filePath, mSitePhotoImageView);
 
         if (file != null) {
             //save new file to firestore storage
@@ -474,7 +471,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * and stores the scaled image in a new file. The new file has a unique
      * system generated name.
      * <p>
-     * Called by {@link #getSiteSaveImages()}
+     * Called by {@link #getSiteSaveImages(String)}
      *
      * @param srcPhotoPath source file
      * @param imageView    target image to be used in sizing
@@ -592,7 +589,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * user has been granted write permission to access external storage.
      * If permission granted calls the method {@link #takePhotoDispatchIntent()}
      * The results are returned in the method {@link #onActivityResult(int, int, Intent)}
-     * If permission denied requests permission with the results returned
+     * If permission not available requests permission with the results returned
      * in the method {@link #onRequestPermissionsResult(int, String[], int[])}.
      * <p>
      * Called from {@link #takePhoto()}.
@@ -650,6 +647,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
              * configure the eligible paths in the dedicated resource file,
              * res/xml/file_paths.xml. */
 
+            /* FileProvider allows secure sharing of file through a content:// URI by granting
+             * temporary access to the file, which will be available for the receiver activity */
+
             // get authority for the file provider, this has to match the manifest authority
             String authority = getApplicationContext().getPackageName() + ".myfileprovider";
             Uri photoURI = FileProvider.getUriForFile(this,
@@ -660,19 +660,55 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
     }
 
+
+    /**
+     * Checks have permission to access external storage.
+     * If permission granted, calls the method {@link #selectPhotoUpdateImageViews()}.
+     * If camera permission not available requests permission with the result
+     * returned by {@link #onRequestPermissionsResult(int, String[], int[])}
+     * <p>
+     * Called from {@link #onClick(View)} which is a general handler of listeners from the buttons.
+     */
+    @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    private void selectPhoto() {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "selectPhoto()");
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //request permissions
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,}
+                    , Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE_GETPHOTO);
+        } else {
+            //permission already granted
+            selectPhotoUpdateImageViews();
+        }
+    }
+
+    /**
+     * Start an intent to selct a photo
+     */
+    private void selectPhotoUpdateImageViews() {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "selectPhotoUpdateImageView()");
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        if (intent.resolveActivity(getPackageManager()) != null)
+            startActivityForResult(intent, Constants.PICK_IMAGE);
+        else        //warn the user
+            makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
+    }
+
     /**
      * Callback result from the intents
-     * <p>
-     * <p>
      * Camera intent started in {@link #takePhotoDispatchIntent()}.
      *
      * @param requestCode calling intent request code
-     * @param resultCode  camera results
-     * @param intent      calling intent
+     * @param resultCode  results of intent
+     * @param data        results form intent
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onActivityResult()");
 
         switch (requestCode) {
@@ -682,12 +718,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                  * Files of the scaled images are not saved in Firestore storage at this stage,
                  * because the user may choose a different image or abandon the edit of the site. */
 
-                if (resultCode != Activity.RESULT_OK || intent == null) {    // Warn the user
+                if (resultCode != Activity.RESULT_OK || data == null) {    // Warn the user
                     makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
                     break;
                 }
-                if (updateImageViewsFile(mPhotoPath)) {     //process the file
-                    mSiteHasChanged = true;                 //Ok, set flag site details have changed
+                if (updateImageViewsFile(mPhotoPath)) {  //process the file
+                    mSiteHasChanged = true;              //if Ok, set flag site details have changed
                 } else { // Warn the user
                     makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
                 }
@@ -695,29 +731,21 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
             case Constants.PICK_IMAGE:
                 // For the chosen image, scale & display in thumbnail and sitePhoto ImageViews.
-                if (resultCode != Activity.RESULT_OK || intent == null) {    // Warn the user
-                    makeText(this, getString(R.string.ERROR_Photos_not_available), Toast.LENGTH_SHORT).show();
+                if (resultCode != Activity.RESULT_OK || data == null) {    // Warn the user
+                    makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
                     break;
                 }
-                InputStream in = null;
-                boolean result;
-                try {
-                    in = this.getContentResolver().openInputStream(intent.getData());
-                    result = updateImageViewsStream(in);
-                } catch (IOException e) {  // Warn the user
-                    makeText(this, getString(R.string.ERROR_Photos_not_available), Toast.LENGTH_SHORT).show();
+                //extract the file path from the returned data
+                String filePath = OperationsImage.getRealPathFromUri(this, data.getData());
+
+                if (filePath == null) {
+                    makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
                     break;
-                } finally {
-                    try {
-                        if (in != null) in.close();
-                    } catch (IOException e) {  // Warn the user
-                        Log.e(TAG, getString(R.string.ERROR_File_Error));
-                    }
                 }
-                if (result) {
-                    mSiteHasChanged = true;                 //Ok, set flag site details have changed
+                if (updateImageViewsFile(filePath)) {  //process the file
+                    mSiteHasChanged = true;            // If Ok, set flag site details have changed
                 } else { // Warn the user
-                    makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
+                    makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -733,36 +761,14 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     private boolean updateImageViewsFile(String photoPath) {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "updateImageViewsFile()");
 
+        // Scale thumbnail
         Bitmap bitmap = scaleImageFile(photoPath, mThumbnailImageView);
         if (bitmap == null) return false;
 
         mThumbnailImageView.setImageBitmap(bitmap);
 
-        //scale site photo
+        // Scale site photo
         bitmap = scaleImageFile(photoPath, mSitePhotoImageView);
-        if (bitmap == null) return false;
-
-        mSitePhotoImageView.setImageBitmap(bitmap);
-        return true;
-    }
-
-    /**
-     * Scales image from the InputStream to thumbnail and sitePhoto ImageViews
-     * then displays scaled image in thumbnail and sitePhoto ImageViews
-     *
-     * @param inputStream stream containing image to be processed
-     * @return true if operation successful
-     */
-    private boolean updateImageViewsStream(InputStream inputStream) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "updateImageStream()");
-
-        Bitmap bitmap = scaleImageInputStream(inputStream, mThumbnailImageView);
-        if (bitmap == null) return false;
-
-        mThumbnailImageView.setImageBitmap(bitmap);
-
-        //scale site photo
-        bitmap = scaleImageInputStream(inputStream, mSitePhotoImageView);
         if (bitmap == null) return false;
 
         mSitePhotoImageView.setImageBitmap(bitmap);
@@ -990,19 +996,19 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     takePhotoDispatchIntent();
                 } else {
                     // permission denied exit, tell user
-                    Toast.makeText(this, getString(R.string.ERROR_Storage_external_unavailable)
-                            , Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.ERROR_Storage_external_unavailable),
+                            Toast.LENGTH_LONG).show();
                 }
                 break;
 
             case Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE_GETPHOTO:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted, continue to get the photo from storage
-                    getSiteSaveImages();
+                    selectPhotoUpdateImageViews();
                 } else {
                     // permission denied exit, tell user
-                    Toast.makeText(this, getString(R.string.ERROR_Storage_external_unavailable)
-                            , Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.ERROR_Storage_external_unavailable),
+                            Toast.LENGTH_LONG).show();
                 }
                 break;
         }
@@ -1103,10 +1109,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 break;
 
             case R.id.add_site_button_grab_photo:
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                if (intent.resolveActivity(getPackageManager()) != null)
-                    startActivityForResult(intent, Constants.PICK_IMAGE);
+                selectPhoto();
                 break;
 
             case R.id.add_site_button_delete_photo:
