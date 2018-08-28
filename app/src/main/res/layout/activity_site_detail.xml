@@ -133,7 +133,7 @@
         android:layout_above="@+id/site_detail_facility_icons"
         android:layout_alignStart="@+id/site_detail_name"
         android:layout_marginEnd="8dp"
-        android:text="@string/setail_site_map_coordinates_heading"
+        android:text="@string/detail_site_map_coordinates_heading"
         android:textColor="@color/Gray"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_coordinates"
@@ -179,7 +179,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/site_detail_map_coordinates_heading"
         android:background="@drawable/detail_border"
-        android:text="@string/site_detail_map_show"
+        android:text="@string/detail_site_map_show"
         android:textColor="@color/Gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/site_detail_map_coordinates_heading"/>

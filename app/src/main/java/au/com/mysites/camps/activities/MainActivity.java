@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements
         findViewById(R.id.main_sign_in_button).setOnClickListener(this);
         findViewById(R.id.main_sign_out_button).setOnClickListener(this);
         findViewById(R.id.main_disconnect_button).setOnClickListener(this);
+        findViewById(R.id.main_start_app).setOnClickListener(this);
 
         // [START config_signin]
         // Configure Google Sign In
@@ -84,7 +85,8 @@ public class MainActivity extends AppCompatActivity implements
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
 
-        // Check if called by Summary Sites Activity and if there was a request to sign out
+        /* Check if called by SummarySitesActivity and if there was a request to sign out,
+         * if there was, stay in this activity, otherwise go to SummarySitesActivity  */
         Intent intent = getIntent();
         boolean signOutRequest;
         if (intent != null) {
@@ -218,6 +220,9 @@ public class MainActivity extends AppCompatActivity implements
             signIn();
         } else if (i == R.id.main_sign_out_button) {
             signOut();
+        } else if (i == R.id.main_start_app) {
+            Intent startApp = new Intent(MainActivity.this, SummarySitesActivity.class);
+            startActivity(startApp);
         } else if (i == R.id.main_disconnect_button) {
             revokeAccess();
         }

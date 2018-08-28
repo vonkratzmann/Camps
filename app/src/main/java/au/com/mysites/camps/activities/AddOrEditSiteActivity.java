@@ -32,11 +32,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -46,7 +44,6 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Objects;
 
 import au.com.mysites.camps.R;
@@ -124,24 +121,11 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     private DetailSiteViewModel mViewModel;
 
-    // set up a text watcher to monitor if the edit text fields have changed
-    private TextWatcher mEditTextWatcher = new TextWatcher() {
-        @Override
-        // do not use this one
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
+    // TextWatcher to check for changes to the EditText view
+    private TextWatcher mTextWatcher;
+    // Specific TextWatcher to check for changes to the name EditText view
+    private TextWatcher mNameTextWatcher;
 
-        @Override
-        // do not use this one
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // record the activities has been changed
-            mSiteHasChanged = true;
-        }
-    };
 
     @Override
     @CallSuper
@@ -156,6 +140,11 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         /*Reset flag to say activities has not changed, any editing changes to activities this flag
          * is set to true. Used to check the user has done a save before exiting. */
         mSiteHasChanged = false;
+
+        //Initialise Views and set up listeners
+        initViews();
+
+        setUpTextWatchers();
 
         // Check if this is editing an existing activities and or adding a new activities,
         // check activities ID from extras, provided by the calling activity
@@ -182,14 +171,61 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     .collection(getString(R.string.collection_sites))
                     .document(siteId);
         }
-        //Initialise Views and set up listeners
-        initViews();
 
         //enable toggling of the facility presence, indicating if present or not present
         displayStatusOfAllFacilities(mSite);
 
         // View models
         mViewModel = ViewModelProviders.of(this).get(DetailSiteViewModel.class);
+    }
+
+    /**
+     *  Set up a text watcher to monitor if the edit text fields have changed.
+      */
+    private void setUpTextWatchers() {
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "setUpTextWatchers");
+
+        mTextWatcher = new TextWatcher() {
+            @Override
+            // Do not use this one
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            // Do not use this one
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Record the activities has been changed
+                mSiteHasChanged = true;
+            }
+        };
+
+        /* Set up a specific text watcher to monitor if the name edit text field has changed
+         * as the name of the site is displayed in the toolbar. */
+
+        mNameTextWatcher = new TextWatcher() {
+            @Override
+            // Do not use this one
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            // Do not use this one
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Record the activities has been changed
+                mSiteHasChanged = true;
+                // Update the toolbar title
+                if (s != null)
+                    toolbar.setTitle(s.toString());
+            }
+        };
     }
 
     /**
@@ -201,12 +237,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "initViews()");
 
         //use a common TextChangeListener to monitor for changes to any EditText fields
-        (mNameEditText = findViewById(R.id.add_site_name_text)).addTextChangedListener(mEditTextWatcher);
-        (mStreetEditText = findViewById(R.id.add_site_street_text)).addTextChangedListener(mEditTextWatcher);
-        (mCityEditText = findViewById(R.id.add_site_city_text)).addTextChangedListener(mEditTextWatcher);
-        (mStateEditText = findViewById(R.id.add_site_state_text)).addTextChangedListener(mEditTextWatcher);
-        (mLatitudeEditText = findViewById(R.id.add_site_map_coordinates_lat)).addTextChangedListener(mEditTextWatcher);
-        (mLongitudeEditText = findViewById(R.id.add_site_map_coordinates_long)).addTextChangedListener(mEditTextWatcher);
+        (mNameEditText = findViewById(R.id.add_site_name_text)).addTextChangedListener(mNameTextWatcher);
+        (mStreetEditText = findViewById(R.id.add_site_street_text)).addTextChangedListener(mTextWatcher);
+        (mCityEditText = findViewById(R.id.add_site_city_text)).addTextChangedListener(mTextWatcher);
+        (mStateEditText = findViewById(R.id.add_site_state_text)).addTextChangedListener(mTextWatcher);
+        (mLatitudeEditText = findViewById(R.id.add_site_map_coordinates_lat)).addTextChangedListener(mTextWatcher);
+        (mLongitudeEditText = findViewById(R.id.add_site_map_coordinates_long)).addTextChangedListener(mTextWatcher);
         //where to display the image
         mSitePhotoImageView = findViewById(R.id.add_site_photo);
         mThumbnailImageView = findViewById(R.id.add_site_thumbnail);
@@ -333,6 +369,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         //Reset as loading data from the Site instance to editText views, sets off the TextWatcher
         mSiteHasChanged = false;
     }
+
 
     /**
      * User has requested a save of the newly entered activities or edit of existing activities.
@@ -679,7 +716,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             startActivityForResult(intent, Constants.RC_PICK_IMAGE);
         } else {       //warn the user
             makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
-            if (Debug.DEBUG_SITE) Log.d(TAG, "selectPhotoUpdateImageViews(): ERROR_Photo_not_available");
+            if (Debug.DEBUG_SITE)
+                Log.d(TAG, "selectPhotoUpdateImageViews(): ERROR_Photo_not_available");
         }
     }
 
@@ -1030,11 +1068,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         super.onStart();
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onStart()");
 
-        // Start sign in if necessary
-        if (shouldStartSignIn()) {
-            startSignIn();
-            return;
-        }
         /* Implement snapshot listener, the initial call of the callback {@link #onEvent()}
          * as a result of using addSnapshotListener() immediately creates a document snapshot with the
          * current contents of the single document.
@@ -1058,26 +1091,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             mSiteRegistration.remove();
             mSiteRegistration = null;
         }
-    }
-
-    private boolean shouldStartSignIn() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "shouldStartSignIn()");
-
-        return (!mViewModel.getIsSigningIn() && FirebaseAuth.getInstance().getCurrentUser() == null);
-    }
-
-    private void startSignIn() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "startSignIn()");
-
-        // Sign in with FirebaseUI
-        Intent intent = AuthUI.getInstance().createSignInIntentBuilder()
-                .setAvailableProviders(Collections.singletonList(
-                        new AuthUI.IdpConfig.EmailBuilder().build()))
-                .setIsSmartLockEnabled(false)
-                .build();
-
-        startActivityForResult(intent, Constants.RC_SIGN_IN);
-        mViewModel.setIsSigningIn(true);
     }
 
     /**

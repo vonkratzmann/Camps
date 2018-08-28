@@ -112,6 +112,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
 
         Toolbar toolbar = findViewById(R.id.site_detail_toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle(siteId);
 
         initViews();
 

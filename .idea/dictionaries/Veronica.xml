@@ -4,17 +4,24 @@
       <w>attributename</w>
       <w>attributetype</w>
       <w>attributevalue</w>
+      <w>authorheading</w>
       <w>baos</w>
+      <w>commentauthor</w>
+      <w>commentby</w>
+      <w>commentdate</w>
       <w>coordinateformat</w>
       <w>dateformat</w>
+      <w>dateheading</w>
       <w>dbmaint</w>
       <w>dropbox</w>
       <w>dumppoint</w>
       <w>dumppointpresent</w>
+      <w>facilitytype</w>
       <w>firebase</w>
       <w>firestore</w>
       <w>freepresent</w>
       <w>geelong</w>
+      <w>geocoder</w>
       <w>imageoperations</w>
       <w>mobilepresent</w>
       <w>myfileprovider</w>
@@ -31,6 +38,7 @@
       <w>snapshop</w>
       <w>subheader</w>
       <w>swimmingpresent</w>
+      <w>textheading</w>
       <w>toiletspresent</w>
       <w>tvreception</w>
       <w>tvreceptionpresent</w>
