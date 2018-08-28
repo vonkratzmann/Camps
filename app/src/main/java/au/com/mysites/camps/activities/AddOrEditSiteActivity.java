@@ -66,7 +66,9 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
  * Allows user to add a new activities or edit an existing activities
  */
 public class AddOrEditSiteActivity extends AppCompatActivity implements
-        EventListener<DocumentSnapshot>, View.OnClickListener {
+        EventListener<DocumentSnapshot>,
+        View.OnClickListener {
+
     private final static String TAG = AddOrEditSiteActivity.class.getSimpleName();
 
     //Used to check if a field has changed
@@ -121,12 +123,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     private DetailSiteViewModel mViewModel;
 
-    // TextWatcher to check for changes to the EditText view
-    private TextWatcher mTextWatcher;
-    // Specific TextWatcher to check for changes to the name EditText view
-    private TextWatcher mNameTextWatcher;
-
-
     @Override
     @CallSuper
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +130,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onCreate()");
 
         setContentView(R.layout.activity_site_add_edit);
-        toolbar = findViewById(R.id.site_summary_toolbar);
+        toolbar = findViewById(R.id.add_edit_site_toolbar);
         setSupportActionBar(toolbar);
 
         /*Reset flag to say activities has not changed, any editing changes to activities this flag
@@ -143,8 +139,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         //Initialise Views and set up listeners
         initViews();
-
-        setUpTextWatchers();
 
         // Check if this is editing an existing activities and or adding a new activities,
         // check activities ID from extras, provided by the calling activity
@@ -181,52 +175,44 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     /**
      *  Set up a text watcher to monitor if the edit text fields have changed.
-      */
-    private void setUpTextWatchers() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "setUpTextWatchers");
+     */
+    private final TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        // Do not use this one
+        public void beforeTextChanged (CharSequence s,int start, int count, int after){
+        }
+        @Override
+        // Do not use this one
+        public void onTextChanged (CharSequence s,int start, int before, int count){
+        }
+        @Override
+        public void afterTextChanged (Editable s){
+            // Record the activities has been changed
+            mSiteHasChanged = true;
+        }
+    };
 
-        mTextWatcher = new TextWatcher() {
-            @Override
-            // Do not use this one
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            // Do not use this one
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Record the activities has been changed
-                mSiteHasChanged = true;
-            }
-        };
-
-        /* Set up a specific text watcher to monitor if the name edit text field has changed
-         * as the name of the site is displayed in the toolbar. */
-
-        mNameTextWatcher = new TextWatcher() {
-            @Override
-            // Do not use this one
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            // Do not use this one
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Record the activities has been changed
-                mSiteHasChanged = true;
-                // Update the toolbar title
-                if (s != null)
-                    toolbar.setTitle(s.toString());
-            }
-        };
-    }
+    /* Set up a specific text watcher to monitor if the name edit text field has changed
+     * as the name of the site is displayed in the toolbar.
+     */
+    private final TextWatcher mNameTextWatcher = new TextWatcher() {
+        @Override
+        // Do not use this one
+        public void beforeTextChanged (CharSequence s,int start, int count, int after){
+        }
+        @Override
+        // Do not use this one
+        public void onTextChanged (CharSequence s,int start, int before, int count){
+        }
+        @Override
+        public void afterTextChanged (Editable s){
+            // Record the activities has been changed
+            mSiteHasChanged = true;
+            // Update the toolbar title
+            if (s != null)
+                toolbar.setTitle(s.toString());
+        }
+    };
 
     /**
      * Initialise views and set up listeners. There is a common listener used for the buttons
@@ -678,7 +664,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             startActivityForResult(takePhotoIntent, Constants.RC_IMAGE_CAPTURE);
         }
     }
-
 
     /**
      * Checks have permission to access external storage.
@@ -1151,16 +1136,16 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
     }
 
-    /**
-     * Handles results from the Geocoder
-     */
-    class AddressResultReceiver extends ResultReceiver {
-        @SuppressLint("RestrictedApi")
-        AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
+/**
+ * Handles results from the Geocoder
+ */
+class AddressResultReceiver extends ResultReceiver {
+    @SuppressLint("RestrictedApi")
+    AddressResultReceiver(Handler handler) {
+        super(handler);
+    }
 
-        // private static final String TAG = "AddressResultReceiver";
+    // private static final String TAG = "AddressResultReceiver";
 
         /*     @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
@@ -1186,7 +1171,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                         ,Toast.LENGTH_SHORT).show();
             }
         }*/
-    }
+}
 }
 
 
