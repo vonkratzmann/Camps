@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import au.com.mysites.camps.R;
+
 /**
  * Methods used in manipulating images
  */
@@ -38,7 +40,7 @@ public class OperationsImage {
 
         // Create a unique image file name
         @SuppressLint("SimpleDateFormat")
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat(context.getString(R.string.Image_File_Name)).format(new Date());
         String imageFileName = timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
@@ -57,7 +59,7 @@ public class OperationsImage {
      * @param photoPath save to file pointed to by this pathname
      * @return true if no errors
      */
-    public static boolean saveBitmapToFile(Bitmap bitmap, String photoPath) {
+    private static boolean saveBitmapToFile(Bitmap bitmap, String photoPath) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE) Log.d(TAG, "saveBitmapToFile()");
 
         //convert the decoded bitmap to stream
@@ -148,18 +150,35 @@ public class OperationsImage {
     }
 
     /**
+     * Extract path from URI
      *
-     * @param context
-     * @param contentUri
-     * @return
+     * @param context    context of caller
+     * @param contentUri URI of file
+     * @return path of file
      */
     public static String getRealPathFromUri(Context context, Uri contentUri) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE) Log.d(TAG, "getRealPathFromUri()");
 
+        if (contentUri.getAuthority() != null)
+            if (Debug.DEBUG_UTIL) Log.d(TAG, "contentUri.getAuthority(): " + contentUri.getAuthority());
+        else
+            if (Debug.DEBUG_UTIL) Log.d(TAG, "contentUri.getAuthority(): " + contentUri.getAuthority());
+
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            String[] projection = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri,
+                    projection,   // Which columns to return
+                    null,   // WHERE clause; which rows to return (all rows)
+                    null,   // WHERE clause selection arguments (none)
+                    null);  // Order-by clause (ascending by name)
+
+            if (cursor == null) { // Source is Dropbox or other similar local filepath
+                if (Debug.DEBUG_UTIL)
+                    Log.d(TAG, "getRealPathFromURI : cursor null. Path: " + contentUri.getPath());
+                return contentUri.getPath();
+            }
+
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
@@ -174,10 +193,10 @@ public class OperationsImage {
      * Extracts bitmap from an ImageView and stores the bitmap in a new file.
      * The new file has a unique system generated name.
      *
-     * @param imageView    target image to be saved
-     * @return             new file with image, otherwise return null
+     * @param imageView target image to be saved
+     * @return new file with image, otherwise return null
      */
-    public static File imageViewToNewFile( Context context, ImageView imageView) {
+    public static File imageViewToNewFile(Context context, ImageView imageView) {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "imageViewToNewFile()");
 
         File file;
@@ -191,7 +210,7 @@ public class OperationsImage {
         try {
             file = OperationsImage.createImageFile(context);
         } catch (IOException e) {
-            Log.e(TAG, " IOexception");
+            Log.e(TAG, " IOException");
             return null;
         }
         if (OperationsImage.saveBitmapToFile(bitmap, file.getAbsolutePath()))

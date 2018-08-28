@@ -675,10 +675,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        if (intent.resolveActivity(getPackageManager()) != null)
+        if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, Constants.PICK_IMAGE);
-        else        //warn the user
+        } else {       //warn the user
             makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
+            if (Debug.DEBUG_SITE) Log.d(TAG, "selectPhotoUpdateImageViews(): ERROR_Photo_not_available");
+        }
     }
 
     /**

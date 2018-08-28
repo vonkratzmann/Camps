@@ -169,6 +169,10 @@
     <!-- File path on Firebase storage -->
     <string name="firebase_storage_path">camps</string>
 
+    <!-- File name for image files -->
+    <string name="Image_File_Name">yyyyMMdd_HHmmss</string>
+
+    "yyyyMMdd_HHmmss"
 
     <!-- kk sort out -->
     <string name="value_any_city">Anywhere</string>

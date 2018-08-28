@@ -1,6 +1,6 @@
 package au.com.mysites.camps.util;
 
-public class Constants {
+public final class Constants {
 
     //Storage Permissions request identifier
     public static final int REQUEST_EXTERNAL_STORAGE = 10;

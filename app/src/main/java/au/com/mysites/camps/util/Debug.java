@@ -1,6 +1,6 @@
 package au.com.mysites.camps.util;
 
-public class Debug {
+public final class Debug {
 
     /**
      * Used to enable/disable logging
