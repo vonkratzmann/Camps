@@ -47,7 +47,7 @@
         </activity>
 
         <activity
-            android:name=".activities.SummarySiteActivity"
+            android:name=".activities.SummarySitesActivity"
             android:label="@string/summary_sites_title"
             android:parentActivityName=".activities.MainActivity"/>
 
@@ -59,7 +59,7 @@
         <activity
             android:name=".activities.DetailSiteActivity"
             android:label="@string/site_detail_title"
-            android:parentActivityName=".activities.SummarySiteActivity"/>
+            android:parentActivityName=".activities.SummarySitesActivity"/>
 
         <activity
             android:name=".activities.DetailSiteMapActivity"
@@ -69,7 +69,7 @@
         <activity
             android:name=".activities.BackUpRestoreActivity"
             android:label="@string/backup_restore_database_title"
-            android:parentActivityName=".activities.SummarySiteActivity"/>
+            android:parentActivityName=".activities.SummarySitesActivity"/>
 
         <activity
             android:name=".activities.RatingDetailActivity"
@@ -79,7 +79,7 @@
         <activity
             android:name=".activities.QueryDatabaseActivity"
             android:label="@string/query_database_title"
-            android:parentActivityName=".activities.SummarySiteActivity"/>
+            android:parentActivityName=".activities.SummarySitesActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

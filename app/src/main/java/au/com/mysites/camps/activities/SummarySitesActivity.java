@@ -20,14 +20,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-
-import java.util.Collections;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.adapter.SiteAdapter;
@@ -37,11 +33,11 @@ import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
 import au.com.mysites.camps.viewmodel.SummarySiteACtivityViewModel;
 
-public class SummarySiteActivity extends AppCompatActivity implements
+public class SummarySitesActivity extends AppCompatActivity implements
         FilterDialogFragment.FilterListener,
         SiteAdapter.OnSiteSelectedListener {
 
-    private static final String TAG = SummarySiteActivity.class.getSimpleName();
+    private static final String TAG = SummarySitesActivity.class.getSimpleName();
 
     Toolbar mToolbar;
     TextView mCurrentSearchView;
@@ -88,7 +84,7 @@ public class SummarySiteActivity extends AppCompatActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent addNewSite = new Intent(SummarySiteActivity.this, AddOrEditSiteActivity.class);
+                Intent addNewSite = new Intent(SummarySitesActivity.this, AddOrEditSiteActivity.class);
                 startActivity(addNewSite);
             }
         });
@@ -185,12 +181,6 @@ public class SummarySiteActivity extends AppCompatActivity implements
         super.onStart();
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onStart()");
 
-        // Start sign in if necessary
-        if (shouldStartSignIn()) {
-            startSignIn();
-            return;
-        }
-
         // Apply filters
         onFilter(mViewModel.getFilters());
 
@@ -274,14 +264,8 @@ public class SummarySiteActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onActivityResult()");
 
-        if (requestCode == Constants.RC_SIGN_IN) {
-            mViewModel.setIsSigningIn(false);
-
-            if (resultCode != RESULT_OK && shouldStartSignIn()) {
-                startSignIn();
-            }
-        }
     }
+
 /*
     @OnClick(R.id.filter_bar)
     public void onFilterClicked() {
@@ -307,26 +291,6 @@ public class SummarySiteActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
-    private boolean shouldStartSignIn() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "shouldStartSignIn()");
-
-        return (!mViewModel.getIsSigningIn() && FirebaseAuth.getInstance().getCurrentUser() == null);
-    }
-
-    private void startSignIn() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "startSignIn()");
-
-        // Sign in with FirebaseUI
-        Intent intent = AuthUI.getInstance().createSignInIntentBuilder()
-                .setAvailableProviders(Collections.singletonList(
-                        new AuthUI.IdpConfig.EmailBuilder().build()))
-                .setIsSmartLockEnabled(false)
-                .build();
-
-        startActivityForResult(intent, Constants.RC_SIGN_IN);
-        mViewModel.setIsSigningIn(true);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onOptionsItemSelected()");
@@ -341,17 +305,19 @@ public class SummarySiteActivity extends AppCompatActivity implements
                 break;
 
             case R.id.menu_summary_sign_out:
-                AuthUI.getInstance().signOut(this);
-                startSignIn();
+                Intent signOut = new Intent(SummarySitesActivity.this, MainActivity.class);
+                // Signal to new activity the source of this intent
+                signOut.putExtra(getString(R.string.intent_sign_out), true);
+                startActivity(signOut);
                 break;
 
             case R.id.menu_summary_database_manage:
-                Intent backupRestore = new Intent(SummarySiteActivity.this, BackUpRestoreActivity.class);
+                Intent backupRestore = new Intent(SummarySitesActivity.this, BackUpRestoreActivity.class);
                 startActivity(backupRestore);
                 break;
 
             case R.id.menu_summary_database_query:
-                Intent databaseQuery = new Intent(SummarySiteActivity.this, QueryDatabaseActivity.class);
+                Intent databaseQuery = new Intent(SummarySitesActivity.this, QueryDatabaseActivity.class);
                 startActivity(databaseQuery);
                 break;
         }

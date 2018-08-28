@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E0E0E0"
-    tools:context=".activities.SummarySiteActivity">
+    tools:context=".activities.SummarySitesActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

@@ -7,16 +7,15 @@
     <string name="site_detail_map_title">Camp Map</string>
     <string name="add_comment_title">Add Comment</string>
     <string name="add_edit_site_title">Add Edit Site</string>
-    <string name="backup_restore_database_title">Bacup Restore Database</string>
+    <string name="backup_restore_database_title">Backup Restore Database</string>
     <string name="query_database_title">Quey Database</string>
     <string name="ratings_title">Enter Rating</string>
 
     <!-- Intent Extras -->
     <string name="intent_site_number" translatable="false">siteNumber</string>
     <string name="intent_edit_site_number" translatable="false">editSiteNumber</string>
-    <string name="intent_comment_number" translatable="false">commentNumber</string>
-    <string name="intent_add_comment" translatable="false">addComment</string>
     <string name="intent_site_name" translatable="false">siteName</string>
+    <string name="intent_sign_out" translatable="false">signout</string>
 
     <!-- Preference keys -->
     <string name="pref_key_site_id" translatable="false">pref_key_site_id</string>
@@ -56,6 +55,9 @@
     <string name="facilitytype" translatable="false">type</string>
 
     <!-- Summary and detailed headings in Layout-->
+    <string name="main_sign_in">Sign In</string>
+    <string name="main_sign_out">Sign Out</string>
+
     <string name="name_heading">Name</string>
     <string name="city_heading">Area</string>
     <string name="street_heading">Highway</string>
@@ -140,6 +142,10 @@
     <!-- Detail Site Layout Text -->
     <string name="site_detail_no_comments">Be the first to leave a comment!</string>
 
+    <!-- Backup Restore Screen Text -->
+    <string name="maint_backup_database">Backup database</string>
+    <string name="maint_restore_database">Restore database</string>
+    <string name="maint_filename">filename</string>
 
     <!-- Menu items -->
     <string name="summary_settings">Settings</string>
@@ -147,22 +153,6 @@
     <string name="summary_database_manage">Manage Database</string>
     <string name="summary_database_query">Query Database</string>
     <string name="detail_edit_site">Edit site</string>
-
-
-    <!-- Maint Screen Text -->
-    <string name="maint_get_site_from_database">Get site from database</string>
-    <string name="maint_put_site_into_database">Put site into database</string>
-    <string name="maint_get_row_count">Get row count</string>
-    <string name="maint_get_all_sites_from_database">Get all sites from database</string>
-    <string name="maint_site_no">Site No.</string>
-    <string name="maint_output_data">Output Data</string>
-    <string name="maint_delete_site">Delete site</string>
-    <string name="maint_update_site">Update site</string>
-    <string name="maint_delete_table">Delete table</string>
-    <string name="maint_delete_database">Delete database</string>
-    <string name="maint_backup_database">Backup database</string>
-    <string name="maint_restore_database">Restore database</string>
-    <string name="maint_filename">filename</string>
 
     <!-- File path on Firebase storage -->
     <string name="firebase_storage_path">camps</string>
@@ -173,7 +163,7 @@
 
     <!-- Sign in -->
     <string name="loading">Loading…</string>
-    <string name="sign_out">Sign Out</string>
+    <string name="sign_out"> Sign Out </string>
     <string name="signed_out">Signed Out</string>
     <string name="disconnect">Disconnect</string>
 

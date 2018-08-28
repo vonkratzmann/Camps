@@ -5,7 +5,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#E0E0E0"
-                tools:context="au.com.mysites.camps.activities.SummarySiteActivity">
+                tools:context="au.com.mysites.camps.activities.SummarySitesActivity">
 
     <FrameLayout
         android:id="@+id/summary_filter_bar_container"

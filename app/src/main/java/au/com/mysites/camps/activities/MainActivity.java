@@ -84,9 +84,17 @@ public class MainActivity extends AppCompatActivity implements
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
 
-        //go to summary site activity
-        Intent SummarySite = new Intent(MainActivity.this, SummarySiteActivity.class);
-        startActivity(SummarySite);
+        // Check if called by Summary Sites Activity and if there was a request to sign out
+        Intent intent = getIntent();
+        boolean signOutRequest;
+        if (intent != null) {
+            signOutRequest = intent.getBooleanExtra(getString(R.string.intent_sign_out), false);
+
+            if (!signOutRequest) { //if no request go to summary site activity
+                Intent SummarySite = new Intent(MainActivity.this, SummarySitesActivity.class);
+                startActivity(SummarySite);
+            }
+        }
     }
 
     @Override
@@ -191,13 +199,13 @@ public class MainActivity extends AppCompatActivity implements
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
             findViewById(R.id.main_sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+            findViewById(R.id.main_sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
 
             findViewById(R.id.main_sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+            findViewById(R.id.main_sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
 
