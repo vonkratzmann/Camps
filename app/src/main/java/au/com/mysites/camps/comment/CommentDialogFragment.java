@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.Objects;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Comment;
+import au.com.mysites.camps.models.Comment;
 import au.com.mysites.camps.util.Debug;
 
 public class CommentDialogFragment extends DialogFragment {

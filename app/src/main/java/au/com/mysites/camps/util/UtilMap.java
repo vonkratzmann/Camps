@@ -7,14 +7,14 @@ import android.util.Log;
 import java.util.StringTokenizer;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Site;
-import au.com.mysites.camps.site.DetailSiteMapActivity;
+import au.com.mysites.camps.models.Site;
+import au.com.mysites.camps.activities.DetailSiteMapActivity;
 
 /**
  * Methods used to assist with maps
  */
-public class OperationsMap {
-    private final static String TAG = OperationsMap.class.getSimpleName();
+public class UtilMap {
+    private final static String TAG = UtilMap.class.getSimpleName();
 
     /**
      * Checks a longitude String is in the format
@@ -132,12 +132,12 @@ public class OperationsMap {
     }
 
     /**
-     * Checks have a valid site, and latitude and longitude are set.
+     * Checks have a valid activities, and latitude and longitude are set.
      * Format checking of latitude and longitude is not done here
      * as this is done at entry of latitude and longitude.
      *
-     * @param site    site containing latitude and longitude
-     * @return false if null site or latitude or longitude not set
+     * @param site    activities containing latitude and longitude
+     * @return false if null activities or latitude or longitude not set
      */
     public static boolean mapCheckLatLongSet(Site site) {
         if (Debug.DEBUG_METHOD_ENTRY_MAP) Log.d(TAG, "mapCheckLatLongSet()");
@@ -152,7 +152,7 @@ public class OperationsMap {
     /**
      * Shows a map using an intent
      *
-     * @param site    site containing latitude and longitude
+     * @param site    activities containing latitude and longitude
      * @param context context of calling method
      */
     public static void mapShow(Site site, Context context) {

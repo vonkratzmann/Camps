@@ -1,4 +1,4 @@
-package au.com.mysites.camps.site;
+package au.com.mysites.camps.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,11 +17,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.util.Debug;
 
-import static au.com.mysites.camps.util.OperationsMap.mapCovertDegMinSecToDegrees;
+import static au.com.mysites.camps.util.UtilMap.mapCovertDegMinSecToDegrees;
 
 
 /**
- * Displays the location of the site on a map and adds a marker
+ * Displays the location of the activities on a map and adds a marker
  */
 public class DetailSiteMapActivity extends FragmentActivity implements OnMapReadyCallback {
     private final static String TAG = DetailSiteMapActivity.class.getSimpleName();
@@ -33,7 +33,7 @@ public class DetailSiteMapActivity extends FragmentActivity implements OnMapRead
     float zoomLevel = 16.0F;
 
     /**
-     * Gets the site, latitude, longitude and name from the intent,
+     * Gets the activities, latitude, longitude and name from the intent,
      * loads the view with the map and requests the map.
      * The results are returned in {@link #onMapReady(GoogleMap)}.
      *
@@ -81,7 +81,7 @@ public class DetailSiteMapActivity extends FragmentActivity implements OnMapRead
         // Add a marker to the map
         mMap.addMarker(new MarkerOptions()
                 .position(location)
-                .title(mName));     //name of the site
+                .title(mName));     //name of the activities
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoomLevel));
     }
 }

@@ -6,9 +6,9 @@ import android.util.Log;
 /**
  * General short methods
  */
-public class OperationsGeneral {
+public class UtilGeneral {
 
-    private final static String TAG = OperationsGeneral.class.getSimpleName();
+    private final static String TAG = UtilGeneral.class.getSimpleName();
 
     /**
      * Checks if string is empty,

@@ -1,4 +1,4 @@
-package au.com.mysites.camps.model;
+package au.com.mysites.camps.models;
 
 import android.text.TextUtils;
 

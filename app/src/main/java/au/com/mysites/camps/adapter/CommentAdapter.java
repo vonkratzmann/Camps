@@ -13,11 +13,11 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.Query;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Comment;
+import au.com.mysites.camps.models.Comment;
 import au.com.mysites.camps.util.Debug;
 
 /**
- * RecyclerView adapter for comments for a single site
+ * RecyclerView adapter for comments for a single activities
  */
 
 public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> {

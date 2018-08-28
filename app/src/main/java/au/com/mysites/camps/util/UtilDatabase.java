@@ -23,8 +23,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Comment;
-import au.com.mysites.camps.model.Site;
+import au.com.mysites.camps.models.Comment;
+import au.com.mysites.camps.models.Site;
 
 import static android.widget.Toast.makeText;
 
@@ -32,13 +32,13 @@ import static android.widget.Toast.makeText;
  * Methods to read and write firestore database
  */
 
-public class OperationsDatabase {
-    private final static String TAG = OperationsDatabase.class.getSimpleName();
+public class UtilDatabase {
+    private final static String TAG = UtilDatabase.class.getSimpleName();
 
 
     /**
-     * Write sites to the firebase database with database id equal to the site name
-     * if any comments for each site, then write as a sub-collection
+     * Write sites to the firebase database with database id equal to the activities name
+     * if any comments for each activities, then write as a sub-collection
      *
      * @param siteList list of sites to be written to the database
      * @param context  of calling activity
@@ -46,7 +46,7 @@ public class OperationsDatabase {
     public static void addMultipleSitesAndComments(ArrayList<Site> siteList, Context context) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addSitesAndComments()");
 
-        //for each site write to the database
+        //for each activities write to the database
         int siteCount = siteList.size();
         for (int i = 0; i < siteCount; i++) {
             Site site = siteList.get(i);
@@ -55,7 +55,7 @@ public class OperationsDatabase {
     }
 
     /**
-     * Write one site to the firebase database with database id equal to the site name
+     * Write one activities to the firebase database with database id equal to the activities name
      *
      * @param site    to be written to the database
      * @param context of calling activity
@@ -63,11 +63,11 @@ public class OperationsDatabase {
     public static void addOneSiteAndComments(final Site site, final Context context) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addOneSiteAndComments()");
 
-        //use the site name as the ID for the database document
+        //use the activities name as the ID for the database document
         String siteName = site.getName();
         final int numberComments = site.getComments().size(); //get number of comments
 
-        // Initialize Firestore and add site to the database
+        // Initialize Firestore and add activities to the database
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
         mFirestore.collection(context.getString(R.string.collection_sites))
                 .document(siteName)
@@ -77,7 +77,7 @@ public class OperationsDatabase {
                     public void onSuccess(Void avoid) {
                         //if no comments, tell caller Ok, otherwise let comments tell caller
                         if (numberComments <= 0)
-                            OperationsDatabase.shortToast(context.getString(R.string.Site_saved),
+                            UtilDatabase.shortToast(context.getString(R.string.Site_saved),
                                     Constants.TOASTTIMEDATABASE, context);
                     }
                 })
@@ -86,7 +86,7 @@ public class OperationsDatabase {
                     public void onFailure(@NonNull Exception e) {
                         //if no comments, tell caller Not Ok, otherwise let comments tell caller
                         if (numberComments <= 0)
-                            OperationsDatabase.shortToast(context.getString(R.string.ERROR_Database),
+                            UtilDatabase.shortToast(context.getString(R.string.ERROR_Database),
                                     Constants.TOASTTIMEDATABASE, context);
                     }
                 });
@@ -104,7 +104,7 @@ public class OperationsDatabase {
     private static void addComments(final Site site, final Context context) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addComments()");
 
-        String siteName = site.getName(); //use the site name as the ID for the database document
+        String siteName = site.getName(); //use the activities name as the ID for the database document
 
         // Initialize Firestore
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
@@ -120,14 +120,14 @@ public class OperationsDatabase {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void avoid) {
-                            OperationsDatabase.shortToast(context.getString(R.string.Comment_saved),
+                            UtilDatabase.shortToast(context.getString(R.string.Comment_saved),
                                     Constants.TOASTTIMEDATABASE, context);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            OperationsDatabase.shortToast(context.getString(R.string.ERROR_Database),
+                            UtilDatabase.shortToast(context.getString(R.string.ERROR_Database),
                                     Constants.TOASTTIMEDATABASE, context);
                         }
                     });
@@ -173,7 +173,7 @@ public class OperationsDatabase {
     /**
      * Checks if file exits on the local device, if yes display it into imageView, else
      * download the file from Firebase Storage and display it in the imageView, so that
-     *  future loads of the site will not require the file to be downloaded again.
+     *  future loads of the activities will not require the file to be downloaded again.
      *
      * @param fileName     name of file containing image
      * @param imageView    view where image is to be displayed
@@ -196,7 +196,7 @@ public class OperationsDatabase {
             imageView.setImageBitmap(bitmap);
         } else {
             // Get the file from storage and display it
-            OperationsDatabase.getFileOffFirebaseStorageAndDisplay(fileName, localFile,
+            UtilDatabase.getFileOffFirebaseStorageAndDisplay(fileName, localFile,
                     storageDir, imageView);
             if (Debug.DEBUG_UTIL) Log.d(TAG, "getImageAndDisplay() get file from Firebase storage: "
                     + localFile.toString());

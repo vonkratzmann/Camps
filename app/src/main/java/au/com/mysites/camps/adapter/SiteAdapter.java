@@ -13,9 +13,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Site;
+import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.util.Debug;
-import au.com.mysites.camps.util.OperationsDatabase;
+import au.com.mysites.camps.util.UtilDatabase;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 /**
@@ -91,16 +91,16 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
 
             /* Check if there is a valid thumbnail. If on local device load into imageView, else
              * download the file from Firebase Storage and display it in the imageView, so that
-             *  future loads of the site will not require the file to be downloaded again. */
+             *  future loads of the activities will not require the file to be downloaded again. */
             if (site.getThumbnail() != null && !site.getThumbnail().isEmpty()) {
-                OperationsDatabase.getImageAndDisplay(site.getThumbnail(), thumbnailView);
+                UtilDatabase.getImageAndDisplay(site.getThumbnail(), thumbnailView);
             }
             else  // Clear imageView
                 thumbnailView.setImageDrawable(null);
 
             // Photo is not displayed on this layout, only thumbnail.
             //todo fix
-            // numRatingsView.setText(resources.getString(R.string.fmt_num_ratings,site.getNumRatings()));
+            // numRatingsView.setText(resources.getString(R.string.fmt_num_ratings,activities.getNumRatings()));
 
             // Click listener
             itemView.setOnClickListener(new View.OnClickListener() {

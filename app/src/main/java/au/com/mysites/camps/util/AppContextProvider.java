@@ -1,9 +1,9 @@
-package au.com.mysites.camps;
+package au.com.mysites.camps.util;
 
 import android.app.Application;
 import android.content.Context;
 
-public class ApplicationContextProvider extends Application {
+public class AppContextProvider extends Application {
 
     /**
      * Keeps a reference of the application context

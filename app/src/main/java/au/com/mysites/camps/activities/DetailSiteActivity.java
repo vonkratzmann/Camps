@@ -1,4 +1,4 @@
-package au.com.mysites.camps.site;
+package au.com.mysites.camps.activities;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
@@ -45,12 +45,12 @@ import java.util.Objects;
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.adapter.CommentAdapter;
 import au.com.mysites.camps.comment.CommentDialogFragment;
-import au.com.mysites.camps.model.Comment;
-import au.com.mysites.camps.model.Site;
+import au.com.mysites.camps.models.Comment;
+import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
-import au.com.mysites.camps.util.OperationsDatabase;
-import au.com.mysites.camps.util.OperationsMap;
+import au.com.mysites.camps.util.UtilDatabase;
+import au.com.mysites.camps.util.UtilMap;
 import au.com.mysites.camps.viewmodel.DetailSiteViewModel;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
@@ -58,7 +58,7 @@ import static android.widget.RelativeLayout.CENTER_VERTICAL;
 import static android.widget.Toast.makeText;
 
 /**
- * Displays the detail for a single site with comments for that site
+ * Displays the detail for a single activities with comments for that activities
  */
 public class DetailSiteActivity extends AppCompatActivity implements View.OnClickListener,
         EventListener<DocumentSnapshot>, CommentDialogFragment.CommentListener {
@@ -92,7 +92,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     private LinearLayout mFacilityIconLinearLayout;
     private LinearLayout.LayoutParams mLayoutParams;
 
-    //displaying the detail for this site
+    //displaying the detail for this activities
     private Site mSite;
 
     private DetailSiteViewModel mViewModel;
@@ -104,7 +104,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
 
         setContentView(R.layout.activity_site_detail);
 
-        // Get site ID from extras
+        // Get activities ID from extras
         String siteId = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.intent_site_name));
         if (siteId == null) {
             throw new IllegalArgumentException("Must pass extra " + getString(R.string.intent_site_name));
@@ -115,17 +115,17 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
 
         initViews();
 
-        // View model
+        // View models
         mViewModel = ViewModelProviders.of(this).get(DetailSiteViewModel.class);
 
         // Initialize Firestore, views and listeners
         mFirestore = FirebaseFirestore.getInstance();
 
-        // Get reference to this site in the database
+        // Get reference to this activities in the database
         mSiteDocumentRef = mFirestore
                 .collection(getString(R.string.collection_sites))
                 .document(siteId);
-        // Get reference to the collection of comments for this site in the database
+        // Get reference to the collection of comments for this activities in the database
         mCommentsQuery = mFirestore
                 .collection(getString(R.string.collection_sites))
                 .document(siteId)
@@ -296,7 +296,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onEvent()");
 
         if (e != null) {
-            Log.w(TAG, "site:onEvent", e);
+            Log.w(TAG, "activities:onEvent", e);
             return;
         }
         if (snapshot != null) {
@@ -305,10 +305,10 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     }
 
     /**
-     * Using the site loaded from the database, update the views on the UI.
+     * Using the activities loaded from the database, update the views on the UI.
      * Called from {@link #onEvent(DocumentSnapshot, FirebaseFirestoreException)}
      *
-     * @param site site that has been loaded
+     * @param site activities that has been loaded
      */
     private void onSiteLoaded(Site site) {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onSiteLoaded()");
@@ -324,11 +324,11 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         mRatingIndicator.setRating((float) site.getAvgRating());
         mNumRatingsView.setText(getString(R.string.fmt_num_ratings, site.getNumRatings()));
 
-        // only process if site photo is valid
+        // only process if activities photo is valid
         if (site.getSitePhoto() != null && !site.getSitePhoto().isEmpty()) {
-            OperationsDatabase.getImageAndDisplay(site.getSitePhoto(), mPhotoView);
+            UtilDatabase.getImageAndDisplay(site.getSitePhoto(), mPhotoView);
         }
-        //displays only those facilities present at the site
+        //displays only those facilities present at the activities
         displayFacilities(site, this);
     }
 
@@ -381,11 +381,11 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     }
 
     /**
-     * Shows facilities that are present at the site
-     * sets up listener for each site that shows a brief description of the facility
+     * Shows facilities that are present at the activities
+     * sets up listener for each activities that shows a brief description of the facility
      * when the facility is touched.
      *
-     * @param site    site to store data
+     * @param site    activities to store data
      * @param context context of calling activity
      */
     public void displayFacilities(Site site, final Context context) {
@@ -396,7 +396,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         mLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        // Ensure layout is empty as there may have been changes if we were editing this site.
+        // Ensure layout is empty as there may have been changes if we were editing this activities.
         if(((LinearLayout) mFacilityIconLinearLayout).getChildCount() > 0)
             ((LinearLayout) mFacilityIconLinearLayout).removeAllViews();
 
@@ -519,9 +519,9 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
 
             case R.id.site_detail_show_map:
                 // Checks latitude and longitude are set,
-                if (OperationsMap.mapCheckLatLongSet(mSite)) {
-                    // Ok, display map with a marker at this site's location by creating an intent
-                    OperationsMap.mapShow(mSite, this);
+                if (UtilMap.mapCheckLatLongSet(mSite)) {
+                    // Ok, display map with a marker at this activities's location by creating an intent
+                    UtilMap.mapShow(mSite, this);
 
                 } else {
                     //warn the user not valid

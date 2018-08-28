@@ -1,4 +1,4 @@
-package au.com.mysites.camps.dbmaint;
+package au.com.mysites.camps.activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -43,7 +43,7 @@ public class QueryDatabaseActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_query_database);
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        Toolbar toolbar = findViewById(R.id.site_summary_toolbar);
         setSupportActionBar(toolbar);
 
         button = findViewById(R.id.button);
@@ -64,7 +64,7 @@ public class QueryDatabaseActivity extends AppCompatActivity {
     void runQuery() {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "runQuery()");
 
-        // Get reference to the site
+        // Get reference to the activities
         mCommentsCollectionRef = mFirestore
                 .collection(getString(R.string.collection_sites))
                 .document("Barbour Park Rest Area")

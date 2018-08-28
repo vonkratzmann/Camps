@@ -22,9 +22,12 @@
     <color name="controlActivated">#4A312A</color>
     <!-- Applied to framework control highlights (i.e ripples or list selectors) -->
 
+    <!-- Signin screen -->
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_500">#9E9E9E</color>
 
-
-
+    <!-- General colours -->
     <color name="White">#FFFFFFFF</color>
     <color name="Silver">#FFC0C0C0</color>
     <color name="Gray">#FF808080</color>

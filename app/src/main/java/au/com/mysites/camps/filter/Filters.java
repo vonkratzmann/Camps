@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.google.firebase.firestore.Query;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Site;
+import au.com.mysites.camps.models.Site;
 
 public class Filters {
 

@@ -1,4 +1,4 @@
-package au.com.mysites.camps;
+package au.com.mysites.camps.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -29,22 +29,19 @@ import com.google.firebase.firestore.Query;
 
 import java.util.Collections;
 
+import au.com.mysites.camps.R;
 import au.com.mysites.camps.adapter.SiteAdapter;
-import au.com.mysites.camps.dbmaint.BackUpRestoreActivity;
-import au.com.mysites.camps.dbmaint.QueryDatabaseActivity;
 import au.com.mysites.camps.filter.FilterDialogFragment;
 import au.com.mysites.camps.filter.Filters;
-import au.com.mysites.camps.site.AddOrEditSiteActivity;
-import au.com.mysites.camps.site.DetailSiteActivity;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
-import au.com.mysites.camps.viewmodel.MainActivityViewModel;
+import au.com.mysites.camps.viewmodel.SummarySiteACtivityViewModel;
 
-public class MainActivity extends AppCompatActivity implements
+public class SummarySiteActivity extends AppCompatActivity implements
         FilterDialogFragment.FilterListener,
         SiteAdapter.OnSiteSelectedListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = SummarySiteActivity.class.getSimpleName();
 
     Toolbar mToolbar;
     TextView mCurrentSearchView;
@@ -60,21 +57,21 @@ public class MainActivity extends AppCompatActivity implements
     private FilterDialogFragment mFilterDialog;
     private SiteAdapter mAdapter;
 
-    private MainActivityViewModel mViewModel;
+    private SummarySiteACtivityViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onCreate()");
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setContentView(R.layout.activity_site_summary);
+        Toolbar toolbar = findViewById(R.id.site_summary_toolbar);
         setSupportActionBar(toolbar);
 
         initViews();
 
-        // View model
-        mViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        // View models
+        mViewModel = ViewModelProviders.of(this).get(SummarySiteACtivityViewModel.class);
 
         // Enable Firestore logging
         FirebaseFirestore.setLoggingEnabled(true);
@@ -86,12 +83,12 @@ public class MainActivity extends AppCompatActivity implements
         // Filter Dialog
         mFilterDialog = new FilterDialogFragment();
 
-        //used to star activity to add a new site to the database
+        //used to star activity to add a new activities to the database
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent addNewSite = new Intent(MainActivity.this, AddOrEditSiteActivity.class);
+                Intent addNewSite = new Intent(SummarySiteActivity.this, AddOrEditSiteActivity.class);
                 startActivity(addNewSite);
             }
         });
@@ -100,17 +97,17 @@ public class MainActivity extends AppCompatActivity implements
     void initViews() {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "initViews()");
 
-        mToolbar = findViewById(R.id.main_toolbar);
+        mToolbar = findViewById(R.id.site_summary_toolbar);
 
-        mCurrentSearchView = findViewById(R.id.main_text_current_search);
+        mCurrentSearchView = findViewById(R.id.summary_text_current_search);
 
-        mCurrentSortByView = findViewById(R.id.main_text_current_sort_by);
+        mCurrentSortByView = findViewById(R.id.summary_text_current_sort_by);
 
-        mSitesRecycler = findViewById(R.id.main_recycler_sites);
+        mSitesRecycler = findViewById(R.id.summary_recycler_sites);
 
-        mEmptyView = findViewById(R.id.main_view_empty);
+        mEmptyView = findViewById(R.id.summary_view_empty);
 
-        mFilterBar = findViewById(R.id.main_filter_bar);
+        mFilterBar = findViewById(R.id.summary_filter_bar);
         mFilterBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        mFilterClear = findViewById(R.id.main_button_clear_filter);
+        mFilterClear = findViewById(R.id.summary_button_clear_filter);
         mFilterClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,40 +264,9 @@ public class MainActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onCreateOptionsMenu()");
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_summary, menu);
         /* Return true so that the visualizer_menu is displayed in the Toolbar */
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onOptionsItemSelected()");
-
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        switch (item.getItemId()) {
-            case R.id.menu_main_settings:
-                Toast.makeText(this, "show option", Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.menu_main_sign_out:
-                AuthUI.getInstance().signOut(this);
-                startSignIn();
-                break;
-
-            case R.id.menu_main_database_manage:
-                Intent backupRestore = new Intent(MainActivity.this, BackUpRestoreActivity.class);
-                startActivity(backupRestore);
-                break;
-
-            case R.id.menu_main_database_query:
-                Intent databaseQuery = new Intent(MainActivity.this, QueryDatabaseActivity.class);
-                startActivity(databaseQuery);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -334,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onSiteSelected(DocumentSnapshot site) {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onSiteSelected()");
 
-        // Go to the comment and details page for the selected site
+        // Go to the comment and details page for the selected activities
         Intent intent = new Intent(this, DetailSiteActivity.class);
         intent.putExtra(getString(R.string.intent_site_name), site.getId());
 
@@ -361,4 +327,35 @@ public class MainActivity extends AppCompatActivity implements
         mViewModel.setIsSigningIn(true);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onOptionsItemSelected()");
+
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        switch (item.getItemId()) {
+            case R.id.menu_summary_settings:
+                Toast.makeText(this, "show option", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.menu_summary_sign_out:
+                AuthUI.getInstance().signOut(this);
+                startSignIn();
+                break;
+
+            case R.id.menu_summary_database_manage:
+                Intent backupRestore = new Intent(SummarySiteActivity.this, BackUpRestoreActivity.class);
+                startActivity(backupRestore);
+                break;
+
+            case R.id.menu_summary_database_query:
+                Intent databaseQuery = new Intent(SummarySiteActivity.this, QueryDatabaseActivity.class);
+                startActivity(databaseQuery);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
+

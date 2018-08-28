@@ -24,12 +24,12 @@ public class ToDoNotes {
     /*
     1. Created 20/6/201 on main activity thumbnail arbitrarily displays icons
 
-    2. Created 20/6/201 Fixed 26/08/2018 When a photo is taken in add new site,
+    2. Created 20/6/201 Fixed 26/08/2018 When a photo is taken in add new activities,
         the photo path in firebase storage is not stored in the database
 
     3. Created 20/6/201 On restore of database app hangs
 
-    4. Created 20/6/20 1n Detail site, comments recycler view have to set fixed size
+    4. Created 20/6/20 1n Detail activities, comments recycler view have to set fixed size
         otherwise doesn't scroll
 
     */

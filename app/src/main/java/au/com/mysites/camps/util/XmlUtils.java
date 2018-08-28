@@ -7,7 +7,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Site;
+import au.com.mysites.camps.models.Site;
 
 /*
  * Various utilities to process xml files
@@ -20,7 +20,7 @@ public class XmlUtils {
     String mPath;
     String mFileName;
     XmlFormatter mXmlformatter;
-    OperationsFile mFop;
+    UtilFile mFop;
 
 
     public void initXmlFile(Context context, String filename) {
@@ -34,7 +34,7 @@ public class XmlUtils {
         mXmlformatter.xmlStartTag(mBuffer, context.getString(R.string.camps));
         mBuffer.append('\n');
 
-        mFop = new OperationsFile();
+        mFop = new UtilFile();
 
         //get the path for the file
         mPath = Environment.getExternalStoragePublicDirectory(context.getString
@@ -45,8 +45,8 @@ public class XmlUtils {
     public void siteSaveToXMLFile(Site s) {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "siteSaveToXMLFile()");
 
-        // save site to buffer
-        // format site into xml
+        // save activities to buffer
+        // format activities into xml
 
         mXmlformatter.formatSite(mBuffer, s);
     }
@@ -57,7 +57,7 @@ public class XmlUtils {
        //add a camps end tag to the end of the file
         mXmlformatter.xmlEndTag(mBuffer, context.getString(R.string.camps));
 
-        OperationsFile fop = new OperationsFile();
+        UtilFile fop = new UtilFile();
         //write the xml to file
         //firsly, get the path for the file
         //Write the file, and return the outcome
@@ -78,12 +78,12 @@ public class XmlUtils {
 
         // Read the xml file and populate the list called sites
         //Setup new file operations to call read and write methods
-        OperationsFile fop = new OperationsFile();
+        UtilFile fop = new UtilFile();
         //Read the file
         String text = fop.read(context, filename, path);
         if (text == null)
             return false;
-        //create a parser to parse the input for the site and display the results
+        //create a parser to parse the input for the activities and display the results
         XmlParser parser = new XmlParser(context);
         parser.parseSites(text, sites);
         // If parsing errors sites will not be loaded into ArrayList

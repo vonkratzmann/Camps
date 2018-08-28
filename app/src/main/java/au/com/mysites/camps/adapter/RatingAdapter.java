@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.google.firebase.firestore.Query;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Rating;
+import au.com.mysites.camps.models.Rating;
 
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;

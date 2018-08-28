@@ -5,14 +5,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#E0E0E0"
-                tools:context="au.com.mysites.camps.MainActivity">
+                tools:context="au.com.mysites.camps.activities.SummarySiteActivity">
 
     <FrameLayout
-        android:id="@+id/main_filter_bar_container"
+        android:id="@+id/summary_filter_bar_container"
         android:layout_marginTop="36dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/main_toolbar"
+        android:layout_below="@+id/site_summary_toolbar"
         android:background="?android:attr/colorPrimary"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
@@ -20,7 +20,7 @@
         android:paddingRight="12dp">
 
         <android.support.v7.widget.CardView
-            android:id="@+id/main_filter_bar"
+            android:id="@+id/summary_filter_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -34,7 +34,7 @@
                 android:gravity="center_vertical">
 
                 <ImageView
-                    android:id="@+id/main_button_filter"
+                    android:id="@+id/summary_button_filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -43,18 +43,18 @@
                     app:srcCompat="@drawable/ic_filter_list_white_24px" />
 
                 <LinearLayout
-                    android:id="@+id/main_text_current_search_container"
+                    android:id="@+id/summary_text_current_search_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
-                    android:layout_toRightOf="@+id/main_button_filter"
+                    android:layout_toRightOf="@+id/summary_button_filter"
                     android:orientation="vertical"
                     android:paddingBottom="8dp"
                     android:paddingTop="16dp">
 
                     <TextView
-                        android:id="@+id/main_text_current_search"
+                        android:id="@+id/summary_text_current_search"
                         style="@style/AppTheme.Body1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                         tools:text="Filter" />
 
                     <TextView
-                        android:id="@+id/main_text_current_sort_by"
+                        android:id="@+id/summary_text_current_sort_by"
                         style="@style/AppTheme.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/main_button_clear_filter"
+                    android:id="@+id/summary_button_clear_filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -88,12 +88,12 @@
 
     </FrameLayout>
 
-    <!-- Main sites recycler -->
+    <!-- Site summary sites recycler -->
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/main_recycler_sites"
+        android:id="@+id/summary_recycler_sites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/main_filter_bar_container"
+        android:layout_below="@+id/summary_filter_bar_container"
         android:background="@android:color/white"
         tools:listitem="@layout/item_site" />
 
@@ -101,16 +101,16 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:layout_below="@+id/main_filter_bar_container"
+        android:layout_below="@+id/summary_filter_bar_container"
         android:background="@drawable/bg_shadow" />
 
     <!-- Empty list (pizza guy) view -->
     <LinearLayout
-        android:id="@+id/main_view_empty"
+        android:id="@+id/summary_view_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/main_toolbar"
+        android:layout_below="@+id/site_summary_toolbar"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="vertical"
@@ -132,11 +132,11 @@
     </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/main_progress_loading"
+        android:id="@+id/summary_progress_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/main_recycler_sites"
-        android:layout_alignTop="@+id/main_recycler_sites"
+        android:layout_alignBottom="@+id/summary_recycler_sites"
+        android:layout_alignTop="@+id/summary_recycler_sites"
         android:layout_centerHorizontal="true"
         android:visibility="gone" />
 

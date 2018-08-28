@@ -1,4 +1,4 @@
-package au.com.mysites.camps.dbmaint;
+package au.com.mysites.camps.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -31,11 +31,11 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Comment;
-import au.com.mysites.camps.model.Site;
+import au.com.mysites.camps.models.Comment;
+import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
-import au.com.mysites.camps.util.OperationsDatabase;
+import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.XmlUtils;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -97,7 +97,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
 
             //Set the title
-            actionBar.setTitle(R.string.maint_manage_database);
+            actionBar.setTitle(R.string.backup_restore_database_title);
         }
 
         // Initialize Firestore
@@ -129,9 +129,9 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * Database read from firestore, stored in an array then written to a filename
      * provide by the user
      * <p>
-     * As comments are in a sub-collection the data base is accessed twice for each site,
-     * once for the site and once for the comments.
-     * The two sequential database accesses for each site are done synchronously
+     * As comments are in a sub-collection the data base is accessed twice for each activities,
+     * once for the activities and once for the comments.
+     * The two sequential database accesses for each activities are done synchronously
      * to avoid race conditions. As each read is done in an async task, the task is blocked
      * until the read is complete.
      *
@@ -242,7 +242,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
 
         // Add sites & their comments read from the xml file, to cleared database
-        OperationsDatabase.addMultipleSitesAndComments(siteList, context);
+        UtilDatabase.addMultipleSitesAndComments(siteList, context);
         //Tell the user the result
         Toast.makeText(context, " Database restored, No. of sites inserted: " +
                         Integer.toString(siteList.size())
@@ -267,13 +267,13 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 ActivityCompat.requestPermissions(BackUpRestoreActivity.this,
                                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                        Constants.REQUEST_EXTERNAL_STORAGE);
+                                        Constants.RC_EXTERNAL_STORAGE);
                             }
                         });
                 return;
             }
             ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE,
-                    Constants.REQUEST_EXTERNAL_STORAGE);
+                    Constants.RC_EXTERNAL_STORAGE);
             return;
         }
         // Permission granted, so do it
@@ -315,7 +315,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             Log.d(TAG, "onRequestPermissionsResult()");
 
         switch (requestCode) {
-            case Constants.REQUEST_EXTERNAL_STORAGE:
+            case Constants.RC_EXTERNAL_STORAGE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted, so do it
                     switch (mBackupRestoreFlag) {
@@ -369,9 +369,9 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                     site = document.toObject(Site.class);
                     if (Debug.DEBUG_DBMAINT_BACKUP)
-                        Log.d(TAG, "site: " + site.getName());
+                        Log.d(TAG, "activities: " + site.getName());
 
-                    //Get comments as they are in a sub-collection, then add to the site
+                    //Get comments as they are in a sub-collection, then add to the activities
                     getCommentsForSite(site, (String) objects[0], (String) objects[1]);
                     sites.add(site);
                 }
@@ -413,7 +413,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 comment = document.toObject(Comment.class);
                 if (Debug.DEBUG_DBMAINT_BACKUP)
                     Log.d(TAG, "comment text: " + comment.getText());
-                //add to comment to the site
+                //add to comment to the activities
                 site.addComment(comment);
             }
         } catch (ExecutionException | InterruptedException e) {
@@ -457,7 +457,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
                     //Get comments as they are in a sub-collection, then delete
                     deleteCommentsForSite(docRefId, (String) objects[0], (String) objects[1]);
-                    OperationsDatabase.deleteSite(docRefId, (String) objects[0]);
+                    UtilDatabase.deleteSite(docRefId, (String) objects[0]);
                 }
 
             } catch (ExecutionException | InterruptedException e) {

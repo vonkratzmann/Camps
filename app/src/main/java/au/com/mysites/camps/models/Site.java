@@ -1,4 +1,4 @@
-package au.com.mysites.camps.model;
+package au.com.mysites.camps.models;
 
 import android.annotation.SuppressLint;
 
@@ -14,7 +14,7 @@ import java.util.Locale;
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.util.Constants;
 
-import static au.com.mysites.camps.ApplicationContextProvider.getContext;
+import static au.com.mysites.camps.util.AppContextProvider.getContext;
 
 /**
  * Site POJO.
@@ -191,7 +191,7 @@ public class Site {
     }
 
     /**
-     * Get the longitude of the site as degrees:minutes:seconds string
+     * Get the longitude of the activities as degrees:minutes:seconds string
      *
      * @return String   return longitude as degrees:minutes:seconds
      */
@@ -200,16 +200,16 @@ public class Site {
     }
 
     /**
-     * Set the longitude for the site from deg:min:sec string
+     * Set the longitude for the activities from deg:min:sec string
      *
-     * @param longitude longitude of the site
+     * @param longitude longitude of the activities
      */
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
     /**
-     * Get the latitude of the site as deg:min:sec string
+     * Get the latitude of the activities as deg:min:sec string
      *
      * @return String   return latitude as deg:min:sec string
      */
@@ -219,9 +219,9 @@ public class Site {
     }
 
     /**
-     * Set the latitude for the site from deg:min:sec string
+     * Set the latitude for the activities from deg:min:sec string
      *
-     * @param latitude latitude to be set for the site
+     * @param latitude latitude to be set for the activities
      */
     public void setLatitude(String latitude) {
         this.latitude = latitude;

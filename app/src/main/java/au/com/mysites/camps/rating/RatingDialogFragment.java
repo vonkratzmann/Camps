@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.Objects;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Rating;
+import au.com.mysites.camps.models.Rating;
 import au.com.mysites.camps.util.Debug;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 

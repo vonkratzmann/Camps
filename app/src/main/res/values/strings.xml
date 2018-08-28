@@ -2,16 +2,14 @@
     <!-- Activity Titles -->
     <string name="app_name">Camps</string>
 
-    <string name="main_summary_title">Camps</string>
+    <string name="summary_sites_title">Camps</string>
     <string name="site_detail_title">Camp Site</string>
     <string name="site_detail_map_title">Camp Map</string>
-    <string name="edit_site_title">Edit/Add Site</string>
-    <string name="edit_comment_title">Edit Comment</string>
     <string name="add_comment_title">Add Comment</string>
-    <string name="add_site_title">Add New Site</string>
-    <string name="map_site_title">Site Map</string>
-    <string name="maint_manage_database">Manage Database</string>
-    <string name="maint_query_database">Quey Database</string>
+    <string name="add_edit_site_title">Add Edit Site</string>
+    <string name="backup_restore_database_title">Bacup Restore Database</string>
+    <string name="query_database_title">Quey Database</string>
+    <string name="ratings_title">Enter Rating</string>
 
     <!-- Intent Extras -->
     <string name="intent_site_number" translatable="false">siteNumber</string>
@@ -144,10 +142,10 @@
 
 
     <!-- Menu items -->
-    <string name="main_settings">Settings</string>
-    <string name="main_sign_out">Sign Out</string>
-    <string name="main_database_manage">Manage Database</string>
-    <string name="main_database_query">Query Database</string>
+    <string name="summary_settings">Settings</string>
+    <string name="summary_sign_out">Sign Out</string>
+    <string name="summary_database_manage">Manage Database</string>
+    <string name="summary_database_query">Query Database</string>
     <string name="detail_edit_site">Edit site</string>
 
 
@@ -168,6 +166,23 @@
 
     <!-- File path on Firebase storage -->
     <string name="firebase_storage_path">camps</string>
+
+    <string name="firebase_status_fmt">Firebase User: %s</string>
+    <string name="firebase_user_management">Firebase User Management</string>
+    <string name="desc_firebase_lockup">Firebase logo and name</string>
+
+    <!-- Sign in -->
+    <string name="loading">Loading…</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="signed_out">Signed Out</string>
+    <string name="disconnect">Disconnect</string>
+
+
+    <string name="label_google_sign_in">Firebase + Google Sign In</string>
+    <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
+
+    <string name="google_status_fmt">Google User: %s</string>
+    <string name="google_title_text">Google Sign In</string>
 
     <!-- File name for image files -->
     <string name="Image_File_Name">yyyyMMdd_HHmmss</string>

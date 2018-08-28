@@ -4,12 +4,12 @@ import android.arch.lifecycle.ViewModel;
 
 import au.com.mysites.camps.filter.Filters;
 
-public class MainActivityViewModel extends ViewModel {
+public class SummarySiteACtivityViewModel extends ViewModel {
 
     private boolean mIsSigningIn;
     private Filters mFilters;
 
-    public MainActivityViewModel() {
+    public SummarySiteACtivityViewModel() {
         mIsSigningIn = false;
         mFilters = Filters.getDefault();
     }

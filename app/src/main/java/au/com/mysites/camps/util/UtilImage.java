@@ -24,9 +24,9 @@ import au.com.mysites.camps.R;
 /**
  * Methods used in manipulating images
  */
-public class OperationsImage {
+public class UtilImage {
 
-    private final static String TAG = OperationsImage.class.getSimpleName();
+    private final static String TAG = UtilImage.class.getSimpleName();
 
     /**
      * Creates a collision resistance file in the public storage directory for pictures in a
@@ -208,12 +208,12 @@ public class OperationsImage {
 
         //create a new file
         try {
-            file = OperationsImage.createImageFile(context);
+            file = UtilImage.createImageFile(context);
         } catch (IOException e) {
             Log.e(TAG, " IOException");
             return null;
         }
-        if (OperationsImage.saveBitmapToFile(bitmap, file.getAbsolutePath()))
+        if (UtilImage.saveBitmapToFile(bitmap, file.getAbsolutePath()))
             return file;
         else
             return null;

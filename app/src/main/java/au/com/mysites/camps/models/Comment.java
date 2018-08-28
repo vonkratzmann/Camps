@@ -1,4 +1,4 @@
-package au.com.mysites.camps.model;
+package au.com.mysites.camps.models;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
@@ -10,7 +10,7 @@ import java.util.Locale;
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.util.Debug;
 
-import static au.com.mysites.camps.ApplicationContextProvider.getContext;
+import static au.com.mysites.camps.util.AppContextProvider.getContext;
 
 public class Comment {
     private final static String TAG = Comment.class.getSimpleName();

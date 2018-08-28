@@ -17,7 +17,7 @@ import com.google.firebase.firestore.Query;
 import java.util.Objects;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Site;
+import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.util.Debug;
 
 public class FilterDialogFragment extends DialogFragment {

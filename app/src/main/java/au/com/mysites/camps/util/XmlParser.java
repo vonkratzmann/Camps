@@ -14,11 +14,11 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.model.Comment;
-import au.com.mysites.camps.model.Site;
+import au.com.mysites.camps.models.Comment;
+import au.com.mysites.camps.models.Site;
 
 /**
- * Methods to parse the data from site XML file and store the result in the list of sites
+ * Methods to parse the data from activities XML file and store the result in the list of sites
  */
 
 public class XmlParser {
@@ -36,7 +36,7 @@ public class XmlParser {
     }
 
     /**
-     * Parse input string and for each site store the site in the Array list of mySites
+     * Parse input string and for each activities store the activities in the Array list of mySites
      *
      * @param text    input text to be parsed, containing data from read of xml file
      * @param mySites stores results of parsed sites
@@ -71,20 +71,20 @@ public class XmlParser {
     }
 
     /**
-     * Parse the site xml and add to the ArrayList of sites
+     * Parse the activities xml and add to the ArrayList of sites
      *
      * @param p       parser
-     * @param mySites List to add new site from parsing input
+     * @param mySites List to add new activities from parsing input
      */
     private void addSite(XmlPullParser p, ArrayList<Site> mySites) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addSite()");
 
         // ArrayList<Comment> comments = new ArrayList<>();
 
-        try { // Test if the current event is the type START_TAG and the string is "site",
+        try { // Test if the current event is the type START_TAG and the string is "activities",
             // otherwise an exception is thrown
             p.require(XmlPullParser.START_TAG, null, context.getString(R.string.site));
-            // create empty site
+            // create empty activities
             Site site = new Site();
             while (p.next() != XmlPullParser.END_TAG) {
                 //ensure we have a start tag
@@ -205,10 +205,10 @@ public class XmlParser {
     }
 
     /**
-     * read the date the site information was entered
+     * read the date the activities information was entered
      *
      * @param XmlPP parser
-     * @return date site data was entered
+     * @return date activities data was entered
      * @throws IOException            handle any exceptions
      * @throws XmlPullParserException handle any exceptions
      */
@@ -309,10 +309,10 @@ public class XmlParser {
     }
 
     /**
-     * Checks if the facilities are available and updates the site
+     * Checks if the facilities are available and updates the activities
      *
      * @param XmlPP  parser
-     * @param mySite site to store th efacility availability
+     * @param mySite activities to store th efacility availability
      */
     private void getFacility(XmlPullParser XmlPP, Site mySite) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getFacility()");
