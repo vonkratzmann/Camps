@@ -1,6 +1,8 @@
 package au.com.mysites.camps.activities;
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -198,6 +200,29 @@ public class SummarySitesActivity extends AppCompatActivity implements
         if (mAdapter != null) {
             mAdapter.stopListening();
         }
+    }
+
+    /*
+     * Dialog to prompt user for yes/no if they want to exit the activity.
+     * Exist the activity if they want to exit.
+     */
+    @Override
+    public void onBackPressed() {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onBackPressed()");
+
+
+        new AlertDialog.Builder(this)
+                .setIcon(R.mipmap.warning)
+                .setTitle("Exit?")
+                .setMessage("Are you sure?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     @Override

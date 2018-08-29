@@ -7,7 +7,11 @@ import android.view.inputmethod.InputMethodManager;
 
 import au.com.mysites.camps.R;
 
+/**
+ * Various dialog methods
+ */
 public class UtilDialog {
+    private static final String TAG = UtilDialog.class.getSimpleName();
 
     public static void showProgressDialog(ProgressDialog progressDialog) {
         if (progressDialog == null) return;
@@ -31,3 +35,4 @@ public class UtilDialog {
         }
     }
 }
+
