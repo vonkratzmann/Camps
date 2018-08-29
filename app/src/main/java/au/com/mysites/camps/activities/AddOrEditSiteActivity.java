@@ -63,7 +63,7 @@ import static au.com.mysites.camps.util.UtilImage.scaleImageFile;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 /**
- * Allows user to add a new activities or edit an existing activities
+ * Allows user to add a new site or edit an existing site
  */
 public class AddOrEditSiteActivity extends AppCompatActivity implements
         EventListener<DocumentSnapshot>,
@@ -74,7 +74,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     //Used to check if a field has changed
     private boolean mSiteHasChanged;
 
-    // activities to capture the newly entered or edited activities data before saving to the database
+    // Captures the newly entered or edited data before saving to the Firestore database
     private Site mSite = new Site();
 
     //setup the views
@@ -133,15 +133,15 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         toolbar = findViewById(R.id.add_edit_site_toolbar);
         setSupportActionBar(toolbar);
 
-        /*Reset flag to say activities has not changed, any editing changes to activities this flag
+        /*Reset flag to say data has not changed, any editing this flag
          * is set to true. Used to check the user has done a save before exiting. */
         mSiteHasChanged = false;
 
         //Initialise Views and set up listeners
         initViews();
 
-        // Check if this is editing an existing activities and or adding a new activities,
-        // check activities ID from extras, provided by the calling activity
+        // Check if this is editing an existing site and or adding a new site,
+        // check for site ID from extras, provided by the calling activity
         Intent intent = getIntent();
         String siteId;
         if (intent.hasExtra(getString(R.string.intent_site_name))) {
@@ -149,13 +149,13 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
             //todo update to include case where activity restarted and partway through edit
 
-            //this is an edit of an existing activities
+            //this is an edit of an existing site
             mSite.setName(siteId);
 
-            // Initialize Firestore, views and listeners
+            // Initialize Firestore
             mFirestore = FirebaseFirestore.getInstance();
 
-            // Get reference to this activities in the database
+            // Get reference to this site in the database
             assert siteId != null;
             /* In {@link #onStart()} implements snapshot listener using mSiteDocumentRef
              * as the reference, the initial call to the callback {@link #onEvent()} as a result
@@ -174,7 +174,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     *  Set up a text watcher to monitor if the edit text fields have changed.
+     *  Set up a text watcher to monitor if the EditText fields have changed.
      */
     private final TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -187,7 +187,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
         @Override
         public void afterTextChanged (Editable s){
-            // Record the activities has been changed
+            // Record the site has been changed
             mSiteHasChanged = true;
         }
     };
@@ -206,7 +206,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
         @Override
         public void afterTextChanged (Editable s){
-            // Record the activities has been changed
+            // Record the site has been changed
             mSiteHasChanged = true;
             // Update the toolbar title
             if (s != null)
@@ -233,7 +233,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         mSitePhotoImageView = findViewById(R.id.add_site_photo);
         mThumbnailImageView = findViewById(R.id.add_site_thumbnail);
 
-        //Get view that requests a save of the new activities
+        //Get view that requests a save of the new site
         findViewById(R.id.add_site_save).setOnClickListener(this);
 
         //Get button that takes a photo
@@ -292,7 +292,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onEvent()");
 
         if (e != null) {
-            Log.w(TAG, "activities:onEvent", e);
+            Log.w(TAG, "Error: ", e);
             return;
         }
         if (snapshot.exists()) {
@@ -301,15 +301,15 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     * Using the activities loaded from the database, update the views on the UI.
+     * Using the site loaded from the database, update the views on the UI.
      * Called from {@link #onEvent(DocumentSnapshot, FirebaseFirestoreException)}
      *
-     * @param site activities that has been loaded
+     * @param site site that has been loaded
      */
     private void onSiteLoaded(Site site) {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onSiteLoaded()");
 
-        mSite = site;   //so we can access activities from any method
+        mSite = site;   //so we can access site from any method
         mNameEditText.setText(site.getName());
         mStreetEditText.setText(site.getStreet());
         mCityEditText.setText(site.getCity());
@@ -317,20 +317,20 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         mLatitudeEditText.setText(site.getLatitude());
         mLongitudeEditText.setText(site.getLongitude());
         //todo finish
-        // mRatingIndicator.setRating((float) activities.getAvgRating());
-        // mNumRatingsView.setText(getString(R.string.fmt_num_ratings, activities.getNumRatings()));
+        // mRatingIndicator.setRating((float) site.getAvgRating());
+        // mNumRatingsView.setText(getString(R.string.fmt_num_ratings, site.getNumRatings()));
 
-        // If we have a file name stored, display the image of the activities
+        // If we have a file name stored, display the image of the site
         String sitePhoto = site.getSitePhoto();
         if (sitePhoto != null && !sitePhoto.isEmpty()) {
             UtilDatabase.getImageAndDisplay(sitePhoto, mSitePhotoImageView);
         }
-        // If we have a file name stored, display the thumbnail of the activities
+        // If we have a file name stored, display the thumbnail of the site
         String thumbnail = site.getThumbnail();
         if (thumbnail != null && !thumbnail.isEmpty()) {
             UtilDatabase.getImageAndDisplay(thumbnail, mThumbnailImageView);
         }
-        // Update UI to show if facility is present as activities or not
+        // Update UI to show if facility is present at site or not
         dumppointpresentImageView.setImageResource((site.checkIfFacilityPresent(Site.Facility.DUMPPOINT))
                 ? R.mipmap.tick : R.mipmap.cross);
         freepresentImageView.setImageResource((site.checkIfFacilityPresent(Site.Facility.FREE))
@@ -358,11 +358,11 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
 
     /**
-     * User has requested a save of the newly entered activities or edit of existing activities.
-     * Gets the entered data for the new activities or edited activities, if entered data ok,
+     * User has requested a save of the newly entered site or edit of existing site.
+     * Gets the entered data for the new site or edited site, if entered data ok,
      * puts the data into a Site object, then saves it to the Firestore database and
      * saves the image files to Firebase storage.
-     * Images files also saved in external storage so next time the activities is loaded, they do not
+     * Images files also saved in external storage so next time the site is loaded, they do not
      * have to be downloaded from Firebase storage.
      * <p>
      * Does not reflect if database write was successful as database write is done asynchronously.
@@ -374,7 +374,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getSite()");
 
         if (!mSiteHasChanged) {
-            // Warn user nothing entered into new activities
+            // Warn user nothing entered into new site
             makeText(this, getString(R.string.ERROR_Nothing_entered), Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -387,14 +387,14 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         getSiteSaveImages();
 
-        // facilities already stored in activities object, so need for anything
+        // facilities already stored in site object, so need for anything
 
         if (!getSiteStoreLatAndLong()) {
             // If coordinates invalid, warn the user
             makeText(this, R.string.ERROR_Latitude_longitude_format_error, Toast.LENGTH_SHORT).show();
             return false;
         }
-        //add activities to the database
+        //add site to the database
         UtilDatabase.addOneSiteAndComments(mSite, this);
 
         return true;
@@ -412,7 +412,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getSiteCheckNameEntered()");
 
         boolean state = true;
-        // check name of activities has been entered
+        // check name of site has been entered
         String text = mNameEditText.getText().toString();
 
         if (text.equals("")) {
@@ -429,24 +429,24 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     private void getSiteStoreTextFromViews() {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getSiteStoreTextFromViews()");
 
-        // get activities street
+        // get site street
         mSite.setStreet(mStreetEditText.getText().toString());
 
-        // get activities city
+        // get site city
         mSite.setCity(mCityEditText.getText().toString());
 
-        // get activities state
+        // get site state
         mSite.setState(mStateEditText.getText().toString());
 
-        /* get the activities name, check if it has changed.
+        /* get the site name, check if it has changed.
          * As siteName is used as the reference to a document in the Firestore database,
-         * a new activities name will create a new document and the old document has to be deleted */
+         * a new site name will create a new document and the old document has to be deleted */
 
-        // If activities name is empty, just copy over the new name from the EditText
+        // If site name is empty, just copy over the new name from the EditText
         if (UtilGeneral.stringEmpty(mSite.getName())) {
             mSite.setName(mNameEditText.getText().toString());
 
-            //If activities name and the new name from the EditText are different, delete old document
+            //If site name and the new name from the EditText are different, delete old document
         } else if (!mSite.getName().equals(mNameEditText.getText().toString())) {
             UtilDatabase.deleteSite(getString(R.string.collection_sites), mSite.getName());
             //save the new SiteName
@@ -455,8 +455,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     * Save activities thumbnail and activities images here, as images are not save to the remote database
-     * when first selected or photo taken, in case user abandons the activities editing or activities entry.
+     * Save site thumbnail and site images here, as images are not save to the remote database
+     * when first selected or photo taken, in case user abandons the site editing.
      * <p>
      * Extracts the image from the thumbnail ImageView, stores this image in a newly created file
      * in external storage and saves the file in FireBase storage, then puts a link in the
@@ -485,17 +485,17 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         if (file != null) {
             //save new file to firestore storage
-            UtilDatabase.saveFileFirestore(this, file, getString(R.string.firebase_storage_path));
+            UtilDatabase.saveFileFirestore(this, file, getString(R.string.firebase_collection_camps));
 
             //save path in storage to the database
             mSite.setThumbnail(file.getName());
         }
-        // Store activities photo image in a new file
+        // Store site photo image in a new file
         file = UtilImage.imageViewToNewFile(this, mSitePhotoImageView);
 
         if (file != null) {
             //save new file to firestore storage
-            UtilDatabase.saveFileFirestore(this, file, getString(R.string.firebase_storage_path));
+            UtilDatabase.saveFileFirestore(this, file, getString(R.string.firebase_collection_camps));
 
             //save path in storage to the database
             mSite.setSitePhoto(file.getName());
@@ -503,7 +503,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     * Get latitude and longitude, if ok store in activities instance.
+     * Get latitude and longitude, if ok store in site instance.
      * If entered in the incorrect format or invalid data range
      * warns the user and return false.
      *
@@ -539,7 +539,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     /*
      * Dialog to prompt user for yes/no if they want to exit the activity
      * <p>
-     * Only display prompt if the activities has been changed
+     * Only display prompt if the site has been changed
      */
     @Override
     public void onBackPressed() {
@@ -722,16 +722,16 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         switch (requestCode) {
             case Constants.RC_IMAGE_CAPTURE:
                 /* Camera return with image file in mPhotoPath.
-                 * Scales and then displays the photo in the thumbnail & activities photo ImageViews.
+                 * Scales and then displays the photo in the thumbnail & site photo ImageViews.
                  * Files of the scaled images are not saved in Firestore storage at this stage,
-                 * because the user may choose a different image or abandon the edit of the activities. */
+                 * because the user may choose a different image or abandon the edit of the site. */
 
                 if (resultCode != Activity.RESULT_OK || data == null) {    // Warn the user
                     makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
                     break;
                 }
                 if (updateImageViewsFromFile(mPhotoPath)) {  // Process the file
-                    mSiteHasChanged = true;              // If Ok, set flag activities details have changed
+                    mSiteHasChanged = true;              // If Ok, set flag site details have changed
                 } else { // Warn the user
                     makeText(this, getString(R.string.ERROR_Camera_unavailable), Toast.LENGTH_SHORT).show();
                 }
@@ -753,7 +753,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     break;
                 }
                 if (updateImageViewsFromFile(filePath)) {  // Process the file
-                    mSiteHasChanged = true;            // If Ok, set flag activities details have changed
+                    mSiteHasChanged = true;            // If Ok, set flag site details have changed
                 } else { // Warn the user
                     makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
                     if (Debug.DEBUG_SITE) Log.d(TAG, "Update image views failure");
@@ -780,7 +780,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
         mThumbnailImageView.setImageBitmap(bitmap);
 
-        // Scale activities photo
+        // Scale site photo
         bitmap = scaleImageFile(photoPath, mSitePhotoImageView);
         if (bitmap == null) {
             if (Debug.DEBUG_SITE) Log.d(TAG, "Site photo image scaling failure");
@@ -817,11 +817,11 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     /**
      * Displays all facilities on the UI, indicating if the facility is present or not
-     * at the activities. Setups a listener, if the activities icon is touched, shows a short message
-     * specifying the type of facility, toggles the status of the activities
+     * at the site. Setups a listener, if the facility icon is touched, shows a short message
+     * specifying the type of facility, toggles the status of the facility
      * ie present or not and updates the UI.
      *
-     * @param site                     activities to be displayed
+     * @param site                     facility to be displayed
      * @param imageViewFacilityIcon    icon for this facility
      * @param imageViewFacilityPresent flag indicating if the facility is present or not
      * @param description              a short description of the facility
@@ -849,7 +849,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 // update display
                 imageViewFacilityPresent.setImageResource((site.checkIfFacilityPresent(type))
                         ? R.mipmap.tick : R.mipmap.cross);
-                // record the activities has been changed
+                // record the facility has been changed
                 mSiteHasChanged = true;
             }
         });
@@ -1059,7 +1059,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
          * Then, each time the contents change, another call updates the document snapshot.
          * Results are returned in the overridden {@link #onEvent} method. */
         if (mSiteDocumentRef != null) {
-            //if this a new activities mSiteDocumentRef will be null, so don't start the listener
+            //if this a new site mSiteDocumentRef will be null, so don't start the listener
             mSiteRegistration = mSiteDocumentRef.addSnapshotListener(this);
         }
     }
@@ -1121,7 +1121,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             case R.id.add_site_button_show_map:
                 // Checks latitude and longitude are set,
                 if (UtilMap.mapCheckLatLongSet(mSite)) {
-                    // Ok, display map with a marker at this activities's location by creating an intent
+                    // Ok, display map with a marker at this site's location by creating an intent
                     UtilMap.mapShow(mSite, this);
 
                 } else {

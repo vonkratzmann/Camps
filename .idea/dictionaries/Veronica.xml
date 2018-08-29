@@ -10,6 +10,7 @@
       <w>commentby</w>
       <w>commentdate</w>
       <w>coordinateformat</w>
+      <w>couldn</w>
       <w>dateformat</w>
       <w>dateheading</w>
       <w>dbmaint</w>
@@ -22,6 +23,8 @@
       <w>freepresent</w>
       <w>geelong</w>
       <w>geocoder</w>
+      <w>getm</w>
+      <w>hmmss</w>
       <w>imageoperations</w>
       <w>mobilepresent</w>
       <w>myfileprovider</w>
@@ -34,8 +37,10 @@
       <w>ratingbar</w>
       <w>realtime</w>
       <w>scenicpresent</w>
+      <w>setm</w>
       <w>showerspresent</w>
       <w>signin</w>
+      <w>signout</w>
       <w>snapshop</w>
       <w>subheader</w>
       <w>swimmingpresent</w>

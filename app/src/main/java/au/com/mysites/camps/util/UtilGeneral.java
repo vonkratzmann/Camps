@@ -3,6 +3,10 @@ package au.com.mysites.camps.util;
 
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * General short methods
  */
@@ -22,4 +26,11 @@ public class UtilGeneral {
 
         return (string == null || string.trim().length() == 0);
     }
+
+    public static String getTodaysDate(String format) {
+
+    DateFormat dateFormat = new SimpleDateFormat(format);
+    Date date = new Date();
+	return dateFormat.format(date);
+}
 }

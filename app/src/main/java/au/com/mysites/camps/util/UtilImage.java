@@ -59,7 +59,7 @@ public class UtilImage {
      * @param photoPath save to file pointed to by this pathname
      * @return true if no errors
      */
-    private static boolean saveBitmapToFile(Bitmap bitmap, String photoPath) {
+    public static boolean saveBitmapToFile(Bitmap bitmap, String photoPath) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE) Log.d(TAG, "saveBitmapToFile()");
 
         //convert the decoded bitmap to stream

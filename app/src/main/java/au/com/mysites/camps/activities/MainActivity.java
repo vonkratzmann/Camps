@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,22 +21,42 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.File;
+import java.io.IOException;
 
 import au.com.mysites.camps.R;
+import au.com.mysites.camps.models.User;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
+import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.UtilDialog;
+import au.com.mysites.camps.util.UtilFile;
 import au.com.mysites.camps.util.UtilGeneral;
 import au.com.mysites.camps.util.UtilImage;
 
 /**
  * Firebase Authentication using a Google ID Token.
+ * Whenever there is a new sign in, saves the users profile information in the database under
+ * the collection users with the user google identification string as the document name. The user
+ * profile picture is save to firebase storage with the name of the photo stored in the database.
+ * <p>
+ * Each time the application is started the last used date for the user is updated
+ * in the Firestore database.
+ * <p>
+ * The application checks if there has been a request to sign out from the SummarySitesActivities,
+ * if there is, then stay in this application and display the user sign out buttons. If there
+ * has not been a request to sign out and if the user is logged in,
+ * start the SummarySitesActivities.
  */
 
 public class MainActivity extends AppCompatActivity implements
@@ -52,16 +70,23 @@ public class MainActivity extends AppCompatActivity implements
     private TextView mStatusTextView;
     private TextView mDetailTextView;
 
+    private ImageView mProfilePhotoImageView;
+
     private ProgressDialog mProgressDialog;
+
+    private File mFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onCreate()");
+
         setContentView(R.layout.activity_main);
 
         // Views
         mStatusTextView = findViewById(R.id.main_status);
         mDetailTextView = findViewById(R.id.main_detail);
+        mProfilePhotoImageView = findViewById(R.id.main_background_imageView);
 
         // Progress Dialog
         mProgressDialog = new ProgressDialog(this);
@@ -85,53 +110,36 @@ public class MainActivity extends AppCompatActivity implements
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
-
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if (acct != null) {
-            Uri personPhoto = acct.getPhotoUrl();
-            String path = UtilImage.getRealPathFromUri(this, personPhoto);
-            if (!UtilGeneral.stringEmpty(path)) {
-                Log.d(TAG,"User picture filename: " + path);
-                Bitmap bitmap = BitmapFactory.decodeFile(path);
-                ImageView imageView = findViewById(R.id.main_background_imageView);
-                if (imageView != null)
-                    Log.d (TAG, "bitmap not empty");
-                   // imageView.setImageBitmap(bitmap);
-                Glide.with(MainActivity.this).load(personPhoto).into(imageView);
-             /*   // Create local file with directory and name of the file
-                final File localFile = new File(storageDir, path);
-
-                if (localFile.exists()) {
-                    // File exists on local device
-                    if (Debug.DEBUG_UTIL) Log.d(TAG, "file exists: " + localFile.toString());
-                    // Display the file
-                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                    imageView.setImageBitmap(bitmap);
-                } */
-
-
-            }
-
-        }
     }
 
+    /**
+     * Check if a users is signed in and update the display to show appropriate buttons.
+     * If a user is signed in, updates the user last used date.
+     * If called by SummarySitesActivity and if there was a request to sign out,
+     * stay in this activity so user can use the sign out buttons,
+     * otherwise the app has just started. If no request to sign out and the user is signed in
+     * then start the SummarySitesActivity to display a list of sites.
+     */
     @Override
     public void onStart() {
         super.onStart();
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onStart()");
+
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        /* Displays the appropriate buttons on the UI,
+         * ie user is presented with sign in or sign out buttons. */
         updateUI(currentUser);
 
-        /* Check if called by SummarySitesActivity and if there was a request to sign out,
-         * if there was, stay in this activity, otherwise go to SummarySitesActivity  */
         Intent intent = getIntent();
         boolean signOutRequest;
         if (intent != null) {
             signOutRequest = intent.getBooleanExtra(getString(R.string.intent_sign_out), false);
 
-            if (!signOutRequest) { //if no request go to summary site activity
+            if (!signOutRequest && currentUser != null) {
+                //Not a request to sign out, and if signed in, go to summary site activity
                 Intent SummarySite = new Intent(MainActivity.this, SummarySitesActivity.class);
-    //kk            startActivity(SummarySite);
+                //kk            startActivity(SummarySite);
             }
         }
     }
@@ -145,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onActivityResult()");
+
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == Constants.RC_SIGN_IN) {
@@ -153,6 +163,8 @@ public class MainActivity extends AppCompatActivity implements
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
+                // Save the user profile in Firestore database
+                updateUserProfile();
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
@@ -166,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
         UtilDialog.showProgressDialog(mProgressDialog);
         // [END_EXCLUDE]
@@ -195,6 +207,109 @@ public class MainActivity extends AppCompatActivity implements
                 });
     }
     // [END auth_with_google]
+
+    /**
+     * Update user profile information in case it has changed in the Firestore database.
+     * Saves user profile photo to Firebase storage, and saves a copy
+     * to local storage, so that next time the photo can be fetched from local storage rather than
+     * the remote database.
+     */
+    private void updateUserProfile() {
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "updateUserProfile()");
+
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if (acct == null) return;
+
+        User user = retrieveProfile(acct);
+
+        if (user == null) return;
+
+        String id = acct.getId();
+        Uri photoUri = acct.getPhotoUrl();
+
+        /* Display the profile photo. If the user is logged in and if the SummarySitesActivity
+         * is started the photo will not been seen */
+        if (photoUri != null) {
+            Glide.with(MainActivity.this).load(photoUri).into(mProfilePhotoImageView);
+            //save file to local storage
+            String s = photoUri.getPath();
+            File src = new File(s);
+            try {
+                UtilFile.copyFile(src, mFile);
+            } catch (IOException e) {
+                Log.d(TAG, "copyFile error");
+            }
+
+   /*         Drawable dr = ((ImageView) mProfilePhotoImageView).getDrawable();
+            Bitmap bmp =  ((GlideBitmapDrawable)dr.getCurrent()).getBitmap();
+            //Bitmap bm = ((BitmapDrawable) mProfilePhotoImageView.getDrawable()).getBitmap();
+            UtilImage.saveBitmapToFile(bmp, mFile.getAbsolutePath());*/
+        }
+        saveUserToFirestore(id, user);
+    }
+
+    /**
+     * @param id   User profile id, used as document reference
+     * @param user user information to be saved
+     */
+    private void saveUserToFirestore(String id, User user) {
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "saveUserToFirestore()");
+
+        // Initialize Firestore
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+        // User Id is used as the document reference
+        assert id != null;
+
+        mFirestore.collection(getString(R.string.firebase_collection_users))
+                .document(id)
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if (Debug.DEBUG_METHOD_ENTRY)
+                            Log.d(TAG, "updateUserProfile() document successfully written");
+                        //   Now save the photo to firebase storage
+                        if (mFile != null) UtilDatabase.saveFileFirestore(MainActivity.this, mFile,
+                                getString(R.string.firebase_collection_users));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "updateUserProfile() Error writing document");
+                    }
+                });
+    }
+
+    /**
+     * Retrieves signed-in user profile information.
+     *
+     * @param acct Contains profile information for the user
+     * @return User with profile information
+     */
+    private User retrieveProfile(GoogleSignInAccount acct) {
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "retrieveProfile()");
+
+        String displayName = acct.getDisplayName();
+        String givenName = acct.getGivenName();
+        String familyName = acct.getFamilyName();
+        String email = acct.getEmail();
+        String lastUsed = UtilGeneral.getTodaysDate(getString(R.string.dateformat));
+        String photoFileName = null;
+
+        // Create a unique file name for the photo
+        try {
+            mFile = UtilImage.createImageFile(this);
+        } catch (IOException ioe) {
+            Log.e(TAG, "updateUserProfile() IOException");
+        }
+        if (mFile != null)
+            photoFileName = mFile.getName();
+
+        User user = new User(displayName, givenName, familyName, email, photoFileName, lastUsed);
+        return user;
+    }
+
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -229,6 +344,11 @@ public class MainActivity extends AppCompatActivity implements
                 });
     }
 
+    /**
+     * Display appropriate sign in or sign out buttons on the UI
+     *
+     * @param user
+     */
     private void updateUI(FirebaseUser user) {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "updateUI()");
 

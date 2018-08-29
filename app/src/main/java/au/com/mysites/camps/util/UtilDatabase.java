@@ -135,37 +135,38 @@ public class UtilDatabase {
     }
 
     /**
-     * Saves a file to Firebase storage, at the supplied path, with the supplied extension.
+     * Saves a file to Firebase storage, at the supplied path.
      *
+     * @param context context from calling activity
      * @param file file to be saved to storage
-     * @param path file path to use
+     * @param path file path to use in firebase
      */
     public static void saveFileFirestore(final Context context, final File file,
                                          final String path) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "saveFileFirestore()");
 
-        //Now store scaled image files in Firestore storage
+        //Now store file in Firestore storage, create reference
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
         Uri uri = Uri.fromFile(file);
 
         final String storagePath = path + "/" + file.getName();
-        StorageReference storageReference = storageRef
+        StorageReference fileReference = storageRef
                 .child(storagePath);
 
-        // Save the local file at the uri to the Firebase storage reference
-        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        // Save the file at the uri to the Firebase storage reference
+        fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 if (Debug.DEBUG_UTIL) Log.d(TAG, "file: " + file.getName() + " upload success");
-                //save path in storage to the database
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                if (Debug.DEBUG_UTIL) Log.d(TAG, "file: " + file.getName() + " upload failure");
+                Log.w(TAG, "file: " + file.getName() + " upload failure");
                 // Warn the user
-                shortToast(context.getString(R.string.ERROR_Photos_not_saved), 2000, context);
+                shortToast(context.getString(R.string.ERROR_Photo_not_saved), 2000, context);
             }
         });
     }
