@@ -81,7 +81,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
         // Filter Dialog
         mFilterDialog = new FilterDialogFragment();
 
-        //used to star activity to add a new activities to the database
+        //used to start activity to add a new site to the database
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,15 +213,15 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
         new AlertDialog.Builder(this)
                 .setIcon(R.mipmap.warning)
-                .setTitle("Exit?")
-                .setMessage("Are you sure?")
+                .setTitle(getString(R.string.exit))
+                .setMessage(getString(R.string.sure))
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finishAffinity();
                     }
                 })
-                .setNegativeButton("No", null)
+                .setNegativeButton(getString(R.string.no), null)
                 .show();
     }
 

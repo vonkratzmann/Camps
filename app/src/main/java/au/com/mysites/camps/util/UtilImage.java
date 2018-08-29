@@ -185,6 +185,8 @@ public class UtilImage {
         } finally {
             if (cursor != null) {
                 cursor.close();
+                //copy file to drawable
+
             }
         }
     }

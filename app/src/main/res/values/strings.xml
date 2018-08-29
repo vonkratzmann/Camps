@@ -166,7 +166,12 @@
     <string name="sign_out"> Sign Out </string>
     <string name="signed_out">Signed Out</string>
     <string name="disconnect">Disconnect</string>
-    
+
+    <!-- Dialog prompts -->
+    <string name="exit">Exit?</string>
+    <string name="sure">Are you sure?</string>
+    <string name="no">No</string>
+
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
 

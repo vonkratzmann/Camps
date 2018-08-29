@@ -4,14 +4,19 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,6 +34,8 @@ import au.com.mysites.camps.R;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
 import au.com.mysites.camps.util.UtilDialog;
+import au.com.mysites.camps.util.UtilGeneral;
+import au.com.mysites.camps.util.UtilImage;
 
 /**
  * Firebase Authentication using a Google ID Token.
@@ -78,6 +85,34 @@ public class MainActivity extends AppCompatActivity implements
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if (acct != null) {
+            Uri personPhoto = acct.getPhotoUrl();
+            String path = UtilImage.getRealPathFromUri(this, personPhoto);
+            if (!UtilGeneral.stringEmpty(path)) {
+                Log.d(TAG,"User picture filename: " + path);
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
+                ImageView imageView = findViewById(R.id.main_background_imageView);
+                if (imageView != null)
+                    Log.d (TAG, "bitmap not empty");
+                   // imageView.setImageBitmap(bitmap);
+                Glide.with(MainActivity.this).load(personPhoto).into(imageView);
+             /*   // Create local file with directory and name of the file
+                final File localFile = new File(storageDir, path);
+
+                if (localFile.exists()) {
+                    // File exists on local device
+                    if (Debug.DEBUG_UTIL) Log.d(TAG, "file exists: " + localFile.toString());
+                    // Display the file
+                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    imageView.setImageBitmap(bitmap);
+                } */
+
+
+            }
+
+        }
     }
 
     @Override
@@ -96,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements
 
             if (!signOutRequest) { //if no request go to summary site activity
                 Intent SummarySite = new Intent(MainActivity.this, SummarySitesActivity.class);
-                startActivity(SummarySite);
+    //kk            startActivity(SummarySite);
             }
         }
     }
@@ -214,27 +249,23 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /*
-     * Prompt user for yes/no if they want to exit the activity
+     * Dialog to prompt user for yes/no if they want to exit the activity.
      */
     @Override
     public void onBackPressed() {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onBackPressed()");
-        /*
-         * Dialog to prompt user for yes/no if they want to exit the activity.
-         * Exist the activity if they want to exit.
-         */
 
         new AlertDialog.Builder(this)
                 .setIcon(R.mipmap.warning)
-                .setTitle("Exit?")
-                .setMessage("Are you sure?")
+                .setTitle(getString(R.string.exit))
+                .setMessage(getString(R.string.sure))
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finishAffinity();
                     }
                 })
-                .setNegativeButton("No", null)
+                .setNegativeButton(getString(R.string.no), null)
                 .show();
     }
 
