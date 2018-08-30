@@ -1,5 +1,6 @@
 package au.com.mysites.camps.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -78,8 +79,7 @@ public class MainActivity extends AppCompatActivity implements
     private ProgressDialog mProgressDialog;
 
     private File mFile;
-    private String mUserId;
-    private User mGoogleUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements
     // [END auth_with_google]
 
     /**
-     * Update user profile information in case it has changed in the Firestore database.
+     * Saves user profile information to Firestore database in case it has changed.
      * Saves user profile photo to Firebase storage, and saves a copy
      * to local storage, so that next time the photo can be fetched from local storage rather than
      * the remote database.
@@ -226,25 +226,28 @@ public class MainActivity extends AppCompatActivity implements
         if (acct == null) return;
 
         // Extract user information
-        mGoogleUser = retrieveProfile(acct);
+        User mGoogleUser = retrieveProfile(acct);
 
-        if (mGoogleUser == null) return;
-
-        mUserId = acct.getId();
+        String mUserId = acct.getId();
         Uri photoUri = acct.getPhotoUrl();
 
         if (photoUri != null) {
-            final String string = photoUri.toString();
+            String string = photoUri.toString();
             /* Display the profile photo. If the user is logged in and if the SummarySitesActivity
              * is started the photo will not been seen */
             Glide.with(MainActivity.this).load(photoUri).into(mProfilePhotoImageView);
 
             // Start AsyncTask and implement onPostExecute Method
             new AsyncTaskGetUri().execute(string);
+
+            // Saves user information to database
+            saveUserToFirestore(mUserId, mGoogleUser);
         }
     }
 
     /**
+     * Save copy of user profile information to Firestore database
+     *
      * @param id   User profile id, used as document reference
      * @param user user information to be saved
      */
@@ -273,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "updateUserProfile() Error writing document");
+                        Log.w(TAG, "Error while saving user: " + e);
                     }
                 });
     }
@@ -303,8 +306,7 @@ public class MainActivity extends AppCompatActivity implements
         if (mFile != null)
             photoFileName = mFile.getName();
 
-        User user = new User(displayName, givenName, familyName, email, photoFileName, lastUsed);
-        return user;
+        return new User(displayName, givenName, familyName, email, photoFileName, lastUsed);
     }
 
 
@@ -344,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Display appropriate sign in or sign out buttons on the UI
      *
-     * @param user
+     * @param user      Current logged in user
      */
     private void updateUI(FirebaseUser user) {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "updateUI()");
@@ -404,8 +406,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     *
+     * fetches a file from the web, copies the result to local storage
      */
+    @SuppressLint("StaticFieldLeak")
     private class AsyncTaskGetUri extends AsyncTask<String, Void, File> {
         private final String TAG = AsyncTaskGetUri.class.getSimpleName();
 
@@ -426,15 +429,20 @@ public class MainActivity extends AppCompatActivity implements
             return file;
         }
 
+        /**
+         * save file to local storage
+         *
+         * @param result file copied from the web
+         */
         @Override
         protected void onPostExecute(File result) {
-            //save file to local storage // FirebaseUser muser = FirebaseAuth.getInstance().getCurrentUser();
+            if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onPostExecute()");
+
             try {
                 UtilFile.copyFile(result, mFile);
             } catch (IOException e) {
-                Log.w(TAG, "e:" + e);
+                Log.w(TAG, "Error while copying file: " + e);
             }
-            saveUserToFirestore(mUserId, mGoogleUser);
         }
     }
 }
