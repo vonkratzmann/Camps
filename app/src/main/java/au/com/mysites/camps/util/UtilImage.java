@@ -73,7 +73,7 @@ public class UtilImage {
             fileOutputStream.close();
         } catch (
                 IOException e) {
-            Log.e(TAG, "File I/O error");
+            Log.e(TAG, "File I/O error: " + e);
             return false;
         }
         return true;

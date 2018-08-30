@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.User;
@@ -232,18 +234,22 @@ public class MainActivity extends AppCompatActivity implements
         if (photoUri != null) {
             Glide.with(MainActivity.this).load(photoUri).into(mProfilePhotoImageView);
             //save file to local storage
-            String s = photoUri.getPath();
-            File src = new File(s);
-            try {
-                UtilFile.copyFile(src, mFile);
-            } catch (IOException e) {
-                Log.d(TAG, "copyFile error");
-            }
+            FirebaseUser muser = FirebaseAuth.getInstance().getCurrentUser();
 
-   /*         Drawable dr = ((ImageView) mProfilePhotoImageView).getDrawable();
-            Bitmap bmp =  ((GlideBitmapDrawable)dr.getCurrent()).getBitmap();
-            //Bitmap bm = ((BitmapDrawable) mProfilePhotoImageView.getDrawable()).getBitmap();
-            UtilImage.saveBitmapToFile(bmp, mFile.getAbsolutePath());*/
+            if (muser != null) {
+                Uri photoUrl = muser.getPhotoUrl();
+                String string = photoUrl.toString();
+                try {
+                    File file = Glide.with(MainActivity.this)
+                            .load(string)
+                            .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                            .get();
+
+                    UtilFile.copyFile(file, mFile);
+                } catch (InterruptedException | ExecutionException | IOException  e) {
+                    Log.d(TAG, "copyFile error: " + e);
+                }
+            }
         }
         saveUserToFirestore(id, user);
     }
