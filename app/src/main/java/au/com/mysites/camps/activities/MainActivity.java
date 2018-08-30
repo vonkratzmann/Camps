@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements
             if (!signOutRequest && currentUser != null) {
                 //Not a request to sign out, and if signed in, go to summary site activity
                 Intent SummarySite = new Intent(MainActivity.this, SummarySitesActivity.class);
-                //kk            startActivity(SummarySite);
+               // startActivity(SummarySite);
             }
         }
     }
@@ -168,8 +168,7 @@ public class MainActivity extends AppCompatActivity implements
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
-                // Save the user profile in Firestore database
-                updateUserProfile();
+
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
@@ -198,6 +197,9 @@ public class MainActivity extends AppCompatActivity implements
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
+                            /* Save the user profile in Firestore database,
+                             * so data is available to app, even if offline */
+                            saveUserProfile();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -219,8 +221,8 @@ public class MainActivity extends AppCompatActivity implements
      * to local storage, so that next time the photo can be fetched from local storage rather than
      * the remote database.
      */
-    private void updateUserProfile() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "updateUserProfile()");
+    private void saveUserProfile() {
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "saveUserProfile()");
 
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct == null) return;
@@ -266,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onSuccess(Void aVoid) {
                         if (Debug.DEBUG_METHOD_ENTRY)
-                            Log.d(TAG, "updateUserProfile() document successfully written");
+                            Log.d(TAG, "saveUserProfile() document successfully written");
                         //   Now save the photo to firebase storage
                         if (mFile != null)
                             UtilDatabase.saveFileFirestore(MainActivity.this, mFile,
@@ -301,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements
         try {
             mFile = UtilImage.createImageFile(this);
         } catch (IOException ioe) {
-            Log.e(TAG, "updateUserProfile() IOException");
+            Log.e(TAG, "saveUserProfile() IOException");
         }
         if (mFile != null)
             photoFileName = mFile.getName();
@@ -346,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Display appropriate sign in or sign out buttons on the UI
      *
-     * @param user      Current logged in user
+     * @param user Current logged in user
      */
     private void updateUI(FirebaseUser user) {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "updateUI()");
