@@ -24,6 +24,7 @@
       <w>geelong</w>
       <w>geocoder</w>
       <w>getm</w>
+      <w>getphoto</w>
       <w>hmmss</w>
       <w>imageoperations</w>
       <w>mobilepresent</w>
@@ -31,6 +32,7 @@
       <w>mysites</w>
       <w>numberofcomments</w>
       <w>onactivityresult</w>
+      <w>operationsimage</w>
       <w>playequipment</w>
       <w>playequipmentpresent</w>
       <w>pojo</w>
@@ -45,6 +47,8 @@
       <w>subheader</w>
       <w>swimmingpresent</w>
       <w>textheading</w>
+      <w>toasttimedatabase</w>
+      <w>toasttimefacilities</w>
       <w>toiletspresent</w>
       <w>tvreception</w>
       <w>tvreceptionpresent</w>

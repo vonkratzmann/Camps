@@ -110,6 +110,7 @@
     <string name="site_image">water Site Image</string>
 
     <!-- Error and Status Messages -->
+    <string name="ERROR_Address">Error: address not available"</string>
     <string name="ERROR_Camera_image_unavailable">Error: camera image not available"</string>
     <string name="ERROR_Camera_unavailable">Error: camera unavailable"</string>
     <string name="ERROR_Comment_not_saved">Error: comment not saved</string>
@@ -141,6 +142,7 @@
     <string name="Comment_saved">Comment: saved to database</string>
     <string name="Database_backup_null">"Database: nothing to backup</string>
     <string name="Database_backup_success">"Database: backup success</string>
+    <string name="Location_null">"Location: empty</string>
     <string name="Exiting_application">Exiting Application</string>
     <string name="Site_saved">Site: saved to database</string>
     <string name="Site_deleted">Site: has been deleted</string>

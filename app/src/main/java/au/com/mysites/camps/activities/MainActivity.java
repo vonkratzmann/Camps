@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements
             if (!signOutRequest && currentUser != null) {
                 //Not a request to sign out, and if signed in, go to summary site activity
                 Intent SummarySite = new Intent(MainActivity.this, SummarySitesActivity.class);
-               // startActivity(SummarySite);
+               startActivity(SummarySite);
             }
         }
     }

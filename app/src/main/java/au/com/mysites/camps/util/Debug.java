@@ -22,8 +22,8 @@ public final class Debug {
     public static final boolean DEBUG_FILE = true;
     public static final boolean DEBUG_PARSING = true;
     public static final boolean DEBUG_PARSING_COMMENTS = true;
-    public static final boolean DEBUG_MODEL = true;
     public static final boolean DEBUG_UTIL = true;
     public static final boolean DEBUG_SITE = true;
+    public static final boolean DEBUG_SERVICE_ADDRESS = true;
 }
 

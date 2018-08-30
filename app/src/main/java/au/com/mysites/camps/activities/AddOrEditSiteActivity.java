@@ -48,6 +48,7 @@ import java.util.Objects;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.Site;
+import au.com.mysites.camps.services.FetchAddressService;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
 import au.com.mysites.camps.util.UtilDatabase;
@@ -114,6 +115,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     private FusedLocationProviderClient mFusedLocationClient;
     private AddressResultReceiver mResultReceiver;
+    private Location mLastLocation;
 
     FirebaseFirestore mFirestore;
     private DocumentReference mSiteDocumentRef;
@@ -133,7 +135,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         toolbar = findViewById(R.id.add_edit_site_toolbar);
         setSupportActionBar(toolbar);
 
-        /*Reset flag to say data has not changed, any editing this flag
+        /* Reset flag to say data has not changed, any editing this flag
          * is set to true. Used to check the user has done a save before exiting. */
         mSiteHasChanged = false;
 
@@ -166,7 +168,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     .document(siteId);
         }
 
-        //enable toggling of the facility presence, indicating if present or not present
+        // Display and enable toggling of the facility presence, indicating if present or not
         displayStatusOfAllFacilities(mSite);
 
         // View models
@@ -174,19 +176,21 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     *  Set up a text watcher to monitor if the EditText fields have changed.
+     * Set up a text watcher to monitor if the EditText fields have changed.
      */
     private final TextWatcher mTextWatcher = new TextWatcher() {
         @Override
         // Do not use this one
-        public void beforeTextChanged (CharSequence s,int start, int count, int after){
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
+
         @Override
         // Do not use this one
-        public void onTextChanged (CharSequence s,int start, int before, int count){
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
         }
+
         @Override
-        public void afterTextChanged (Editable s){
+        public void afterTextChanged(Editable s) {
             // Record the site has been changed
             mSiteHasChanged = true;
         }
@@ -198,14 +202,16 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     private final TextWatcher mNameTextWatcher = new TextWatcher() {
         @Override
         // Do not use this one
-        public void beforeTextChanged (CharSequence s,int start, int count, int after){
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
+
         @Override
         // Do not use this one
-        public void onTextChanged (CharSequence s,int start, int before, int count){
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
         }
+
         @Override
-        public void afterTextChanged (Editable s){
+        public void afterTextChanged(Editable s) {
             // Record the site has been changed
             mSiteHasChanged = true;
             // Update the toolbar title
@@ -279,7 +285,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         mFusedLocationClient = getFusedLocationProviderClient(this);
         mResultReceiver = new AddressResultReceiver(new Handler());
     }
-
 
     /**
      * Provides realtime updates with Cloud Firestore.
@@ -901,6 +906,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
                             // Got last known location. In some rare situations this can be null.
                             if (location != null) {
+                                mLastLocation = location;
                                 getLocationDisplayCoordinates(location);
                             } else {
                                 Toast.makeText(getApplicationContext()
@@ -925,7 +931,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     /**
      * Displays latitude and longitude for the supplied location
-     * Display format is "00:00::00.0000"
+     * Display format is "00:00:00.0000"
      *
      * @param location Display location coordinates
      */
@@ -962,6 +968,17 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         mSiteHasChanged = true;
     }
+
+    /**
+     * Displays address on UI
+     *
+     * @param address   address to be displayed
+     */
+    void displayAddress(String address) {
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "displayAddressOutput()");
+        mStreetEditText.setText(address);
+    }
+
 
     /**
      * Checks we have permissions
@@ -1115,7 +1132,16 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 break;
 
             case R.id.add_site_button_get_address:
-                //getAddress();
+                /* Called when the Display Address Button is pressed, Starts service to
+                 * convert location to an address and display the address on the UI */
+                if (mLastLocation == null) {
+                    Toast.makeText(this, getString(R.string.Location_null), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(this, FetchAddressService.class);
+                intent.putExtra(Constants.RECEIVER, mResultReceiver);
+                intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
+                startService(intent);
                 break;
 
             case R.id.add_site_button_show_map:
@@ -1136,42 +1162,48 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
     }
 
-/**
- * Handles results from the Geocoder
- */
-class AddressResultReceiver extends ResultReceiver {
-    @SuppressLint("RestrictedApi")
-    AddressResultReceiver(Handler handler) {
-        super(handler);
-    }
+    /**
+     * Handles results from the Geocoder
+     */
+    class AddressResultReceiver extends ResultReceiver {
+        //@SuppressLint("RestrictedApi")
+        AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
 
-    // private static final String TAG = "AddressResultReceiver";
+        private static final String TAG = "AddressResultReceiver";
 
-        /*     @Override
+        /**
+         *
+         * @param resultCode
+         * @param resultData
+         */
+        @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onReceiveResult()");
+
             if (resultData == null) {
-                Toast.makeText(getApplicationContext(), getString(R.string.address_fail)
-                        ,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.ERROR_Address),
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
             // Display the address string
             // or an error message sent from the intent service.
-            String mAddressOutput = resultData.getString(Constant.RESULT_DATA_KEY);
+            String mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
             if (mAddressOutput == null) {
-                Toast.makeText(getApplicationContext(), getString(R.string.address_fail)
-                        ,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.ERROR_Address),
+                        Toast.LENGTH_SHORT).show();
                 mAddressOutput = "";
             }
-            if (resultCode == Constant.SUCCESS_RESULT) {
+            if (resultCode == Constants.SUCCESS_RESULT) {
                 displayAddress(mAddressOutput);
             } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.address_fail)
-                        ,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.ERROR_Address),
+                        Toast.LENGTH_SHORT).show();
             }
-        }*/
-}
+        }
+    }
 }
 
 
