@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -77,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements
     private ProgressDialog mProgressDialog;
 
     private File mFile;
+    private String mUserId;
+    private User mGoogleUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,36 +225,23 @@ public class MainActivity extends AppCompatActivity implements
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct == null) return;
 
-        User user = retrieveProfile(acct);
+        // Extract user information
+        mGoogleUser = retrieveProfile(acct);
 
-        if (user == null) return;
+        if (mGoogleUser == null) return;
 
-        String id = acct.getId();
+        mUserId = acct.getId();
         Uri photoUri = acct.getPhotoUrl();
 
-        /* Display the profile photo. If the user is logged in and if the SummarySitesActivity
-         * is started the photo will not been seen */
         if (photoUri != null) {
+            final String string = photoUri.toString();
+            /* Display the profile photo. If the user is logged in and if the SummarySitesActivity
+             * is started the photo will not been seen */
             Glide.with(MainActivity.this).load(photoUri).into(mProfilePhotoImageView);
-            //save file to local storage
-            FirebaseUser muser = FirebaseAuth.getInstance().getCurrentUser();
 
-            if (muser != null) {
-                Uri photoUrl = muser.getPhotoUrl();
-                String string = photoUrl.toString();
-                try {
-                    File file = Glide.with(MainActivity.this)
-                            .load(string)
-                            .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                            .get();
-
-                    UtilFile.copyFile(file, mFile);
-                } catch (InterruptedException | ExecutionException | IOException  e) {
-                    Log.d(TAG, "copyFile error: " + e);
-                }
-            }
+            // Start AsyncTask and implement onPostExecute Method
+            new AsyncTaskGetUri().execute(string);
         }
-        saveUserToFirestore(id, user);
     }
 
     /**
@@ -275,8 +265,9 @@ public class MainActivity extends AppCompatActivity implements
                         if (Debug.DEBUG_METHOD_ENTRY)
                             Log.d(TAG, "updateUserProfile() document successfully written");
                         //   Now save the photo to firebase storage
-                        if (mFile != null) UtilDatabase.saveFileFirestore(MainActivity.this, mFile,
-                                getString(R.string.firebase_collection_users));
+                        if (mFile != null)
+                            UtilDatabase.saveFileFirestore(MainActivity.this, mFile,
+                                    getString(R.string.firebase_collection_users));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -411,4 +402,41 @@ public class MainActivity extends AppCompatActivity implements
             revokeAccess();
         }
     }
+
+    /**
+     *
+     */
+    private class AsyncTaskGetUri extends AsyncTask<String, Void, File> {
+        private final String TAG = AsyncTaskGetUri.class.getSimpleName();
+
+        @Override
+        protected File doInBackground(String... string) {
+            if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "doInBackground()");
+
+            File file = null;
+            try {
+                file = Glide.with(MainActivity.this)
+                        .load(string[0])// Get path to the file
+                        .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                        .get();
+
+            } catch (InterruptedException | ExecutionException e) {
+                Log.d(TAG, "copyFile error: " + e);
+            }
+            return file;
+        }
+
+        @Override
+        protected void onPostExecute(File result) {
+            //save file to local storage // FirebaseUser muser = FirebaseAuth.getInstance().getCurrentUser();
+            try {
+                UtilFile.copyFile(result, mFile);
+            } catch (IOException e) {
+                Log.w(TAG, "e:" + e);
+            }
+            saveUserToFirestore(mUserId, mGoogleUser);
+        }
+    }
 }
+
+
