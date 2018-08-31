@@ -115,7 +115,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     private FusedLocationProviderClient mFusedLocationClient;
     private AddressResultReceiver mResultReceiver;
-    private Location mLastLocation;
+    private Location mLocationToBeDisplayed;    // Used to get and display location
+    private Location mLocationAddress;          // Used to get location to look up address
 
     FirebaseFirestore mFirestore;
     private DocumentReference mSiteDocumentRef;
@@ -532,8 +533,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
 
         //check both have a valid format and values
-        if (!UtilMap.mapCheckLatitudeCoordinate(latitude)
-                || !UtilMap.mapCheckLongitudeCoordinate(longitude)) {
+        if (!UtilMap.checkLatitudeCoordinate(latitude)
+                || !UtilMap.checkLongitudeCoordinate(longitude)) {
             return false;   //format or invalid value
         }
         mSite.setLatitude(latitude); //valid format and range
@@ -585,8 +586,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             //request permissions
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA,}
-                    , Constants.PERMISSIONS_REQUEST_CAMERA);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA,},
+                    Constants.PERMISSIONS_REQUEST_CAMERA);
         } else {
             //permission already granted
             takePhotoCheckStoragePermissions();
@@ -649,7 +650,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             mPhotoPath = photoFile.getAbsolutePath();
         } catch (IOException ex) {
             // Error occurred while creating the File, tell the user
-            Toast.makeText(this, getString(R.string.ERROR_File_Error), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.ERROR_File_error), Toast.LENGTH_SHORT).show();
         }
         // Continue only if the File was successfully created
         if (photoFile != null) {
@@ -686,8 +687,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             //request permissions
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,}
-                    , Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE_GETPHOTO);
+            ActivityCompat.
+                    requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE_GETPHOTO);
         } else {
             //permission already granted
             selectPhotoUpdateImageViews();
@@ -798,26 +800,26 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     public void displayStatusOfAllFacilities(final Site site) {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "displayStatusOfAllFacilities()");
 
-        displayFacility(site, dumppointImageView, dumppointpresentImageView, R.string.dumppoint
-                , Site.Facility.DUMPPOINT);
-        displayFacility(site, freeImageView, freepresentImageView, R.string.free
-                , Site.Facility.FREE);
-        displayFacility(site, mobileImageView, mobilepresentImageView, R.string.mobile
-                , Site.Facility.MOBILE);
-        displayFacility(site, playequipmentImageView, playequipmentpresentImageView
-                , R.string.playequipment, Site.Facility.PLAYEQUIPMENT);
-        displayFacility(site, scenicImageView, scenicpresentImageView, R.string.scenic
-                , Site.Facility.SCENIC);
-        displayFacility(site, showersImageView, showerspresentImageView, R.string.showers
-                , Site.Facility.SHOWERS);
-        displayFacility(site, swimmingImageView, swimmingpresentImageView, R.string.swimming
-                , Site.Facility.SWIMMING);
-        displayFacility(site, toiletsImageView, toiletspresentImageView, R.string.toilets
-                , Site.Facility.TOILETS);
-        displayFacility(site, tvreceptionImageView, tvreceptionpresentImageView, R.string.tvreception
-                , Site.Facility.TVRECEPTION);
-        displayFacility(site, waterImageView, waterpresentImageView, R.string.water
-                , Site.Facility.WATER);
+        displayFacility(site, dumppointImageView, dumppointpresentImageView, R.string.dumppoint,
+                Site.Facility.DUMPPOINT);
+        displayFacility(site, freeImageView, freepresentImageView, R.string.free,
+                Site.Facility.FREE);
+        displayFacility(site, mobileImageView, mobilepresentImageView, R.string.mobile,
+                Site.Facility.MOBILE);
+        displayFacility(site, playequipmentImageView, playequipmentpresentImageView,
+                R.string.playequipment, Site.Facility.PLAYEQUIPMENT);
+        displayFacility(site, scenicImageView, scenicpresentImageView, R.string.scenic,
+                Site.Facility.SCENIC);
+        displayFacility(site, showersImageView, showerspresentImageView, R.string.showers,
+                Site.Facility.SHOWERS);
+        displayFacility(site, swimmingImageView, swimmingpresentImageView, R.string.swimming,
+                Site.Facility.SWIMMING);
+        displayFacility(site, toiletsImageView, toiletspresentImageView, R.string.toilets,
+                Site.Facility.TOILETS);
+        displayFacility(site, tvreceptionImageView, tvreceptionpresentImageView, R.string.tvreception,
+                Site.Facility.TVRECEPTION);
+        displayFacility(site, waterImageView, waterpresentImageView, R.string.water,
+                Site.Facility.WATER);
     }
 
     /**
@@ -867,7 +869,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * <p>
      * If permission granted, calls the method {@link #getLocationFusedProviderClient()}
      * to continue processing.
-     * If permission denied requests the permission, with the result returned in
+     * If do not have permission, requests the permission, with the result returned in
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      */
     private void getLocation() {
@@ -892,7 +894,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * which displays longitude and latitude.
      * If fails displays a message to the user.
      */
-    @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     void getLocationFusedProviderClient() {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getLocationFusedProviderClient()");
 
@@ -904,13 +905,14 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                         @Override
                         public void onSuccess(Location location) {
 
-                            // Got last known location. In some rare situations this can be null.
+                            /* Got last known location. In some rare situations this can be null.
+                             * Only display result if requested too, otherwise just save result */
                             if (location != null) {
-                                mLastLocation = location;
+                                mLocationToBeDisplayed = location;
                                 getLocationDisplayCoordinates(location);
                             } else {
-                                Toast.makeText(getApplicationContext()
-                                        , getString(R.string.ERROR_GPS_Null), Toast.LENGTH_SHORT)
+                                Toast.makeText(getApplicationContext(),
+                                        getString(R.string.ERROR_GPS_null), Toast.LENGTH_SHORT)
                                         .show();
                             }
                         }
@@ -918,12 +920,14 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext()
-                                    , getString(R.string.ERROR_GPS_Error), Toast.LENGTH_SHORT)
-                                    .show();
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.ERROR_GPS_error), Toast.LENGTH_SHORT).show();
                         }
                     });
-        } catch (SecurityException e) {
+        } catch (
+                SecurityException e)
+
+        {
             Toast.makeText(this, getString(R.string.ERROR_Security_exception),
                     Toast.LENGTH_LONG).show();
         }
@@ -945,6 +949,56 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         textView.setText(Location.convert(location.getLongitude(), Location.FORMAT_SECONDS));
     }
 
+    /**
+     * Gets address using the longitude and latitude coordinates displayed on the UI.
+     * These could have been entered by the user or loaded from the database
+     * when a site was selected to be edited or a combination of the both.
+     * <p>
+     * Requires a Location object to fetch the address.
+     */
+    private void getAddress() {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getAddress()");
+
+        if (mLocationAddress == null) {
+            mLocationAddress = new Location("");
+        }
+        // Get latitude and longitude entered by the user or loaded from the site
+        String latitude = mLatitudeEditText.getText().toString();
+        String longitude = mLongitudeEditText.getText().toString();
+
+        // Now check latitude and longitude not empty
+        if (UtilGeneral.stringEmpty(latitude) || UtilGeneral.stringEmpty(longitude)) {
+            makeText(this, getString(R.string.ERROR_Map_invalid_lat_long), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // Now check latitude and longitude have a valid format
+        if (!UtilMap.checkLongitudeCoordinate(latitude)|| !UtilMap.checkLongitudeCoordinate(longitude)) {
+            makeText(this, getString(R.string.ERROR_Map_invalid_lat_long), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mLocationAddress.setLatitude(UtilMap.covertDegMinSecToDegrees(latitude));
+        mLocationAddress.setLongitude(UtilMap.covertDegMinSecToDegrees(longitude));
+
+        // Start intent to fetch address
+        Intent intent = new Intent(this, FetchAddressService.class);
+        intent.putExtra(Constants.RECEIVER, mResultReceiver);
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLocationAddress);
+        startService(intent);
+    }
+
+    /**
+     * Displays address on UI
+     *
+     * @param address address to be displayed
+     */
+    void getAddressDisplay(String address) {
+        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "getAddressDisplay()");
+
+        if (UtilGeneral.stringEmpty(address))
+            makeText(this, getString(R.string.ERROR_Address), Toast.LENGTH_SHORT).show();
+        else
+            mStreetEditText.setText(address);
+    }
 
     /**
      * Clears photos from the display and clears links in the database which point to
@@ -968,17 +1022,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         mSiteHasChanged = true;
     }
-
-    /**
-     * Displays address on UI
-     *
-     * @param address   address to be displayed
-     */
-    void displayAddress(String address) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "displayAddressOutput()");
-        mStreetEditText.setText(address);
-    }
-
 
     /**
      * Checks we have permissions
@@ -1022,10 +1065,11 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     takePhotoCheckStoragePermissions();
                 } else {
                     // permission denied exit, tell user
-                    Toast.makeText(this, getString(R.string.ERROR_Camera_unavailable)
-                            , Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.ERROR_Camera_unavailable),
+                            Toast.LENGTH_LONG).show();
                 }
                 break;
+
             case Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE_CAMERA:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted, continue to take a photo
@@ -1044,6 +1088,17 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 } else {
                     // permission denied exit, tell user
                     Toast.makeText(this, getString(R.string.ERROR_Storage_external_unavailable),
+                            Toast.LENGTH_LONG).show();
+                }
+                break;
+
+            case Constants.PERMISSIONS_REQUEST_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //permission granted, continue to get the location
+                    getLocationFusedProviderClient();
+                } else {
+                    // permission denied exit, tell user
+                    Toast.makeText(this, getString(R.string.ERROR_Location_permission_denied),
                             Toast.LENGTH_LONG).show();
                 }
                 break;
@@ -1107,9 +1162,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         switch (v.getId()) {
             case R.id.add_site_save:
-                /* Flag mSiteHasBeenChanged is set to false
-                 * if no errors during processing by GetNewSiteIfOkSave().
-                 * Does not reflect if write to database was successful
+                /* Flag mSiteHasBeenChanged is set to false if no errors during processing
+                 * by getSite(). Does not reflect if write to database was successful
                  * as database write is done asynchronously. */
                 if (getSite())
                     mSiteHasChanged = false;
@@ -1128,31 +1182,22 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 break;
 
             case R.id.add_site_button_get_location:
-                getLocation();
+                getLocation();      // Get location and display the result
                 break;
 
             case R.id.add_site_button_get_address:
-                /* Called when the Display Address Button is pressed, Starts service to
-                 * convert location to an address and display the address on the UI */
-                if (mLastLocation == null) {
-                    Toast.makeText(this, getString(R.string.Location_null), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Intent intent = new Intent(this, FetchAddressService.class);
-                intent.putExtra(Constants.RECEIVER, mResultReceiver);
-                intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
-                startService(intent);
+                getAddress();    // Get address and display it
                 break;
 
             case R.id.add_site_button_show_map:
                 // Checks latitude and longitude are set,
-                if (UtilMap.mapCheckLatLongSet(mSite)) {
+                if (UtilMap.checkLatLongSet(mSite)) {
                     // Ok, display map with a marker at this site's location by creating an intent
                     UtilMap.mapShow(mSite, this);
 
                 } else {
-                    //warn the user not valid
-                    makeText(this, getString(R.string.ERROR_GPS_Coordinates),
+                    //warn the user latitude or longitude invalid
+                    makeText(this, getString(R.string.ERROR_GPS_coordinates),
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -1174,7 +1219,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         private static final String TAG = "AddressResultReceiver";
 
         /**
-         *
          * @param resultCode
          * @param resultData
          */
@@ -1187,7 +1231,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
                 return;
             }
-
             // Display the address string
             // or an error message sent from the intent service.
             String mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
@@ -1197,7 +1240,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 mAddressOutput = "";
             }
             if (resultCode == Constants.SUCCESS_RESULT) {
-                displayAddress(mAddressOutput);
+                getAddressDisplay(mAddressOutput);
             } else {
                 Toast.makeText(getApplicationContext(), getString(R.string.ERROR_Address),
                         Toast.LENGTH_SHORT).show();

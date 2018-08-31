@@ -23,8 +23,8 @@ public class UtilMap {
      * <p>
      * returns true if valid format.
      */
-    public static boolean mapCheckLongitudeCoordinate(String coordinate) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "mapCheckLongitudeCoordinate()");
+    public static boolean checkLongitudeCoordinate(String coordinate) {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "checkLongitudeCoordinate()");
 
         if (coordinate == null) return false;
 
@@ -64,8 +64,8 @@ public class UtilMap {
      * <p>
      * returns true if valid format.
      */
-    public static boolean mapCheckLatitudeCoordinate(String coordinate) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "mapCheckLatitudeCoordinate()");
+    public static boolean checkLatitudeCoordinate(String coordinate) {
+        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "checkLatitudeCoordinate()");
 
         if (coordinate == null) return false;
 
@@ -106,7 +106,7 @@ public class UtilMap {
      * @param coordinate String of DD:MM:SS
      * @return Degrees as double
      */
-    public static double mapCovertDegMinSecToDegrees(String coordinate) {
+    public static double covertDegMinSecToDegrees(String coordinate) {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "mapConvertDegMinSecToDegrees()");
 
         //assume it is positive
@@ -139,8 +139,8 @@ public class UtilMap {
      * @param site    activities containing latitude and longitude
      * @return false if null activities or latitude or longitude not set
      */
-    public static boolean mapCheckLatLongSet(Site site) {
-        if (Debug.DEBUG_METHOD_ENTRY_MAP) Log.d(TAG, "mapCheckLatLongSet()");
+    public static boolean checkLatLongSet(Site site) {
+        if (Debug.DEBUG_METHOD_ENTRY_MAP) Log.d(TAG, "checkLatLongSet()");
 
         if (site == null) return false;
         if (site.getLatitude() == null || site.getLatitude().isEmpty()) return false;

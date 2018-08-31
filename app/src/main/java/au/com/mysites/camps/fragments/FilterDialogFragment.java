@@ -1,4 +1,4 @@
-package au.com.mysites.camps.filter;
+package au.com.mysites.camps.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.google.firebase.firestore.Query;
 import java.util.Objects;
 
 import au.com.mysites.camps.R;
+import au.com.mysites.camps.models.Filters;
 import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.util.Debug;
 

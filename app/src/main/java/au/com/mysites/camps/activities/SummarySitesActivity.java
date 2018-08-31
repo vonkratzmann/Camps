@@ -29,8 +29,8 @@ import com.google.firebase.firestore.Query;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.adapter.SiteAdapter;
-import au.com.mysites.camps.filter.FilterDialogFragment;
-import au.com.mysites.camps.filter.Filters;
+import au.com.mysites.camps.fragments.FilterDialogFragment;
+import au.com.mysites.camps.models.Filters;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
 import au.com.mysites.camps.viewmodel.SummarySiteACtivityViewModel;
@@ -339,11 +339,6 @@ public class SummarySitesActivity extends AppCompatActivity implements
             case R.id.menu_summary_database_manage:
                 Intent backupRestore = new Intent(SummarySitesActivity.this, BackUpRestoreActivity.class);
                 startActivity(backupRestore);
-                break;
-
-            case R.id.menu_summary_database_query:
-                Intent databaseQuery = new Intent(SummarySitesActivity.this, QueryDatabaseActivity.class);
-                startActivity(databaseQuery);
                 break;
         }
         return super.onOptionsItemSelected(item);

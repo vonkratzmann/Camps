@@ -66,7 +66,7 @@ public class XmlParser {
             }
         } catch (Exception e) {
             // tell user error in file format and exit application
-            exitApplication(R.string.ERROR_File_Format);
+            exitApplication(R.string.ERROR_File_format);
         }
     }
 
@@ -120,7 +120,7 @@ public class XmlParser {
             mySites.add(site);
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
-            exitApplication(R.string.ERROR_File_Format);
+            exitApplication(R.string.ERROR_File_format);
         }
     }
 
@@ -350,7 +350,7 @@ public class XmlParser {
 
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
-            exitApplication(R.string.ERROR_File_Format);
+            exitApplication(R.string.ERROR_File_format);
         }
     }
     /**

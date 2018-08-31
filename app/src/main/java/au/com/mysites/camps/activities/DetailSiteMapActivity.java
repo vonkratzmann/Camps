@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.util.Debug;
 
-import static au.com.mysites.camps.util.UtilMap.mapCovertDegMinSecToDegrees;
+import static au.com.mysites.camps.util.UtilMap.covertDegMinSecToDegrees;
 
 
 /**
@@ -75,8 +75,8 @@ public class DetailSiteMapActivity extends FragmentActivity implements OnMapRead
         GoogleMap mMap = googleMap;
 
        //get latitude and longitude, convert from DD:MM:SS to DD.DDDDDD as a double
-        LatLng location = new LatLng(mapCovertDegMinSecToDegrees(mLatitude),
-                mapCovertDegMinSecToDegrees(mLongitude));
+        LatLng location = new LatLng(covertDegMinSecToDegrees(mLatitude),
+                covertDegMinSecToDegrees(mLongitude));
 
         // Add a marker to the map
         mMap.addMarker(new MarkerOptions()

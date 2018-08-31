@@ -44,7 +44,7 @@ import java.util.Objects;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.adapter.CommentAdapter;
-import au.com.mysites.camps.comment.CommentDialogFragment;
+import au.com.mysites.camps.fragments.CommentDialogFragment;
 import au.com.mysites.camps.models.Comment;
 import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.util.Constants;
@@ -520,13 +520,13 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
 
             case R.id.site_detail_show_map:
                 // Checks latitude and longitude are set,
-                if (UtilMap.mapCheckLatLongSet(mSite)) {
+                if (UtilMap.checkLatLongSet(mSite)) {
                     // Ok, display map with a marker at this activities's location by creating an intent
                     UtilMap.mapShow(mSite, this);
 
                 } else {
                     //warn the user not valid
-                    makeText(this, getString(R.string.ERROR_GPS_Coordinates),
+                    makeText(this, getString(R.string.ERROR_GPS_coordinates),
                             Toast.LENGTH_SHORT).show();
                 }
                 break;

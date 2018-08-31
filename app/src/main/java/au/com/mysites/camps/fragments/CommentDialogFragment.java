@@ -1,4 +1,4 @@
-package au.com.mysites.camps.comment;
+package au.com.mysites.camps.fragments;
 
 import android.content.Context;
 import android.os.Bundle;

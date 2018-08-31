@@ -166,7 +166,7 @@ public class UtilDatabase {
             public void onFailure(@NonNull Exception e) {
                 Log.w(TAG, "file: " + file.getName() + " upload failure");
                 // Warn the user
-                shortToast(context.getString(R.string.ERROR_File_Not_saved)
+                shortToast(context.getString(R.string.ERROR_File_not_saved)
                         + "e:" + e , 2000, context);
             }
         });

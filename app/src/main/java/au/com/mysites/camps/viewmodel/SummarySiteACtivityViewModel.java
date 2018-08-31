@@ -2,7 +2,7 @@ package au.com.mysites.camps.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
 
-import au.com.mysites.camps.filter.Filters;
+import au.com.mysites.camps.models.Filters;
 
 public class SummarySiteACtivityViewModel extends ViewModel {
 

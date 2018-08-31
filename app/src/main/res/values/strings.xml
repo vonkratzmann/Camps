@@ -117,16 +117,17 @@
     <string name="ERROR_Contacts">Error: contacts and accounts access denied</string>
     <string name="ERROR_Database">Error: database site not saved</string>
     <string name="ERROR_Database_backup_failed">Database backup failed</string>
-    <string name="ERROR_File_Not_Available">Error: file not available</string>
-    <string name="ERROR_File_Not_saved">Error: file not saved</string>
-    <string name="ERROR_File_Format">Error: file format incorrect</string>
-    <string name="ERROR_File_Error">Error: could not read or write file</string>
-    <string name="ERROR_GPS_Latitude">Error: latitude incorrect format, latitude longitude zeroed</string>
-    <string name="ERROR_GPS_Longitude">Error: longitude incorrect format, latitude longitude zeroed</string>
-    <string name="ERROR_GPS_Map">Error: Google maps not installed</string>
-    <string name="ERROR_GPS_Error">Error: satellite positioning system error</string>
-    <string name="ERROR_GPS_Null">Error: invalid location coordinates</string>
-    <string name="ERROR_GPS_Coordinates">Error: coordinates invalid</string>
+    <string name="ERROR_File_not_available">Error: file not available</string>
+    <string name="ERROR_File_not_saved">Error: file not saved</string>
+    <string name="ERROR_File_format">Error: file format incorrect</string>
+    <string name="ERROR_File_error">Error: could not read or write file</string>
+    <string name="ERROR_GPS_latitude">Error: latitude incorrect format, latitude longitude zeroed</string>
+    <string name="ERROR_GPS_longitude">Error: longitude incorrect format, latitude longitude zeroed</string>
+    <string name="ERROR_GPS_map">Error: Google maps not installed</string>
+    <string name="ERROR_GPS_error">Error: satellite positioning system error</string>
+    <string name="ERROR_GPS_null">Error: invalid location coordinates</string>
+    <string name="ERROR_GPS_coordinates">Error: coordinates invalid</string>
+    <string name="ERROR_Location_permission_denied">Error: coordinates invalid</string>
     <string name="ERROR_Latitude_longitude_format_error">Error: invalid format for latitude or longitude</string>
     <string name="ERROR_Map_invalid_lat_long">Error: invalid latitude or longitude</string>
     <string name="ERROR_Nothing_entered">Error: nothing updated</string>
@@ -152,7 +153,6 @@
     <string name="summary_settings">Settings</string>
     <string name="summary_sign_out">Sign Out</string>
     <string name="summary_database_manage">Manage Database</string>
-    <string name="summary_database_query">Query Database</string>
     <string name="detail_edit_site">Edit site</string>
 
     <!-- File path on Firebase storage -->

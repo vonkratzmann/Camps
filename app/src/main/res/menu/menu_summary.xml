@@ -20,9 +20,4 @@
         android:orderInCategory="100"
         app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/menu_summary_database_query"
-        android:title="@string/summary_database_query"
-        android:orderInCategory="100"
-        app:showAsAction="never"/>
 </menu>

@@ -34,7 +34,7 @@ import au.com.mysites.camps.R;
 import au.com.mysites.camps.adapter.RatingAdapter;
 import au.com.mysites.camps.models.Rating;
 import au.com.mysites.camps.models.Site;
-import au.com.mysites.camps.rating.RatingDialogFragment;
+import au.com.mysites.camps.fragments.RatingDialogFragment;
 import au.com.mysites.camps.util.Debug;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 

@@ -28,13 +28,19 @@ public class FetchAddressService extends IntentService {
     private final static String TAG = FetchAddressService.class.getSimpleName();
     protected ResultReceiver mReceiver;
 
+    private String street;
+    private String locality;
+    private String state;
+    private String postCode;
+    private String country;
+
     /**
      * Checks for errors invokes Geocoder
      * gets address, checks for errors
      * logs debug information which is normally suppressed
      * calls method to send results back to main activity
      *
-     * @param intent  intent used to start service
+     * @param intent intent used to start service
      */
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
@@ -46,6 +52,7 @@ public class FetchAddressService extends IntentService {
         }
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         String errorMessage = "";
+        ArrayList<String> addressFragments = new ArrayList<String>();
 
         // Get the location passed to this service through an extra.
         Location location = intent.getParcelableExtra(Constants.LOCATION_DATA_EXTRA);
@@ -55,40 +62,37 @@ public class FetchAddressService extends IntentService {
         try {
             //Just a single address.
             addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-        } catch (IOException ioException) {
+        } catch (IOException e) {
             // Catch network or other I/O problems.
             errorMessage = "Service_not_available";
-            if (Debug.DEBUG_SERVICE_ADDRESS) Log.e(TAG, errorMessage, ioException);
+            Log.e (TAG, "Error: " + e);
+            deliverResultToReceiver(Constants.FAILURE_RESULT,
+                    TextUtils.join(System.getProperty("line.separator"), addressFragments));
+            return;
 
-        } catch (IllegalArgumentException illegalArgumentException) {
+        } catch (IllegalArgumentException e) {
             // Catch invalid latitude or longitude values.
             errorMessage = "Invalid_lat_long_used";
-            if (Debug.DEBUG_SERVICE_ADDRESS) Log.e(TAG, errorMessage + ". " +
-                    "Latitude = " + location.getLatitude() + ", Longitude = " +
-                    location.getLongitude(), illegalArgumentException);
+            Log.e (TAG, "Error: " + e);
+            deliverResultToReceiver(Constants.FAILURE_RESULT,
+                    TextUtils.join(System.getProperty("line.separator"), addressFragments));
+            return;
         }
 
         // Handle case where no address was found.
         if (addresses == null || addresses.size() == 0) {
-            if (errorMessage.isEmpty()) {
-                errorMessage = "Address is null";
-                if (Debug.DEBUG_SERVICE_ADDRESS) Log.d(TAG, errorMessage);
-            }
+            errorMessage = "Address is null";
             deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
         } else {
             if (Debug.DEBUG_SERVICE_ADDRESS) Log.d(TAG, "Address_found");
             Address address = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<String>();
 
-            // Fetch the address lines using getAddressLine,
-            // join them, and send them to the calling activity
-            for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
-
-                //for debugging only show each address string
-                if (Debug.DEBUG_SERVICE_ADDRESS) Log.d(TAG, "i=" + Integer.toString(i) + " "
-                        + address.getAddressLine(i));
-            }
+            // Collect them send to the calling activity
+            addressFragments.add(address.getThoroughfare());
+            addressFragments.add(address.getLocality());
+            addressFragments.add(address.getAdminArea());
+            addressFragments.add(address.getPostalCode());
+            addressFragments.add(address.getCountryCode());
 
             deliverResultToReceiver(Constants.SUCCESS_RESULT,
                     TextUtils.join(System.getProperty("line.separator"),
@@ -96,12 +100,11 @@ public class FetchAddressService extends IntentService {
         }
     }
 
-
     /**
      * send address back to calling activity
      *
-     * @param resultCode        results code
-     * @param message           address
+     * @param resultCode results code
+     * @param message    address
      */
     @SuppressLint("RestrictedApi")
     private void deliverResultToReceiver(int resultCode, String message) {

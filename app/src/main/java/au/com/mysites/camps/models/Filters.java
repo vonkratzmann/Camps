@@ -1,4 +1,4 @@
-package au.com.mysites.camps.filter;
+package au.com.mysites.camps.models;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.google.firebase.firestore.Query;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.models.Site;
 
 public class Filters {
 
