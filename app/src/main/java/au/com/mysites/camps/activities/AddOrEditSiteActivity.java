@@ -45,6 +45,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.StringTokenizer;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.Site;
@@ -328,12 +329,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         // If we have a file name stored, display the image of the site
         String sitePhoto = site.getSitePhoto();
-        if (sitePhoto != null && !sitePhoto.isEmpty()) {
+        if (!UtilGeneral.stringEmpty(sitePhoto)) {
             UtilDatabase.getImageAndDisplay(sitePhoto, mSitePhotoImageView);
         }
         // If we have a file name stored, display the thumbnail of the site
         String thumbnail = site.getThumbnail();
-        if (thumbnail != null && !thumbnail.isEmpty()) {
+        if (!UtilGeneral.stringEmpty(thumbnail)) {
             UtilDatabase.getImageAndDisplay(thumbnail, mThumbnailImageView);
         }
         // Update UI to show if facility is present at site or not
@@ -357,11 +358,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 ? R.mipmap.tick : R.mipmap.cross);
         waterpresentImageView.setImageResource((site.checkIfFacilityPresent(Site.Facility.WATER))
                 ? R.mipmap.tick : R.mipmap.cross);
-
         //Reset as loading data from the Site instance to editText views, sets off the TextWatcher
         mSiteHasChanged = false;
     }
-
 
     /**
      * User has requested a save of the newly entered site or edit of existing site.
@@ -641,11 +640,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     Toast.LENGTH_SHORT).show();
             return;
         }
-
         File photoFile = null;
         try {
-            // Create the File in external storage where the photo should go
-            // with a collision resistant file name.
+            // Create the File in external storage with a collision resistant file name.
             photoFile = UtilImage.createImageFile(this);
             mPhotoPath = photoFile.getAbsolutePath();
         } catch (IOException ex) {
@@ -655,8 +652,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         // Continue only if the File was successfully created
         if (photoFile != null) {
             /* NOTE: configure the FileProvider in the manifest and
-             * configure the eligible paths in the dedicated resource file,
-             * res/xml/file_paths.xml. */
+             * configure the eligible paths in the dedicated resource file, res/xml/file_paths.xml. */
 
             /* FileProvider allows secure sharing of file through a content:// URI by granting
              * temporary access to the file, which will be available for the receiver activity */
@@ -888,11 +884,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     * Gets a fused location client, which is an API from Google Play Services
-     * adds listeners for success and failure.
-     * If success calls {@link #getLocationDisplayCoordinates(Location)}
-     * which displays longitude and latitude.
-     * If fails displays a message to the user.
+     * Gets a fused location client, which is an API from Google Play Services, adds listeners
+     * for success and failure. If success calls {@link #getLocationDisplayCoordinates(Location)}
+     * which displays longitude and latitude. If fails displays a message to the user.
      */
     void getLocationFusedProviderClient() {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getLocationFusedProviderClient()");
@@ -904,9 +898,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-
-                            /* Got last known location. In some rare situations this can be null.
-                             * Only display result if requested too, otherwise just save result */
+                            /* Got last known location. In some rare situations this can be null. */
                             if (location != null) {
                                 mLocationToBeDisplayed = location;
                                 getLocationDisplayCoordinates(location);
@@ -926,7 +918,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     });
         } catch (
                 SecurityException e)
-
         {
             Toast.makeText(this, getString(R.string.ERROR_Security_exception),
                     Toast.LENGTH_LONG).show();
@@ -972,7 +963,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             return;
         }
         // Now check latitude and longitude have a valid format
-        if (!UtilMap.checkLongitudeCoordinate(latitude)|| !UtilMap.checkLongitudeCoordinate(longitude)) {
+        if (!UtilMap.checkLongitudeCoordinate(latitude) || !UtilMap.checkLongitudeCoordinate(longitude)) {
             makeText(this, getString(R.string.ERROR_Map_invalid_lat_long), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -996,8 +987,29 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         if (UtilGeneral.stringEmpty(address))
             makeText(this, getString(R.string.ERROR_Address), Toast.LENGTH_SHORT).show();
-        else
-            mStreetEditText.setText(address);
+        else {
+            /* order of address sub-components is:
+             * addressFragments.add(address.getThoroughfare());
+             * addressFragments.add(address.getLocality());
+             * addressFragments.add(address.getAdminArea());
+             * addressFragments.add(address.getPostalCode());
+             * addressFragments.add(address.getCountryCode()) */
+            StringTokenizer st = new StringTokenizer(address, System.getProperty("line.separator"));
+            int tokens = st.countTokens();
+
+            if (tokens <= 4 ) {  // Only need 4 as country code is ignored
+                makeText(this, getString(R.string.ERROR_Address), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String street = st.nextToken();
+            String city = st.nextToken();
+            String state = st.nextToken();
+            String postcode = st.nextToken();
+
+            mStreetEditText.setText(street);
+            mCityEditText.setText(city);
+            mStateEditText.setText(state);
+        }
     }
 
     /**
@@ -1219,8 +1231,10 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         private static final String TAG = "AddressResultReceiver";
 
         /**
-         * @param resultCode
-         * @param resultData
+         * Get address returned from service an display it on the UI
+         *
+         * @param resultCode        Results of address request
+         * @param resultData        Contains address
          */
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
@@ -1234,15 +1248,17 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             // Display the address string
             // or an error message sent from the intent service.
             String mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-            if (mAddressOutput == null) {
+
+            if (UtilGeneral.stringEmpty(mAddressOutput)) {
                 Toast.makeText(getApplicationContext(), getString(R.string.ERROR_Address),
                         Toast.LENGTH_SHORT).show();
-                mAddressOutput = "";
+                return;
             }
             if (resultCode == Constants.SUCCESS_RESULT) {
                 getAddressDisplay(mAddressOutput);
-            } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.ERROR_Address),
+
+            } else { //Show error message from the service
+                Toast.makeText(getApplicationContext(), mAddressOutput,
                         Toast.LENGTH_SHORT).show();
             }
         }

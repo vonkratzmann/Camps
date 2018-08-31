@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.7"
-        android:text="Select photo"
+        android:text="@string/add_edit_site_select_photo"
         android:textAppearance="?android:textAppearanceSmall"
         app:layout_constraintBottom_toBottomOf="@+id/guidelineimage"
         app:layout_constraintEnd_toStartOf="@+id/add_site_button_take_photo"
@@ -39,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.7"
-        android:text="Take a picture"
+        android:text="@string/add_edit_site_take_picture"
         android:textAppearance="?android:textAppearanceSmall"
         app:layout_constraintBottom_toBottomOf="@+id/guidelineimage"
         app:layout_constraintEnd_toStartOf="@+id/add_site_button_delete_photo"
@@ -51,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.7"
-        android:text="Delete image"
+        android:text="@string/add_edit_site_take_picture"
         android:textAppearance="?android:textAppearanceSmall"
         app:layout_constraintBottom_toBottomOf="@+id/guidelineimage"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,6 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:alpha="1.0"
+        android:contentDescription="@string/add_edit_site_site_photo"
         android:scaleType="centerInside"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/add_edit_site_toolbar"
@@ -76,9 +76,9 @@
         android:background="@drawable/circle_background"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:text="Ok"
+        android:text="@string/add_edit_site_ok"
         android:textColor="#FFF"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/add_site_photo"
         app:layout_constraintEnd_toEndOf="@+id/add_site_photo"
@@ -93,6 +93,7 @@
         android:layout_height="60dp"
         android:layout_marginEnd="8dp"
         android:scaleType="centerInside"
+        android:contentDescription="@string/add_edit_site_thumbnail"
         app:layout_constraintEnd_toStartOf="@+id/add_site_name_text"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/guidelinesitename"
@@ -109,8 +110,7 @@
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
         app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
-        app:layout_constraintTop_toTopOf="@+id/guidelinesitename"
-        tools:text="enter name"/>
+        app:layout_constraintTop_toTopOf="@+id/guidelinesitename"/>
 
     <EditText
         android:id="@+id/add_site_street_text"
@@ -124,8 +124,7 @@
         android:textColor="@color/list_item_text"
         app:layout_constraintBottom_toTopOf="@+id/add_site_city_text"
         app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
-        app:layout_constraintTop_toBottomOf="@+id/add_site_name_text"
-        tools:text="street text"/>
+        app:layout_constraintTop_toBottomOf="@+id/add_site_name_text"/>
 
     <EditText
         android:id="@+id/add_site_city_text"
@@ -138,29 +137,42 @@
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
         app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
-        app:layout_constraintBottom_toBottomOf="@+id/add_site_thumbnail"
-        tools:text="city text"/>
+        app:layout_constraintBottom_toBottomOf="@+id/add_site_thumbnail"/>
+
+    <EditText
+        android:id="@+id/add_site_postcode_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="#FFF5E6E6"
+        android:hint="@string/add_edit_site_postcode_hint"
+        android:imeOptions="actionDone"
+        android:inputType="textShortMessage"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/list_item_text"
+        app:layout_constraintStart_toEndOf="@+id/add_site_city_text"
+        app:layout_constraintTop_toTopOf="@+id/add_site_city_text"/>
 
     <EditText
         android:id="@+id/add_site_state_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:background="#FFF5E6E6"
         android:hint="@string/add_edit_site_state_hint"
         android:imeOptions="actionDone"
         android:inputType="textShortMessage"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
-        app:layout_constraintStart_toEndOf="@+id/add_site_city_text"
-        app:layout_constraintTop_toTopOf="@+id/add_site_city_text"
-        tools:text="state text"/>
+        app:layout_constraintStart_toEndOf="@+id/add_site_postcode_text"
+        app:layout_constraintTop_toTopOf="@+id/add_site_city_text"/>
 
     <TextView
         android:id="@+id/add_site_map_latitude_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#FFF5E6E6"
-        android:text="Latitude"
+        android:text="@string/add_edit_site_latitude"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -190,7 +202,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#FFF5E6E6"
-        android:text="Longitude"
+        android:text="@string/add_edit_site_longitude"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -213,13 +225,24 @@
         app:layout_constraintStart_toEndOf="@+id/add_site_map_coordinates_lat"
         app:layout_constraintTop_toBottomOf="@+id/add_site_map_longitude_heading"/>
 
+    <ImageView
+        android:id="@+id/main_background_imageView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:contentDescription="@null"
+        android:background="@color/grey_300"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_map_coordinates_lat"/>
+
     <Button
         android:id="@+id/add_site_button_get_location"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get location"
+        android:text="@string/add_edit_site_get_location"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
         app:layout_constraintEnd_toStartOf="@+id/add_site_button_get_address"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toEndOf="@+id/guideline"
@@ -227,11 +250,12 @@
 
     <Button
         android:id="@+id/add_site_button_get_address"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get address"
+        android:text="@string/add_edit_site_get_address"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
         app:layout_constraintEnd_toStartOf="@+id/add_site_button_show_map"
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/add_site_button_get_location"
@@ -239,11 +263,12 @@
 
     <Button
         android:id="@+id/add_site_button_show_map"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_edit_site_map_show"
+        android:text="@string/add_edit_site_show_map"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/add_site_button_get_address"
@@ -528,7 +553,7 @@
 
     <view
         class="android.support.v7.widget.LinearLayoutCompat"
-        id="@+id/view"
+        android:id="@+id/view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

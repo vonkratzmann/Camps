@@ -67,12 +67,24 @@
     <string name="site_detail_image_pizza_hint">Site picture</string>
 
     <!-- Add Edit Site layout text -->
-    <string name="add_edit_site_map_show">Show Map</string>
+    <string name="add_edit_site_show_map">Show Map</string>
+    <string name="add_edit_site_get_location">Get Location</string>
+    <string name="add_edit_site_get_address">Get Address</string>
+    <string name="add_edit_site_select_photo">Select Photo</string>
+    <string name="add_edit_site_take_picture">Take a Picture</string>
+    <string name="add_edit_site_delete_image">Delete Image</string>
+    <string name="add_edit_site_latitude">Latitude</string>
+    <string name="add_edit_site_longitude">Longitude</string>
+    <string name="add_edit_site_ok">OK</string>
+    <string name="add_edit_site_site_photo">Site photo</string>
+    <string name="add_edit_site_thumbnail">Thumbnail</string>
+
 
     <!-- Add Edit Site layout hints -->
     <string name="add_edit_site_name_hint">Enter name</string>
     <string name="add_edit_site_city_hint">Enter town/city</string>
     <string name="add_edit_site_street_hint">Enter street</string>
+    <string name="add_edit_site_postcode_hint">Enter postcode</string>
     <string name="add_edit_site_state_hint">Enter state</string>
     <string name="add_edit_comment_hint">Enter comment</string>
 

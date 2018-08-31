@@ -1,5 +1,6 @@
 package au.com.mysites.camps.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -132,27 +133,27 @@ public class UtilMap {
     }
 
     /**
-     * Checks have a valid activities, and latitude and longitude are set.
-     * Format checking of latitude and longitude is not done here
-     * as this is done at entry of latitude and longitude.
+     * Checks latitude and longitude have been entered and
+     * format of latitude and longitude is correct.
      *
      * @param site    activities containing latitude and longitude
      * @return false if null activities or latitude or longitude not set
      */
+    @SuppressLint("")
     public static boolean checkLatLongSet(Site site) {
         if (Debug.DEBUG_METHOD_ENTRY_MAP) Log.d(TAG, "checkLatLongSet()");
 
         if (site == null) return false;
         if (site.getLatitude() == null || site.getLatitude().isEmpty()) return false;
+        //noinspection SimplifiableIfStatement
         if (site.getLongitude() == null || site.getLongitude().isEmpty()) return false;
-
-        return true;
-}
+        return checkLatitudeCoordinate(site.getLatitude()) && checkLongitudeCoordinate(site.getLongitude());
+    }
 
     /**
      * Shows a map using an intent
      *
-     * @param site    activities containing latitude and longitude
+     * @param site    site containing latitude and longitude
      * @param context context of calling method
      */
     public static void mapShow(Site site, Context context) {

@@ -72,16 +72,14 @@ public class DetailSiteMapActivity extends FragmentActivity implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "onMapReady()");
 
-        GoogleMap mMap = googleMap;
-
-       //get latitude and longitude, convert from DD:MM:SS to DD.DDDDDD as a double
+        // Get latitude and longitude, convert from DD:MM:SS to DD.DDDDDD as a double
         LatLng location = new LatLng(covertDegMinSecToDegrees(mLatitude),
                 covertDegMinSecToDegrees(mLongitude));
 
         // Add a marker to the map
-        mMap.addMarker(new MarkerOptions()
+        googleMap.addMarker(new MarkerOptions()
                 .position(location)
                 .title(mName));     //name of the activities
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoomLevel));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoomLevel));
     }
 }

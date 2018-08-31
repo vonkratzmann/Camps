@@ -66,7 +66,6 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     private static final String TAG = DetailSiteActivity.class.getSimpleName();
 
     private ImageView mPhotoView;
-    private TextView mNameView;
     private TextView mNumRatingsView;
     private TextView mStreetView;
     private TextView mCityView;
@@ -156,7 +155,6 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "initViews()");
 
         mPhotoView = findViewById(R.id.site_detail_photo);
-        mNameView = findViewById(R.id.site_detail_name);
         mNumRatingsView = findViewById(R.id.site_num_ratings);
         mStreetView = findViewById(R.id.site_detail_street);
         mCityView = findViewById(R.id.site_detail_city);
@@ -275,13 +273,11 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         // In a transaction, add the new comment
         return mFirestore.runTransaction(new Transaction.Function<Void>() {
             @Override
-            public Void apply(@NonNull Transaction transaction)
-                    throws FirebaseFirestoreException {
+            public Void apply(@NonNull Transaction transaction) {
                 // Commit to Firestore
                 transaction.set(commentRef, comment);
                 return null;
             }
-
         });
     }
 
@@ -315,7 +311,6 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onSiteLoaded()");
 
         mSite = site;
-        mNameView.setText(site.getName());
         mStreetView.setText(site.getStreet());
         mCityView.setText(site.getCity());
         mStateView.setText(site.getState());
@@ -398,8 +393,8 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
         // Ensure layout is empty as there may have been changes if we were editing this activities.
-        if(((LinearLayout) mFacilityIconLinearLayout).getChildCount() > 0)
-            ((LinearLayout) mFacilityIconLinearLayout).removeAllViews();
+        if((mFacilityIconLinearLayout).getChildCount() > 0)
+            ( mFacilityIconLinearLayout).removeAllViews();
 
         //configure layout
         mLayoutParams.setMargins(2, 2, 2, 2);
