@@ -5,6 +5,7 @@
       <w>attributetype</w>
       <w>attributevalue</w>
       <w>authorheading</w>
+      <w>backupfilename</w>
       <w>baos</w>
       <w>commentauthor</w>
       <w>commentby</w>
@@ -41,6 +42,7 @@
       <w>pojo</w>
       <w>ratingbar</w>
       <w>realtime</w>
+      <w>restorefilename</w>
       <w>scenicpresent</w>
       <w>setm</w>
       <w>showerspresent</w>

@@ -103,7 +103,7 @@
     <!-- Backup Restore layout text -->
     <string name="maint_backup_database">Backup database</string>
     <string name="maint_restore_database">Restore database</string>
-    <string name="maint_filename">filename</string>
+    <string name="maint_filename">Enter filename</string>
 
     <!-- Database collection names -->
     <string name="collection_sites" translatable="false">sites</string>

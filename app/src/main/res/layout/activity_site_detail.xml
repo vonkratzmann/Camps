@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/site_detail_toolbar"
         android:layout_width="match_parent"
@@ -269,6 +268,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_facilities"
         tools:listitem="@layout/recycler_comment"/>
-
 
 </android.support.constraint.ConstraintLayout>

@@ -13,7 +13,6 @@ public final class Debug {
     public static final boolean DEBUG_METHOD_ENTRY_MAP = true;
     public static final boolean DEBUG_METHOD_ENTRY_SERVICE = false;
     public static final boolean DEBUG_METHOD_ENTRY_UTIL = true;
-    public static final boolean DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE = true;
 
     // To log a message for specific areas in the code
     public static final boolean DEBUG_DBMAINT_BACKUP = true;

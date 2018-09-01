@@ -10,9 +10,9 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +24,6 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -62,7 +61,6 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
     private FirebaseFirestore mFirestore;
     private CollectionReference mSitesCollectionRef;
-    private Query mQuery;
 
     /**
      * Constructor
@@ -75,30 +73,13 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onCreate()");
 
-
         setContentView(R.layout.activity_backup_restore);
 
         // Find the toolbar view inside the activity layout
-        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.maintbackuprestoretoolbar);
-        // The internal implementation of the support library just checks if the Toolbar has a title (not null)
-        // at the moment the SupportActionBar is set up. If there is, then this title will be used instead of
-        // the window title. You can then set a dummy title while you load the real title.
-        toolbar.setTitle("");
 
-        // Sets the Toolbar to act as the ActionBar for this Activity window.
+        Toolbar toolbar = findViewById(R.id.maintbackuprestoretoolbar);
         setSupportActionBar(toolbar);
-
-        final ActionBar actionBar = getSupportActionBar();
-        // Make sure the actionbar exists in the activity and is not null
-        if (actionBar != null) {
-            //todo clarify fix
-            //myActionBar.setHomeAsUpIndicator(R.drawable.bin); can set an image if required by removing comment
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-
-            //Set the title
-            actionBar.setTitle(R.string.backup_restore_database_title);
-        }
+        toolbar.setTitle(getString(R.string.backup_restore_database_title));
 
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
@@ -423,7 +404,6 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
     }
 
-
     //todo add some time limits on these methods
 
     public class DeleteSitesAsyncTask extends AsyncTask {
@@ -454,10 +434,8 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                     String docRefId = document.getId();
                     if (Debug.DEBUG_DBMAINT_BACKUP) Log.d(TAG, "docRefId: " + docRefId);
-
-                    //Get comments as they are in a sub-collection, then delete
-                    deleteCommentsForSite(docRefId, (String) objects[0], (String) objects[1]);
-                    UtilDatabase.deleteSite(docRefId, (String) objects[0]);
+                    // DeleteSite parameters are: Collection name, document reference
+                    UtilDatabase.deleteSite((String) objects[0], docRefId);
                 }
 
             } catch (ExecutionException | InterruptedException e) {

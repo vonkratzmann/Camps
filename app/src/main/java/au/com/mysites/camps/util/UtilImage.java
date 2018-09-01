@@ -59,8 +59,8 @@ public class UtilImage {
      * @param photoPath save to file pointed to by this pathname
      * @return true if no errors
      */
-    public static boolean saveBitmapToFile(Bitmap bitmap, String photoPath) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE) Log.d(TAG, "saveBitmapToFile()");
+    private static boolean saveBitmapToFile(Bitmap bitmap, String photoPath) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "saveBitmapToFile()");
 
         //convert the decoded bitmap to stream
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -89,7 +89,7 @@ public class UtilImage {
      * @return bitmap       the new scaled image
      */
     public static Bitmap scaleImageFile(String photoPath, ImageView imageView) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE) Log.d(TAG, "scaleImageFile()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "scaleImageFile()");
 
         //Check we have valid photo and image View
         if ((imageView == null) || (photoPath == null) || photoPath.isEmpty()) {
@@ -127,7 +127,7 @@ public class UtilImage {
      * @return the scaling required
      */
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE) Log.d(TAG, "calculateInSampleSize()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "calculateInSampleSize()");
 
         // Raw height and width of image
         final int height = options.outHeight;
@@ -157,7 +157,7 @@ public class UtilImage {
      * @return path of file
      */
     public static String getRealPathFromUri(Context context, Uri contentUri) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE) Log.d(TAG, "getRealPathFromUri()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getRealPathFromUri()");
 
         if (contentUri.getAuthority() != null)
             if (Debug.DEBUG_UTIL) Log.d(TAG, "contentUri.getAuthority(): " + contentUri.getAuthority());
@@ -199,7 +199,7 @@ public class UtilImage {
      * @return new file with image, otherwise return null
      */
     public static File imageViewToNewFile(Context context, ImageView imageView) {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "imageViewToNewFile()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "imageViewToNewFile()");
 
         File file;
         BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
