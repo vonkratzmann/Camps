@@ -16,11 +16,11 @@ import au.com.mysites.camps.models.Site;
 public class XmlUtils {
     private final static String TAG = XmlUtils.class.getSimpleName();
 
-    StringBuilder mBuffer;
-    String mPath;
-    String mFileName;
-    XmlFormatter mXmlformatter;
-    UtilFile mFop;
+    private StringBuilder mBuffer;
+    private String mPath;
+    private String mFileName;
+    private XmlFormatter mXmlformatter;
+    private UtilFile mFop;
 
 
     public void initXmlFile(Context context, String filename) {
@@ -45,8 +45,8 @@ public class XmlUtils {
     public void siteSaveToXMLFile(Site s) {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "siteSaveToXMLFile()");
 
-        // save activities to buffer
-        // format activities into xml
+        // save site to buffer
+        // format site into xml
 
         mXmlformatter.formatSite(mBuffer, s);
     }
@@ -83,7 +83,7 @@ public class XmlUtils {
         String text = fop.read(context, filename, path);
         if (text == null)
             return false;
-        //create a parser to parse the input for the activities and display the results
+        //create a parser to parse the input for the site and display the results
         XmlParser parser = new XmlParser(context);
         parser.parseSites(text, sites);
         // If parsing errors sites will not be loaded into ArrayList

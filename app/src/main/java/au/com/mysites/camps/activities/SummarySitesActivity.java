@@ -309,7 +309,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
     public void onSiteSelected(DocumentSnapshot site) {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onSiteSelected()");
 
-        // Go to the comment and details page for the selected activities
+        // Go to the comment and details page for the selected site
         Intent intent = new Intent(this, DetailSiteActivity.class);
         intent.putExtra(getString(R.string.intent_site_name), site.getId());
 

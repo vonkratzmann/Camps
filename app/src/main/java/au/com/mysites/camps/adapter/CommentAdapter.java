@@ -17,7 +17,7 @@ import au.com.mysites.camps.models.Comment;
 import au.com.mysites.camps.util.Debug;
 
 /**
- * RecyclerView adapter for comments for a single activities
+ * RecyclerView adapter for comments for a single site
  */
 
 public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> {

@@ -129,9 +129,9 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * Database read from firestore, stored in an array then written to a filename
      * provide by the user
      * <p>
-     * As comments are in a sub-collection the data base is accessed twice for each activities,
-     * once for the activities and once for the comments.
-     * The two sequential database accesses for each activities are done synchronously
+     * As comments are in a sub-collection the data base is accessed twice for each site,
+     * once for the site and once for the comments.
+     * The two sequential database accesses for each site are done synchronously
      * to avoid race conditions. As each read is done in an async task, the task is blocked
      * until the read is complete.
      *
@@ -369,9 +369,9 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                     site = document.toObject(Site.class);
                     if (Debug.DEBUG_DBMAINT_BACKUP)
-                        Log.d(TAG, "activities: " + site.getName());
+                        Log.d(TAG, "site: " + site.getName());
 
-                    //Get comments as they are in a sub-collection, then add to the activities
+                    //Get comments as they are in a sub-collection, then add to the site
                     getCommentsForSite(site, (String) objects[0], (String) objects[1]);
                     sites.add(site);
                 }
@@ -386,7 +386,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     }
 
     /**
-     * @param site
+     * @param site site containing the comments
      */
     void getCommentsForSite(Site site, String collRefSites, String collRefComments) {
         if (Debug.DEBUG_DBMAINT_BACKUP) Log.d(TAG, "getCommentsForSite()");
@@ -413,7 +413,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 comment = document.toObject(Comment.class);
                 if (Debug.DEBUG_DBMAINT_BACKUP)
                     Log.d(TAG, "comment text: " + comment.getText());
-                //add to comment to the activities
+                //add to comment to the site
                 site.addComment(comment);
             }
         } catch (ExecutionException | InterruptedException e) {
@@ -469,7 +469,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
 
         /**
-         * @param docRefId
+         * @param docRefId              
          * @param collectionRefSites
          * @param collectionRefComments
          */

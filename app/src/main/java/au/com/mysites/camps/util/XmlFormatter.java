@@ -30,32 +30,35 @@ class XmlFormatter {
     }
 
     /**
-     * Takes a activities and formats into XML
+     * Takes a site and formats into XML
      *
-     * @param buffer Buffer to add activities XML description of the activities
+     * @param buffer Buffer to add site XML description of the site
      * @param site   Site to be converted to XML format
      */
 
     void formatSite(StringBuilder buffer, Site site) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "formatSite()");
 
-        // Start with a activities start tag and add to the buffer
+        // Start with a site start tag and add to the buffer
         xmlStartTag(buffer, context.getString(R.string.site));
         buffer.append('\n');
 
-        // convert activities name to xml and add to the buffer
+        // convert site name to xml and add to the buffer
         xmlElement(buffer, context.getString(R.string.name), site.getName());
         buffer.append('\n');
-        // convert activities street to xml and add to the buffer
+        // convert site street to xml and add to the buffer
         xmlElement(buffer, context.getString(R.string.street), site.getStreet());
         buffer.append('\n');
-        // convert activities city to xml and add to the buffer
+        // convert site city to xml and add to the buffer
         xmlElement(buffer, context.getString(R.string.city), site.getCity());
         buffer.append('\n');
-        // convert activities state to xml and add to the buffer
+        // convert site postcode to xml and add to the buffer
+        xmlElement(buffer, context.getString(R.string.postcode), site.getPostcode());
+        buffer.append('\n');
+        // convert site state to xml and add to the buffer
         xmlElement(buffer, context.getString(R.string.state), site.getState());
         buffer.append('\n');
-        // convert activities date to xml and add to the buffer
+        // convert site date to xml and add to the buffer
         xmlElement(buffer, context.getString(R.string.date_created), site.getDateCreated());
         buffer.append('\n');
 
@@ -224,27 +227,27 @@ class XmlFormatter {
             buffer.append('\n');
         }
 
-        // convert activities thumbnail to xml and add to the buffer
+        // convert site thumbnail to xml and add to the buffer
         xmlElement(buffer, context.getString(R.string.thumbnail), site.getThumbnail());
         buffer.append('\n');
 
-        // convert activities photo to xml and add to the buffer
+        // convert site photo to xml and add to the buffer
         xmlElement(buffer, context.getString(R.string.photo), site.getSitePhoto());
         buffer.append('\n');
 
-        // convert the activities comments to xml and add
+        // convert the site comments to xml and add
         buffer.append(getCommentsInXml(site));
 
-        // add the closing activities tag to the buffer
+        // add the closing site tag to the buffer
         xmlEndTag(buffer, context.getString(R.string.site));
         // add a return at the end
         buffer.append('\n');
     }
 
     /**
-     * Get comments from activities and convert to xml and store in a StringBuilder
+     * Get comments from site and convert to xml and store in a StringBuilder
      *
-     * @param site      activities to process
+     * @param site      site to process
      * @return          StringBuilder with comments converted to xml
      */
 

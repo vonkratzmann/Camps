@@ -136,8 +136,8 @@ public class UtilMap {
      * Checks latitude and longitude have been entered and
      * format of latitude and longitude is correct.
      *
-     * @param site    activities containing latitude and longitude
-     * @return false if null activities or latitude or longitude not set
+     * @param site    site containing latitude and longitude
+     * @return false if null site or latitude or longitude not set
      */
     @SuppressLint("")
     public static boolean checkLatLongSet(Site site) {

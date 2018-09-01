@@ -71,7 +71,7 @@ public class RatingDetailActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_rating_detail);
 
-        // Get activities ID from extras
+        // Get site ID from extras
         String siteId = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.pref_key_site_id));
         if (siteId == null) {
             throw new IllegalArgumentException("Must pass extra " + getString(R.string.pref_key_site_id));
@@ -81,7 +81,7 @@ public class RatingDetailActivity extends AppCompatActivity
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
 
-        // Get reference to the activities
+        // Get reference to the site
         mSiteRef = mFirestore.collection("sites").document(siteId);
 
         // Get ratings
@@ -177,7 +177,7 @@ public class RatingDetailActivity extends AppCompatActivity
     /**
      * Add a rating to the sub-collection
      *
-     * @param siteRef reference to the activities
+     * @param siteRef reference to the site
      * @param rating  rating to be added
      * @return null
      */
@@ -207,7 +207,7 @@ public class RatingDetailActivity extends AppCompatActivity
                 double newAvgRating = (oldRatingTotal + rating.getRating()) /
                         newNumRatings;
 
-                // Set new activities info
+                // Set new site info
                 site.setNumRatings(newNumRatings);
                 site.setAvgRating(newAvgRating);
 
@@ -228,16 +228,16 @@ public class RatingDetailActivity extends AppCompatActivity
         if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "onEvent()");
 
         if (e != null) {
-            Log.w(TAG, "activities:onEvent", e);
+            Log.w(TAG, "site:onEvent", e);
             return;
         }
         onSiteLoaded(Objects.requireNonNull(snapshot.toObject(Site.class)));
     }
 
     /**
-     * From the activities loaded from the database, update the views on the UI
+     * From the site loaded from the database, update the views on the UI
      *
-     * @param site      activities that has been loaded
+     * @param site      site that has been loaded
      */
     private void onSiteLoaded(Site site) {
         if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "onSiteLoaded()");

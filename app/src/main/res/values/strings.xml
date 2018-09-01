@@ -52,6 +52,7 @@
     <!-- XML file attribute and comment values -->
     <string name="commentdate" translatable="false">date</string>
     <string name="commentauthor" translatable="false">author</string>
+    <string name="commentauthorId" translatable="false">authorid</string>
     <string name="commentby" translatable="false">By:</string>
     <string name="facilitytype" translatable="false">type</string>
 

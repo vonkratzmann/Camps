@@ -94,7 +94,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
 
             /* Check if there is a valid thumbnail. If on local device load into imageView, else
              * download the file from Firebase Storage and display it in the imageView, so that
-             *  future loads of the activities will not require the file to be downloaded again. */
+             *  future loads of the site will not require the file to be downloaded again. */
             if (site.getThumbnail() != null && !site.getThumbnail().isEmpty()) {
                 UtilDatabase.getImageAndDisplay(site.getThumbnail(), thumbnailView);
             }
@@ -103,7 +103,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
 
             // Photo is not displayed on this layout, only thumbnail.
             //todo fix
-            // numRatingsView.setText(resources.getString(R.string.fmt_num_ratings,activities.getNumRatings()));
+            // numRatingsView.setText(resources.getString(R.string.fmt_num_ratings,site.getNumRatings()));
 
             // Click listener
             itemView.setOnClickListener(new View.OnClickListener() {

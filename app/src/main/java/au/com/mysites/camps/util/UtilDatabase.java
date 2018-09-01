@@ -37,8 +37,8 @@ public class UtilDatabase {
 
 
     /**
-     * Write sites to the firebase database with database id equal to the activities name
-     * if any comments for each activities, then write as a sub-collection
+     * Write sites to the firebase database with database id equal to the site name
+     * if any comments for each site, then write as a sub-collection
      *
      * @param siteList list of sites to be written to the database
      * @param context  of calling activity
@@ -46,7 +46,7 @@ public class UtilDatabase {
     public static void addMultipleSitesAndComments(ArrayList<Site> siteList, Context context) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addSitesAndComments()");
 
-        //for each activities write to the database
+        //for each site write to the database
         int siteCount = siteList.size();
         for (int i = 0; i < siteCount; i++) {
             Site site = siteList.get(i);
@@ -55,7 +55,7 @@ public class UtilDatabase {
     }
 
     /**
-     * Write one activities to the firebase database with database id equal to the activities name
+     * Write one site to the firebase database with database id equal to the site name
      *
      * @param site    to be written to the database
      * @param context of calling activity
@@ -63,11 +63,11 @@ public class UtilDatabase {
     public static void addOneSiteAndComments(final Site site, final Context context) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addOneSiteAndComments()");
 
-        //use the activities name as the ID for the database document
+        //use the site name as the ID for the database document
         String siteName = site.getName();
         final int numberComments = site.getComments().size(); //get number of comments
 
-        // Initialize Firestore and add activities to the database
+        // Initialize Firestore and add site to the database
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
         mFirestore.collection(context.getString(R.string.collection_sites))
                 .document(siteName)
@@ -104,7 +104,7 @@ public class UtilDatabase {
     private static void addComments(final Site site, final Context context) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addComments()");
 
-        String siteName = site.getName(); //use the activities name as the ID for the database document
+        String siteName = site.getName(); //use the site name as the ID for the database document
 
         // Initialize Firestore
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
@@ -175,7 +175,7 @@ public class UtilDatabase {
     /**
      * Checks if file exits on the local device, if yes display it into imageView, else
      * download the file from Firebase Storage and display it in the imageView, so that
-     *  future loads of the activities will not require the file to be downloaded again.
+     *  future loads of the site will not require the file to be downloaded again.
      *
      * @param fileName     name of file containing image
      * @param imageView    view where image is to be displayed

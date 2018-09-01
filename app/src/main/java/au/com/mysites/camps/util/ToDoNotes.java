@@ -12,7 +12,7 @@ public class ToDoNotes {
     //todo Created 20/6/201 check while addsite handles restarts correctly, may loose data eg
         // if (savedInstanceState == null) {
         //restore variables image paths etc
-        //fix so firebase listeners are unregistred on activity lifecycle changes, then restored
+        //fix so firebase listeners are unregistered on activity lifecycle changes, then restored
     //  when activity restarts
     // Created 20/6/2018 Done 26/8/2017 move storage of photos away from database into cloud
     //  and just have thumbnail in the database
@@ -24,12 +24,12 @@ public class ToDoNotes {
     /*
     1. Created 20/6/201 on main activity thumbnail arbitrarily displays icons
 
-    2. Created 20/6/201 Fixed 26/08/2018 When a photo is taken in add new activities,
+    2. Created 20/6/201 Fixed 26/08/2018 When a photo is taken in add new site,
         the photo path in firebase storage is not stored in the database
 
     3. Created 20/6/201 On restore of database app hangs
 
-    4. Created 20/6/20 1n Detail activities, comments recycler view have to set fixed size
+    4. Created 20/6/20 1n Detail site, comments recycler view have to set fixed size
         otherwise doesn't scroll
 
     */

@@ -58,7 +58,7 @@ import static android.widget.RelativeLayout.CENTER_VERTICAL;
 import static android.widget.Toast.makeText;
 
 /**
- * Displays the detail for a single activities with comments for that activities
+ * Displays the detail for a single site with comments for that site
  */
 public class DetailSiteActivity extends AppCompatActivity implements View.OnClickListener,
         EventListener<DocumentSnapshot>, CommentDialogFragment.CommentListener {
@@ -92,7 +92,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     private LinearLayout mFacilityIconLinearLayout;
     private LinearLayout.LayoutParams mLayoutParams;
 
-    //displaying the detail for this activities
+    //displaying the detail for this site
     private Site mSite;
 
     private DetailSiteViewModel mViewModel;
@@ -104,7 +104,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
 
         setContentView(R.layout.activity_site_detail);
 
-        // Get activities ID from extras
+        // Get site ID from extras
         String siteId = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.intent_site_name));
         if (siteId == null) {
             throw new IllegalArgumentException("Must pass extra " + getString(R.string.intent_site_name));
@@ -122,11 +122,11 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         // Initialize Firestore, views and listeners
         mFirestore = FirebaseFirestore.getInstance();
 
-        // Get reference to this activities in the database
+        // Get reference to this site in the database
         mSiteDocumentRef = mFirestore
                 .collection(getString(R.string.collection_sites))
                 .document(siteId);
-        // Get reference to the collection of comments for this activities in the database
+        // Get reference to the collection of comments for this site in the database
         mCommentsQuery = mFirestore
                 .collection(getString(R.string.collection_sites))
                 .document(siteId)
@@ -295,7 +295,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onEvent()");
 
         if (e != null) {
-            Log.w(TAG, "activities:onEvent", e);
+            Log.w(TAG, "site:onEvent", e);
             return;
         }
         if (snapshot != null) {
@@ -304,10 +304,10 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     }
 
     /**
-     * Using the activities loaded from the database, update the views on the UI.
+     * Using the site loaded from the database, update the views on the UI.
      * Called from {@link #onEvent(DocumentSnapshot, FirebaseFirestoreException)}
      *
-     * @param site activities that has been loaded
+     * @param site site that has been loaded
      */
     private void onSiteLoaded(Site site) {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onSiteLoaded()");
@@ -323,11 +323,11 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         mRatingIndicator.setRating((float) site.getAvgRating());
         mNumRatingsView.setText(getString(R.string.fmt_num_ratings, site.getNumRatings()));
 
-        // only process if activities photo is valid
+        // only process if site photo is valid
         if (site.getSitePhoto() != null && !site.getSitePhoto().isEmpty()) {
             UtilDatabase.getImageAndDisplay(site.getSitePhoto(), mPhotoView);
         }
-        //displays only those facilities present at the activities
+        //displays only those facilities present at the site
         displayFacilities(site, this);
     }
 
@@ -380,11 +380,11 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     }
 
     /**
-     * Shows facilities that are present at the activities
-     * sets up listener for each activities that shows a brief description of the facility
+     * Shows facilities that are present at the site
+     * sets up listener for each site that shows a brief description of the facility
      * when the facility is touched.
      *
-     * @param site    activities to store data
+     * @param site    site to store data
      * @param context context of calling activity
      */
     public void displayFacilities(Site site, final Context context) {
@@ -395,7 +395,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         mLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        // Ensure layout is empty as there may have been changes if we were editing this activities.
+        // Ensure layout is empty as there may have been changes if we were editing this site.
         if((mFacilityIconLinearLayout).getChildCount() > 0)
             ( mFacilityIconLinearLayout).removeAllViews();
 
@@ -519,7 +519,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
             case R.id.site_detail_show_map:
                 // Checks latitude and longitude are set,
                 if (UtilMap.checkLatLongSet(mSite)) {
-                    // Ok, display map with a marker at this activities's location by creating an intent
+                    // Ok, display map with a marker at this site's location by creating an intent
                     UtilMap.mapShow(mSite, this);
 
                 } else {

@@ -21,7 +21,7 @@ import static au.com.mysites.camps.util.UtilMap.covertDegMinSecToDegrees;
 
 
 /**
- * Displays the location of the activities on a map and adds a marker
+ * Displays the location of the site on a map and adds a marker
  */
 public class DetailSiteMapActivity extends FragmentActivity implements OnMapReadyCallback {
     private final static String TAG = DetailSiteMapActivity.class.getSimpleName();
@@ -33,7 +33,7 @@ public class DetailSiteMapActivity extends FragmentActivity implements OnMapRead
     float zoomLevel = 16.0F;
 
     /**
-     * Gets the activities, latitude, longitude and name from the intent,
+     * Gets the site, latitude, longitude and name from the intent,
      * loads the view with the map and requests the map.
      * The results are returned in {@link #onMapReady(GoogleMap)}.
      *
@@ -79,7 +79,7 @@ public class DetailSiteMapActivity extends FragmentActivity implements OnMapRead
         // Add a marker to the map
         googleMap.addMarker(new MarkerOptions()
                 .position(location)
-                .title(mName));     //name of the activities
+                .title(mName));     //name of the site
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoomLevel));
     }
 }

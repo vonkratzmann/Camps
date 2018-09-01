@@ -49,9 +49,8 @@ public class CommentDialogFragment extends DialogFragment {
         if (Debug.DEBUG_METHOD_ENTRY_COMMENT) Log.d(TAG, "onCreateView()");
 
         // Inflate and set the layout for the dialog
-        View v = inflater.inflate(R.layout.dialog_comment, container, false);
 
-        return v;
+        return inflater.inflate(R.layout.dialog_comment, container, false);
     }
 
     void initViews() {
@@ -72,7 +71,7 @@ public class CommentDialogFragment extends DialogFragment {
 
                 Comment comment = new Comment(
                         mCommentText.getText().toString(),
-                        userEmail);
+                        userEmail, null);       // Null, as don't want to display user id
 
                 if (mCommentListener != null) {
                     mCommentListener.onComment(comment);
@@ -93,7 +92,7 @@ public class CommentDialogFragment extends DialogFragment {
     /**
      * Override the Fragment.onAttach() method to instantiate the CommentListener
      *
-     * @param context
+     * @param context  context of caller
      */
     @Override
     public void onAttach(Context context) {

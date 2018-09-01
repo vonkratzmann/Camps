@@ -18,6 +18,7 @@ public class Comment {
     private String mText;
     private String mCreatedDate;
     private String mAuthor;
+    private String mAuthorId;
     private String mPhoto;
 
     /**
@@ -35,7 +36,7 @@ public class Comment {
      * @param author author of comment
      */
     @SuppressLint("StringFormatInvalid")
-    public Comment(String text, String author) {
+    public Comment(String text, String author, String authorId) {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "Comment()");
 
         String format = getContext().getString(R.string.dateformat, Locale.ENGLISH);
@@ -45,6 +46,7 @@ public class Comment {
         this.mCreatedDate = sdf.format(now);
         this.mText = text;
         this.mAuthor = author;
+        this.mAuthorId = authorId;
     }
 
     /**
@@ -56,11 +58,12 @@ public class Comment {
      * @param date   date created for the comment
      * @param author author of comment
      */
-    public Comment(String text, String date, String format, String author) {
+    public Comment(String text, String date, String format, String author, String authorId) {
 
         mText = text;
         mCreatedDate = date;
         mAuthor = author;
+        this.mAuthorId = authorId;
     }
 
     public String getText() {
@@ -87,6 +90,14 @@ public class Comment {
         this.mAuthor = author;
     }
 
+    public String getAuthorId() {
+        return mAuthorId;
+    }
+
+    public void setAuthorId(String mAuthorId) {
+        this.mAuthorId = mAuthorId;
+    }
+
     public void setCommentDate(String s) {
         mCreatedDate = s;
     }
@@ -97,18 +108,5 @@ public class Comment {
 
     public void setPhoto(String photo) {
         this.mPhoto = photo;
-    }
-
-    /**
-     * Copy/Load contents of the src(source) comment into this comment
-     *
-     * @param src Source comment to be copied/loaded into this comment
-     */
-
-    public void copyComment(Comment src) {
-
-        mAuthor = src.mAuthor;
-        mCreatedDate = src.mCreatedDate;
-        mText = src.mText;
     }
 }
