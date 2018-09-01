@@ -9,8 +9,6 @@ public class User {
     private final static String TAG = User.class.getSimpleName();
 
     private String displayName;
-    private String givenName;
-    private String familyName;
     private String email;
     private String photoFileName;
     private String lastUsed;
@@ -21,14 +19,10 @@ public class User {
     }
 
     public User(String displayName,
-                String givenName,
-                String familyName,
                 String email,
                 String photoFileName,
                 String lastUsed) {
         this.displayName = displayName;
-        this.givenName = givenName;
-        this.familyName = familyName;
         this.email = email;
         this.photoFileName = photoFileName;
         this.lastUsed = lastUsed;
@@ -40,22 +34,6 @@ public class User {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-    }
-
-    public String getFamilyName() {
-        return familyName;
-    }
-
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
-    }
-
-    public String getGivenName() {
-        return givenName;
-    }
-
-    public void setGivenName(String givenName) {
-        this.givenName = givenName;
     }
 
     public String getEmail() {

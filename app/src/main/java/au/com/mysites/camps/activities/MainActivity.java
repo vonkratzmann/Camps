@@ -231,8 +231,18 @@ public class MainActivity extends AppCompatActivity implements
             String email = user.getEmail();
             Uri photoUri = user.getPhotoUrl();
             String uid = user.getUid();     // The user's ID, unique to this Firebase project
+            String photoFileName = null;    // The name of the file used to store photo in storage
 
             if (photoUri != null) {
+                // Create a unique file name for the photo
+                try {
+                    mFile = UtilImage.createImageFile(this);
+                } catch (IOException ioe) {
+                    Log.e(TAG, "saveUserProfile() IOException");
+                }
+                if (mFile != null)
+                    photoFileName = mFile.getName();
+
                 String string = photoUri.toString();
                 /* Display the profile photo. If the user is logged in and if the SummarySitesActivity
                  * is started the photo will not been seen */
@@ -285,27 +295,6 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
     }
-
-    /**
-     * Retrieves signed-in user profile information.
-     *
-     * @param acct Contains profile information for the user
-     * @return User with profile information
-     */
-    private User retrieveProfile(GoogleSignInAccount acct) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "retrieveProfile()");
-
-        String displayName = acct.getDisplayName();
-        String givenName = acct.getGivenName();
-        String familyName = acct.getFamilyName();
-        String email = acct.getEmail();
-        String lastUsed = UtilGeneral.getTodaysDate(getString(R.string.dateformat));
-        String photoFileName = null;
-
-
-        return new User(displayName, givenName, familyName, email, photoFileName, lastUsed);
-    }
-
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
