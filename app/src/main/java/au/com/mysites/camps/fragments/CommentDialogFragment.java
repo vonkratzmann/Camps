@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -53,35 +54,38 @@ public class CommentDialogFragment extends DialogFragment {
         return inflater.inflate(R.layout.dialog_comment, container, false);
     }
 
+    /**
+     * On comment submit button compiles the comment and sends it to the calling activity
+      */
     void initViews() {
         if (Debug.DEBUG_METHOD_ENTRY_COMMENT) Log.d(TAG, "initViews()");
 
         mCommentText = getDialog().findViewById(R.id.site_form_text);
-
         mSiteFormSubmit = getDialog().findViewById(R.id.site_form_button_submit);
         mSiteFormSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //get user email to display on the comment
+                String email;
+                String uid;
+                FirebaseUser user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
 
-                //get user email to display on the comment
-                String userEmail = Objects.requireNonNull(FirebaseAuth
-                        .getInstance()
-                        .getCurrentUser()
-                        .getEmail());
+                if (user != null) {
+                    email = user.getEmail();
+                    uid = user.getUid();
 
-                Comment comment = new Comment(
-                        mCommentText.getText().toString(),
-                        userEmail, null);       // Null, as don't want to display user id
+                    Comment comment = new Comment(mCommentText.getText().toString(), email, uid);
 
-                if (mCommentListener != null) {
-                    mCommentListener.onComment(comment);
+                    if (mCommentListener != null) {
+                        mCommentListener.onComment(comment);
+                    }
+                    dismiss();
                 }
-                dismiss();
             }
         });
         //cancel comment entry
         mSiteFormCancel = getDialog().findViewById(R.id.site_form_button_cancel);
-        mSiteFormCancel.setOnClickListener(new View.OnClickListener() {
+        mSiteFormCancel.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -92,7 +96,7 @@ public class CommentDialogFragment extends DialogFragment {
     /**
      * Override the Fragment.onAttach() method to instantiate the CommentListener
      *
-     * @param context  context of caller
+     * @param context context of caller
      */
     @Override
     public void onAttach(Context context) {

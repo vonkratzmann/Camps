@@ -128,8 +128,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
                 .document(siteId);
         // Get reference to the collection of comments for this site in the database
         mCommentsQuery = mFirestore
-                .collection(getString(R.string.collection_sites))
-                .document(siteId)
+
                 .collection(getString(R.string.collection_comments));
 
         // RecyclerView
@@ -332,10 +331,10 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     }
 
     /**
-     * The dialog fragment receives a reference to this Activity through the
-     * Fragment.onAttach() callback, which it uses to call the following method
-     * defined by the CommentDialogFragment.CommentListener interface
-     *
+     * The CommentDialogFragment fragment receives a reference to this Activity through the
+     * Fragment.onAttach() callback. On completion the fragment calls this method.
+     * <p>>
+     * This method then saves the comment to the database in the collection comments.
      * @param comment comment from the dialog fragment
      */
 
@@ -343,8 +342,9 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     public void onComment(Comment comment) {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onComment()");
 
-        // In a transaction, add the new comment
-        addComment(mCommentsQuery, comment)
+        mFirestore.collection(getString(R.string.collection_comments))
+                .document(comment.getAuthorId())
+                .set(comment)
                 .addOnSuccessListener(this, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -396,8 +396,8 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
         // Ensure layout is empty as there may have been changes if we were editing this site.
-        if((mFacilityIconLinearLayout).getChildCount() > 0)
-            ( mFacilityIconLinearLayout).removeAllViews();
+        if ((mFacilityIconLinearLayout).getChildCount() > 0)
+            (mFacilityIconLinearLayout).removeAllViews();
 
         //configure layout
         mLayoutParams.setMargins(2, 2, 2, 2);
