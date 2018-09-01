@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements
             if (!signOutRequest && currentUser != null) {
                 //Not a request to sign out, and if signed in, go to summary site activity
                 Intent SummarySite = new Intent(MainActivity.this, SummarySitesActivity.class);
-               startActivity(SummarySite);
+                startActivity(SummarySite);
             }
         }
     }
@@ -224,26 +224,29 @@ public class MainActivity extends AppCompatActivity implements
     private void saveUserProfile() {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "saveUserProfile()");
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if (acct == null) return;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUri = user.getPhotoUrl();
+            String uid = user.getUid();     // The user's ID, unique to this Firebase project
 
-        // Extract user information
-        User mGoogleUser = retrieveProfile(acct);
+            if (photoUri != null) {
+                String string = photoUri.toString();
+                /* Display the profile photo. If the user is logged in and if the SummarySitesActivity
+                 * is started the photo will not been seen */
+                Glide.with(MainActivity.this).load(photoUri).into(mProfilePhotoImageView);
 
-        String mUserId = acct.getId();
-        Uri photoUri = acct.getPhotoUrl();
+                // Start AsyncTask and implement onPostExecute Method to retrieve user photo
+                new AsyncTaskGetUri().execute(string);
+            }
+            String lastUsed = UtilGeneral.getTodaysDate(getString(R.string.dateformat));
 
-        if (photoUri != null) {
-            String string = photoUri.toString();
-            /* Display the profile photo. If the user is logged in and if the SummarySitesActivity
-             * is started the photo will not been seen */
-            Glide.with(MainActivity.this).load(photoUri).into(mProfilePhotoImageView);
-
-            // Start AsyncTask and implement onPostExecute Method
-            new AsyncTaskGetUri().execute(string);
+            User myUser = new User(name, email, photoFileName, lastUsed);
 
             // Saves user information to database
-            saveUserToFirestore(mUserId, mGoogleUser);
+            saveUserToFirestore(uid, myUser);
         }
     }
 
@@ -299,14 +302,6 @@ public class MainActivity extends AppCompatActivity implements
         String lastUsed = UtilGeneral.getTodaysDate(getString(R.string.dateformat));
         String photoFileName = null;
 
-        // Create a unique file name for the photo
-        try {
-            mFile = UtilImage.createImageFile(this);
-        } catch (IOException ioe) {
-            Log.e(TAG, "saveUserProfile() IOException");
-        }
-        if (mFile != null)
-            photoFileName = mFile.getName();
 
         return new User(displayName, givenName, familyName, email, photoFileName, lastUsed);
     }
