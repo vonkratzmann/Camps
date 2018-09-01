@@ -59,7 +59,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onCreate()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onCreate()");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_site_summary);
@@ -93,7 +93,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
     }
 
     void initViews() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "initViews()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initViews()");
 
         mToolbar = findViewById(R.id.site_summary_toolbar);
 
@@ -124,7 +124,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
     }
 
     private void initFirestore() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "initFirestore()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initFirestore()");
 
         mFirestore = FirebaseFirestore.getInstance();
 
@@ -135,7 +135,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
     }
 
     private void initRecyclerView() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "initRecyclerView()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initRecyclerView()");
 
         if (mQuery == null) {
             Log.w(TAG, "No query, not initializing RecyclerView");
@@ -169,19 +169,19 @@ public class SummarySitesActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onPause()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onPause()");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onResume()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onResume()");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onStart()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onStart()");
 
         // Apply filters
         onFilter(mViewModel.getFilters());
@@ -195,7 +195,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
     @Override
     public void onStop() {
         super.onStop();
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onStop()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onStop()");
 
         if (mAdapter != null) {
             mAdapter.stopListening();
@@ -208,7 +208,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
      */
     @Override
     public void onBackPressed() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onBackPressed()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onBackPressed()");
 
 
         new AlertDialog.Builder(this)
@@ -227,7 +227,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
     @Override
     public void onFilter(Filters filters) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onFilter()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onFilter()");
 
         // Construct query basic query
         Query query = mFirestore.collection("sites");
@@ -276,7 +276,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onCreateOptionsMenu()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onCreateOptionsMenu()");
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_summary, menu);
@@ -287,7 +287,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onActivityResult()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onActivityResult()");
 
     }
 
@@ -307,7 +307,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
     @Override
     public void onSiteSelected(DocumentSnapshot site) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onSiteSelected()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onSiteSelected()");
 
         // Go to the comment and details page for the selected site
         Intent intent = new Intent(this, DetailSiteActivity.class);
@@ -318,7 +318,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onOptionsItemSelected()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onOptionsItemSelected()");
 
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long

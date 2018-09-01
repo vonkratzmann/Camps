@@ -14,11 +14,12 @@ import static au.com.mysites.camps.util.AppContextProvider.getContext;
 
 public class Comment {
     private final static String TAG = Comment.class.getSimpleName();
+    public static final String FIELD_SITEID = "siteId";
 
     private String mText;
     private String mCreatedDate;
     private String mAuthor;
-    private String mAuthorId;
+    private String mSiteId;
     private String mPhoto;
 
     /**
@@ -36,8 +37,8 @@ public class Comment {
      * @param author author of comment
      */
     @SuppressLint("StringFormatInvalid")
-    public Comment(String text, String author, String authorId) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "Comment()");
+    public Comment(String text, String author) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "Comment()");
 
         String format = getContext().getString(R.string.dateformat, Locale.ENGLISH);
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
@@ -46,8 +47,7 @@ public class Comment {
         this.mCreatedDate = sdf.format(now);
         this.mText = text;
         this.mAuthor = author;
-        this.mAuthorId = authorId;
-    }
+           }
 
     /**
      * Constructor
@@ -58,12 +58,12 @@ public class Comment {
      * @param date   date created for the comment
      * @param author author of comment
      */
-    public Comment(String text, String date, String format, String author, String authorId) {
+    public Comment(String text, String date, String format, String author, String siteId) {
 
         mText = text;
         mCreatedDate = date;
         mAuthor = author;
-        this.mAuthorId = authorId;
+        this.mSiteId = siteId;
     }
 
     public String getText() {
@@ -90,12 +90,12 @@ public class Comment {
         this.mAuthor = author;
     }
 
-    public String getAuthorId() {
-        return mAuthorId;
+    public String getSiteId() {
+        return mSiteId;
     }
 
-    public void setAuthorId(String mAuthorId) {
-        this.mAuthorId = mAuthorId;
+    public void setSiteId(String siteId) {
+        this.mSiteId = siteId;
     }
 
     public void setCommentDate(String s) {

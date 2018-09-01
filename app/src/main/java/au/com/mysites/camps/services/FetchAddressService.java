@@ -44,7 +44,7 @@ public class FetchAddressService extends IntentService {
      */
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onHandleIntent");
+        if (Debug.DEBUG_METHOD_ENTRY_SERVICE) Log.d(TAG, "onHandleIntent");
 
         if (intent == null) {
             if (Debug.DEBUG_SERVICE_ADDRESS) Log.d(TAG, "Intent is null");
@@ -108,7 +108,7 @@ public class FetchAddressService extends IntentService {
      */
     @SuppressLint("RestrictedApi")
     private void deliverResultToReceiver(int resultCode, String message) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "deliverResultToReceiver");
+        if (Debug.DEBUG_METHOD_ENTRY_SERVICE) Log.d(TAG, "deliverResultToReceiver");
 
         Bundle bundle = new Bundle();
         bundle.putString(Constants.RESULT_DATA_KEY, message);

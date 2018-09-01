@@ -73,7 +73,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "onCreate()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onCreate()");
 
 
         setContentView(R.layout.activity_backup_restore);
@@ -138,7 +138,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * @param context context to be used
      */
     public void backupDatabase(final Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_DBMAINT) Log.d(TAG, "backupDatabase()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "backupDatabase()");
 
         //Get the view of where the filename is entered by the user
         EditText filenameView = findViewById(R.id.backupfilename);
@@ -202,7 +202,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * @param context context of calling activity
      */
     public void restoreDatabase(final Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "restoreDatabase()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "restoreDatabase()");
 
         //Get the view of where the filename is entered by the user
         EditText filenameView = findViewById(R.id.restorefilename);
@@ -253,7 +253,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * Check permissions, if ok carry out either backup or restore
      */
     private void checkStoragePermission() {
-        if (Debug.DEBUG_METHOD_ENTRY_RATING)
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY)
             Log.d(TAG, "checkStoragePermission()()");
 
         int hasWriteContactsPermission = ContextCompat.checkSelfPermission(this,
@@ -311,7 +311,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (Debug.DEBUG_METHOD_ENTRY_RATING)
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY)
             Log.d(TAG, "onRequestPermissionsResult()");
 
         switch (requestCode) {
@@ -347,7 +347,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
         @Override
         protected ArrayList<Site> doInBackground(Object[] objects) {
-            if (Debug.DEBUG_METHOD_ENTRY_DBMAINT) Log.d(TAG, "doInBackground");
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
 
             //uses Google play Task API
             Task<QuerySnapshot> task = FirebaseFirestore
@@ -431,7 +431,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
         @Override
         protected ArrayList<Site> doInBackground(Object[] objects) {
-            if (Debug.DEBUG_METHOD_ENTRY_DBMAINT) Log.d(TAG, "doInBackground");
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
 
             //Get list of sites from the database
             Task<QuerySnapshot> task = FirebaseFirestore

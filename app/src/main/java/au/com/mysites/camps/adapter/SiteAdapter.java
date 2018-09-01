@@ -38,7 +38,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onCreateViewHolder()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onCreateViewHolder()");
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return new ViewHolder(inflater.inflate(R.layout.recycler_site, parent, false));
@@ -46,7 +46,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onBindViewHolder()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onBindViewHolder()");
 
         holder.bind(getSnapshot(position), mListener);
     }
@@ -65,7 +65,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
 
         ViewHolder(View itemView) {
             super(itemView);
-            if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "ViewHolder()");
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "ViewHolder()");
 
             thumbnailView = itemView.findViewById(R.id.site_item_thumbnail);
             nameView = itemView.findViewById(R.id.site_item_name);
@@ -79,7 +79,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
 
         void bind(final DocumentSnapshot snapshot,
                   final OnSiteSelectedListener listener) {
-            if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "bind()");
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "bind()");
 
             Site site = snapshot.toObject(Site.class);
 

@@ -48,7 +48,7 @@ public class FilterDialogFragment extends DialogFragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onCreateView()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "onCreateView()");
 
         mRootView = inflater.inflate(R.layout.dialog_filters, container, false);
         // ButterKnife.bind(this, mRootView);
@@ -57,7 +57,7 @@ public class FilterDialogFragment extends DialogFragment {
     }
 
     void initViews() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "initViews()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "initViews()");
 
         mCategorySpinner = getDialog().findViewById(R.id.spinner_category);
 
@@ -87,7 +87,7 @@ public class FilterDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onAttach()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "onAttach()");
 
         if (context instanceof FilterListener) {
             mFilterListener = (FilterListener) context;
@@ -97,7 +97,7 @@ public class FilterDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onResume()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "onResume()");
 
         Objects.requireNonNull(getDialog().getWindow()).setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -121,7 +121,7 @@ public class FilterDialogFragment extends DialogFragment {
 
     @Nullable
     private String getSelectedCity() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "getSelectedCity()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "getSelectedCity()");
 
         String selected = (String) mCitySpinner.getSelectedItem();
         if (getString(R.string.value_any_city).equals(selected)) {
@@ -132,7 +132,7 @@ public class FilterDialogFragment extends DialogFragment {
     }
 
     private int getSelectedPrice() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "getSelectedPrice()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "getSelectedPrice()");
 
         String selected = (String) mPriceSpinner.getSelectedItem();
         if (selected.equals(getString(R.string.price_1))) {
@@ -148,7 +148,7 @@ public class FilterDialogFragment extends DialogFragment {
 
     @Nullable
     private String getSelectedSortBy() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "getSelectedSortBy()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "getSelectedSortBy()");
 
         String selected = (String) mSortSpinner.getSelectedItem();
         if (getString(R.string.sort_by_rating).equals(selected)) {
@@ -166,7 +166,7 @@ public class FilterDialogFragment extends DialogFragment {
 
     @Nullable
     private Query.Direction getSortDirection() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "Query.Direction getSortDirection()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "Query.Direction getSortDirection()");
 
         String selected = (String) mSortSpinner.getSelectedItem();
         if (getString(R.string.sort_by_rating).equals(selected)) {
@@ -183,7 +183,7 @@ public class FilterDialogFragment extends DialogFragment {
     }
 
     public void resetFilters() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "resetFilters()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "resetFilters()");
 
         if (mRootView != null) {
             mCategorySpinner.setSelection(0);
@@ -194,7 +194,7 @@ public class FilterDialogFragment extends DialogFragment {
     }
 
     public Filters getFilters() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "getFilters()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "getFilters()");
 
         Filters filters = new Filters();
 

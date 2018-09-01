@@ -31,7 +31,6 @@ public class CommentDialogFragment extends DialogFragment {
     /**
      * The activity that creates an instance of this dialog fragment must
      * implement this interface in order to receive event callbacks.
-     * Each method passes the DialogFragment in case the host needs to query it.
      */
     public interface CommentListener {
         void onComment(Comment comment);
@@ -47,7 +46,7 @@ public class CommentDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        if (Debug.DEBUG_METHOD_ENTRY_COMMENT) Log.d(TAG, "onCreateView()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "onCreateView()");
 
         // Inflate and set the layout for the dialog
 
@@ -55,25 +54,24 @@ public class CommentDialogFragment extends DialogFragment {
     }
 
     /**
-     * On comment submit button compiles the comment and sends it to the calling activity
+     * The submit button generates the comment using the entered data 
+     * and sends it to the calling activity using the comment listener
       */
     void initViews() {
-        if (Debug.DEBUG_METHOD_ENTRY_COMMENT) Log.d(TAG, "initViews()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "initViews()");
 
         mCommentText = getDialog().findViewById(R.id.site_form_text);
         mSiteFormSubmit = getDialog().findViewById(R.id.site_form_button_submit);
         mSiteFormSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { //get user email to display on the comment
-                String email;
-                String uid;
+            public void onClick(View v) { 
+                String email;           //get user email to display on the comment
                 FirebaseUser user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
 
                 if (user != null) {
                     email = user.getEmail();
-                    uid = user.getUid();
 
-                    Comment comment = new Comment(mCommentText.getText().toString(), email, uid);
+                    Comment comment = new Comment(mCommentText.getText().toString(), email);
 
                     if (mCommentListener != null) {
                         mCommentListener.onComment(comment);
@@ -101,7 +99,7 @@ public class CommentDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (Debug.DEBUG_METHOD_ENTRY_COMMENT) Log.d(TAG, "onAttach()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "onAttach()");
 
         // Verify that the host activity implements the callback interface
         if (context instanceof CommentDialogFragment.CommentListener) {
@@ -114,7 +112,7 @@ public class CommentDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (Debug.DEBUG_METHOD_ENTRY_COMMENT) Log.d(TAG, "onResume()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "onResume()");
 
         Objects.requireNonNull(getDialog().getWindow()).setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,

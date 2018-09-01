@@ -23,6 +23,10 @@ import au.com.mysites.camps.util.Debug;
 public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> {
     private final static String TAG = CommentAdapter.class.getSimpleName();
 
+    /**
+     *
+     * @param query  database query from the calling routine
+     */
     protected CommentAdapter(Query query) {
         super(query);
     }

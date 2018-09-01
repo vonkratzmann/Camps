@@ -25,7 +25,7 @@ public class UtilMap {
      * returns true if valid format.
      */
     public static boolean checkLongitudeCoordinate(String coordinate) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "checkLongitudeCoordinate()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "checkLongitudeCoordinate()");
 
         if (coordinate == null) return false;
 
@@ -66,7 +66,7 @@ public class UtilMap {
      * returns true if valid format.
      */
     public static boolean checkLatitudeCoordinate(String coordinate) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "checkLatitudeCoordinate()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "checkLatitudeCoordinate()");
 
         if (coordinate == null) return false;
 
@@ -108,7 +108,7 @@ public class UtilMap {
      * @return Degrees as double
      */
     public static double covertDegMinSecToDegrees(String coordinate) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "mapConvertDegMinSecToDegrees()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "mapConvertDegMinSecToDegrees()");
 
         //assume it is positive
         double sign = +1D;

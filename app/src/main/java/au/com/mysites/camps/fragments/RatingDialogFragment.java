@@ -45,7 +45,7 @@ public class RatingDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onCreateView()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "onCreateView()");
 
         View v = inflater.inflate(R.layout.dialog_rating, container, false);
 
@@ -53,7 +53,7 @@ public class RatingDialogFragment extends DialogFragment {
     }
 
     void initViews() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "initViews()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "initViews()");
 
         mRatingBar = getDialog().findViewById(R.id.site_form_rating);
 
@@ -87,7 +87,7 @@ public class RatingDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onAttach()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "onAttach()");
 
         if (context instanceof RatingListener) {
             mRatingListener = (RatingListener) context;
@@ -97,7 +97,7 @@ public class RatingDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onResume()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "onResume()");
 
         Objects.requireNonNull(getDialog().getWindow()).setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,

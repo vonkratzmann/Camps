@@ -24,13 +24,9 @@ import static au.com.mysites.camps.util.AppContextProvider.getContext;
 public class Site {
 
     public static final String FIELD_NAME = "name";
-    public static final String FIELD_STREET = "street";
-    public static final String FIELD_CITY = "city";
-    public static final String FIELD_STATE = "state";
     public static final String FIELD_POPULARITY = "numRatings";
     public static final String FIELD_AVG_RATING = "avgRating";
     public static final String FIELD_PRICE = "price";
-    public static final String FIELD_CATEGORY = "category";
 
     private String name;
     private String street;

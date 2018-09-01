@@ -67,7 +67,7 @@ public class RatingDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "onCreate()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onCreate()");
 
         setContentView(R.layout.activity_rating_detail);
 
@@ -110,7 +110,7 @@ public class RatingDetailActivity extends AppCompatActivity
     }
 
     void initViews() {
-        if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "initViews()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initViews()");
 
         mImageView = findViewById(R.id.site_image);
 
@@ -148,7 +148,7 @@ public class RatingDetailActivity extends AppCompatActivity
     }
 
     public void onBackArrowClicked(View view) {
-        if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "onBackArrowClicked()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onBackArrowClicked()");
 
         onBackPressed();
     }
@@ -156,7 +156,7 @@ public class RatingDetailActivity extends AppCompatActivity
     @Override
     public void onStart() {
         super.onStart();
-        if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "onStart()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onStart()");
 
         mRatingAdapter.startListening();
         mSiteRegistration = mSiteRef.addSnapshotListener(this);
@@ -165,7 +165,7 @@ public class RatingDetailActivity extends AppCompatActivity
     @Override
     public void onStop() {
         super.onStop();
-        if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "onStop()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onStop()");
 
         mRatingAdapter.stopListening();
         if (mSiteRegistration != null) {
@@ -182,7 +182,7 @@ public class RatingDetailActivity extends AppCompatActivity
      * @return null
      */
     private Task<Void> addRating(final DocumentReference siteRef, final Rating rating) {
-        if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "Task<Void> addRating()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "Task<Void> addRating()");
 
         // Create reference for new rating, for use inside the transaction
         final DocumentReference ratingRef = siteRef.collection("ratings")
@@ -225,7 +225,7 @@ public class RatingDetailActivity extends AppCompatActivity
      */
     @Override
     public void onEvent(DocumentSnapshot snapshot, FirebaseFirestoreException e) {
-        if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "onEvent()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onEvent()");
 
         if (e != null) {
             Log.w(TAG, "site:onEvent", e);
@@ -240,7 +240,7 @@ public class RatingDetailActivity extends AppCompatActivity
      * @param site      site that has been loaded
      */
     private void onSiteLoaded(Site site) {
-        if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "onSiteLoaded()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onSiteLoaded()");
 
         mNameView.setText(site.getName());
         mRatingIndicator.setRating((float) site.getAvgRating());
@@ -264,7 +264,7 @@ public class RatingDetailActivity extends AppCompatActivity
      */
     @Override
     public void onRating(Rating rating) {
-        if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "onRating()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onRating()");
 
         // In a transaction, add the new rating and update the aggregate totals
         addRating(mSiteRef, rating)
@@ -292,7 +292,7 @@ public class RatingDetailActivity extends AppCompatActivity
     }
 
     private void hideKeyboard() {
-        if (Debug.DEBUG_METHOD_ENTRY_RATING) Log.d(TAG, "hideKeyboard()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "hideKeyboard()");
 
         View view = getCurrentFocus();
         if (view != null) {

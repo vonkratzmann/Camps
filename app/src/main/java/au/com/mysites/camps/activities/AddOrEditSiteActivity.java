@@ -179,7 +179,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     @CallSuper
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onCreate()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onCreate()");
 
         setContentView(R.layout.activity_site_add_edit);
         toolbar = findViewById(R.id.add_edit_site_toolbar);
@@ -227,7 +227,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * have changed.
      */
     private void initViews() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "initViews()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initViews()");
 
         //use a common TextChangeListener to monitor for changes to any EditText fields
         (mNameEditText = findViewById(R.id.add_site_name_text)).addTextChangedListener(mNameTextWatcher);
@@ -296,7 +296,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      */
     @Override
     public void onEvent(DocumentSnapshot snapshot, FirebaseFirestoreException e) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onEvent()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onEvent()");
 
         if (e != null) {
             Log.w(TAG, "Error: ", e);
@@ -314,7 +314,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @param site site that has been loaded
      */
     private void onSiteLoaded(Site site) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onSiteLoaded()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onSiteLoaded()");
 
         mSite = site;   //so we can access site from any method
         mNameEditText.setText(site.getName());
@@ -377,7 +377,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @return true if entered data is valid
      */
     public boolean getSite() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getSite()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getSite()");
 
         if (!mSiteHasChanged) {
             // Warn user nothing entered into new site
@@ -415,7 +415,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @return Boolean  true if data successfully stored in the Site instance
      */
     boolean getSiteCheckNameEntered() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getSiteCheckNameEntered()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getSiteCheckNameEntered()");
 
         boolean state = true;
         // check name of site has been entered
@@ -433,7 +433,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Called by {@link #getSite()}.
      */
     private void getSiteStoreTextFromViews() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getSiteStoreTextFromViews()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getSiteStoreTextFromViews()");
 
         // get site street
         mSite.setStreet(mStreetEditText.getText().toString());
@@ -481,7 +481,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Called by {@link #getSite()}.
      */
     private void getSiteSaveImages() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getSiteSaveImages()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getSiteSaveImages()");
 
         // Check external storage is available
         if (!isExternalStorageAvailable()) {  // Warn the user.
@@ -519,7 +519,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @return false if format or range invalid
      */
     private boolean getSiteStoreLatAndLong() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getSiteStoreLatAndLong()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getSiteStoreLatAndLong()");
 
         //Get GPS coordinates
         String latitude = mLatitudeEditText.getText().toString();
@@ -552,7 +552,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      */
     @Override
     public void onBackPressed() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onBackPressed()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onBackPressed()");
 
         //Check for changes
         if (mSiteHasChanged) {
@@ -584,7 +584,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      */
     @RequiresPermission(Manifest.permission.CAMERA)
     private void takePhoto() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "takePhoto()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "takePhoto()");
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -609,7 +609,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Called from {@link #takePhoto()}.
      */
     private void takePhotoCheckStoragePermissions() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "takePhotoCheckStoragePermissions()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "takePhotoCheckStoragePermissions()");
 
         //check if external storage mounted and available
         if (!isExternalStorageAvailable()) {
@@ -682,7 +682,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
 
     private void selectPhoto() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "selectPhoto()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "selectPhoto()");
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -700,7 +700,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Start an intent to select a photo
      */
     private void selectPhotoUpdateImageViews() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "selectPhotoUpdateImageView()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "selectPhotoUpdateImageView()");
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
@@ -724,7 +724,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onActivityResult()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onActivityResult()");
 
         switch (requestCode) {
             case Constants.RC_IMAGE_CAPTURE:
@@ -777,7 +777,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @return true if operation successful
      */
     private boolean updateImageViewsFromFile(String photoPath) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "updateImageViewsFromFile()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "updateImageViewsFromFile()");
 
         // Scale thumbnail
         Bitmap bitmap = scaleImageFile(photoPath, mThumbnailImageView);
@@ -798,7 +798,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     public void displayStatusOfAllFacilities(final Site site) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "displayStatusOfAllFacilities()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "displayStatusOfAllFacilities()");
 
         displayFacility(site, dumppointImageView, dumppointpresentImageView, R.string.dumppoint,
                 Site.Facility.DUMPPOINT);
@@ -838,7 +838,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                                  final ImageView imageViewFacilityIcon,
                                  final ImageView imageViewFacilityPresent,
                                  final int description, final Site.Facility type) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "displayFacility()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "displayFacility()");
 
         //Show if facility is present or not, by displaying a tick or cross
         imageViewFacilityPresent.setImageResource((site.checkIfFacilityPresent(type))
@@ -873,7 +873,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      */
     private void getLocation() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getLocation()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getLocation()");
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -893,7 +893,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * which displays longitude and latitude. If fails displays a message to the user.
      */
     void getLocationFusedProviderClient() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getLocationFusedProviderClient()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getLocationFusedProviderClient()");
 
         //sets up fused location client, which is API from Google Play Services
         mFusedLocationClient = getFusedLocationProviderClient(this);
@@ -934,7 +934,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @param location Display location coordinates
      */
     private void getLocationDisplayCoordinates(Location location) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getLocationDisplayCoordinates()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getLocationDisplayCoordinates()");
 
         TextView textView = findViewById(R.id.add_site_map_coordinates_lat);
         textView.setText(Location.convert(location.getLatitude(), Location.FORMAT_SECONDS));
@@ -952,7 +952,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Address is returned in {@link  AddressResultReceiver#onReceiveResult(int, Bundle)}
      */
     private void getAddress() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getAddress()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getAddress()");
 
         if (mLocationAddress == null) {
             mLocationAddress = new Location("");
@@ -987,7 +987,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @param address address to be displayed
      */
     void getAddressDisplay(String address) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "getAddressDisplay()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getAddressDisplay()");
 
         if (UtilGeneral.stringEmpty(address))
             makeText(this, getString(R.string.ERROR_Address), Toast.LENGTH_SHORT).show();
@@ -1027,7 +1027,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Called by the generic {@link #onClick(View)} handler
      */
     private void deletePhotos() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "deletePhotos()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "deletePhotos()");
 
         // Clear the images from the views
         mThumbnailImageView.setImageDrawable(null);
@@ -1050,7 +1050,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @param requestId   Used to identify calling method
      */
     private boolean checkPermissions(String[] permissions, int requestId) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "checkPermissions()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "checkPermissions()");
         //Check permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -1073,7 +1073,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onRequestPermissionsResult()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onRequestPermissionsResult()");
 
         switch (requestCode) {
             case Constants.PERMISSIONS_REQUEST_CAMERA:
@@ -1125,13 +1125,13 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onPause()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onPause()");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onResume()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onResume()");
     }
 
     /**
@@ -1145,7 +1145,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     @Override
     public void onStart() {
         super.onStart();
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onStart()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onStart()");
 
 
         if (mSiteDocumentRef != null) {
@@ -1160,7 +1160,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     @Override
     public void onStop() {
         super.onStop();
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onStop()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onStop()");
 
         if (mSiteRegistration != null) {
             mSiteRegistration.remove();
@@ -1176,7 +1176,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     @SuppressLint("MissingPermission")
     @Override
     public void onClick(View v) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onClick");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onClick");
 
         switch (v.getId()) {
             case R.id.add_site_save:
@@ -1244,7 +1244,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
          */
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
-            if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onReceiveResult()");
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onReceiveResult()");
 
             if (resultData == null) {
                 Toast.makeText(getApplicationContext(), getString(R.string.ERROR_Address),

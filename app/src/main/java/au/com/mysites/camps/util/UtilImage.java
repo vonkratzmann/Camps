@@ -199,7 +199,7 @@ public class UtilImage {
      * @return new file with image, otherwise return null
      */
     public static File imageViewToNewFile(Context context, ImageView imageView) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "imageViewToNewFile()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "imageViewToNewFile()");
 
         File file;
         BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();

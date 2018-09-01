@@ -28,7 +28,6 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -37,7 +36,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Transaction;
+import com.google.firebase.firestore.Query;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -81,8 +80,6 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     private CommentDialogFragment mCommentDialog;
 
     private FirebaseFirestore mFirestore;
-    private DocumentReference mSiteDocumentRef;
-    private CollectionReference mCommentsQuery;
 
     private ListenerRegistration mSiteRegistration;
 
@@ -92,27 +89,30 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     private LinearLayout mFacilityIconLinearLayout;
     private LinearLayout.LayoutParams mLayoutParams;
 
-    //displaying the detail for this site
+    // Holds the site loaded from the snapshot
     private Site mSite;
+
+    // Id of the site (same as the name of the site) loaded from the calling Intent
+    private String mSiteId;
 
     private DetailSiteViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onCreate()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onCreate()");
 
         setContentView(R.layout.activity_site_detail);
 
         // Get site ID from extras
-        String siteId = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.intent_site_name));
-        if (siteId == null) {
+        mSiteId = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.intent_site_name));
+        if (mSiteId == null) {
             throw new IllegalArgumentException("Must pass extra " + getString(R.string.intent_site_name));
         }
 
         Toolbar toolbar = findViewById(R.id.site_detail_toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(siteId);
+        toolbar.setTitle(mSiteId);
 
         initViews();
 
@@ -122,17 +122,13 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         // Initialize Firestore, views and listeners
         mFirestore = FirebaseFirestore.getInstance();
 
-        // Get reference to this site in the database
-        mSiteDocumentRef = mFirestore
-                .collection(getString(R.string.collection_sites))
-                .document(siteId);
-        // Get reference to the collection of comments for this site in the database
-        mCommentsQuery = mFirestore
-
-                .collection(getString(R.string.collection_comments));
+        // Build a query for comments for this site
+        CollectionReference commentRef = mFirestore.collection(getString(R.string.collection_comments));
+        // Find all comments with the siteId of this site
+        Query query = commentRef.whereEqualTo(Comment.FIELD_SITEID, mSiteId);
 
         // RecyclerView
-        mCommentAdapter = new CommentAdapter(mCommentsQuery) {
+        mCommentAdapter = new CommentAdapter(query) {
             @Override
             protected void onDataChanged() {
                 if (getItemCount() == 0) {
@@ -152,7 +148,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
      * Initialise the views and attach listeners
      */
     void initViews() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "initViews()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initViews()");
 
         mPhotoView = findViewById(R.id.site_detail_photo);
         mNumRatingsView = findViewById(R.id.site_num_ratings);
@@ -185,22 +181,27 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onPause() {
         super.onPause();
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onPause()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onPause()");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onResume()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onResume()");
     }
 
     /**
-     *
+     * Implement snapshot listener, the initial call of the callback
+     * {@link #onEvent(DocumentSnapshot, FirebaseFirestoreException)}
+     * as a result of using addSnapshotListener() immediately creates a document snapshot with the
+     * current contents of the single document.
+     * Then, each time the contents change, another call updates the document snapshot.
+     * Results are returned in the overridden {@link #onEvent} method.
      */
     @Override
     public void onStart() {
         super.onStart();
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onStart()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onStart()");
 
         // Start sign in if necessary
         if (shouldStartSignIn()) {
@@ -211,12 +212,13 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         if (mCommentAdapter != null) {
             mCommentAdapter.startListening();
         }
-        /* Implement snapshot listener, the initial call of the callback {@link #onEvent()}
-         * as a result of using addSnapshotListener() immediately creates a document snapshot with the
-         * current contents of the single document.
-         * Then, each time the contents change, another call updates the document snapshot.
-         * Results are returned in the overriden {@link #onEvent} method. */
-        mSiteRegistration = mSiteDocumentRef.addSnapshotListener(this);
+
+        // Get reference to this site
+        DocumentReference docRef = mFirestore
+                .collection(getString(R.string.collection_sites))
+                .document(mSiteId);
+        // The site data is returned in onEvent()
+        mSiteRegistration = docRef.addSnapshotListener(this);
     }
 
     /**
@@ -225,7 +227,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onStop() {
         super.onStop();
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onStop()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onStop()");
 
         if (mCommentAdapter != null) {
             mCommentAdapter.stopListening();
@@ -237,13 +239,13 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     }
 
     private boolean shouldStartSignIn() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "shouldStartSignIn()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "shouldStartSignIn()");
 
         return (!mViewModel.getIsSigningIn() && FirebaseAuth.getInstance().getCurrentUser() == null);
     }
 
     private void startSignIn() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "startSignIn()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "startSignIn()");
 
         // Sign in with FirebaseUI
         Intent intent = AuthUI.getInstance().createSignInIntentBuilder()
@@ -257,32 +259,6 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     }
 
     /**
-     * Adds a comment to the sub-collection
-     * Comment came from the dialog fragment
-     *
-     * @param commentsCollectionRef reference to the collection of comments
-     * @param comment               new comment to be added
-     * @return null
-     */
-    private Task<Void> addComment(final CollectionReference commentsCollectionRef,
-                                  final Comment comment) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "addComment()");
-
-        //Create firebase reference for new comment, for use inside the transaction
-        final DocumentReference commentRef = commentsCollectionRef.document();
-
-        // In a transaction, add the new comment
-        return mFirestore.runTransaction(new Transaction.Function<Void>() {
-            @Override
-            public Void apply(@NonNull Transaction transaction) {
-                // Commit to Firestore
-                transaction.set(commentRef, comment);
-                return null;
-            }
-        });
-    }
-
-    /**
      * Provides realtime updates with Cloud Firestore.
      * An initial call of this callback after using addSnapshopListener() immediately creates
      * a document snapshot with the current contents of the single document.
@@ -291,13 +267,13 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onEvent(@Nullable DocumentSnapshot snapshot,
                         @Nullable FirebaseFirestoreException e) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onEvent()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onEvent()");
 
         if (e != null) {
             Log.w(TAG, "site:onEvent", e);
             return;
         }
-        if (snapshot != null) {
+        if (snapshot != null) {  // Now go and process the data loaded from the snapshot
             onSiteLoaded(Objects.requireNonNull(snapshot.toObject(Site.class)));
         }
     }
@@ -309,7 +285,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
      * @param site site that has been loaded
      */
     private void onSiteLoaded(Site site) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onSiteLoaded()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onSiteLoaded()");
 
         mSite = site;
         mStreetView.setText(site.getStreet());
@@ -331,25 +307,29 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     }
 
     /**
-     * The CommentDialogFragment fragment receives a reference to this Activity through the
-     * Fragment.onAttach() callback. On completion the fragment calls this method.
+     * When the Floating Action Button (FAB) is pressed to add a new comment,
+     * the CommentDialogFragment receives a reference to this Activity,
+     * overrides the {@link CommentDialogFragment#onAttach(Context)}
+     * which instantiate the CommentListener callback. When the submit button in the fragment
+     * is pressed, the fragment via listener sends the comment to this method.
      * <p>>
      * This method then saves the comment to the database in the collection comments.
+     *
      * @param comment comment from the dialog fragment
      */
 
     @Override
     public void onComment(Comment comment) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onComment()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onComment()");
+
+        // Add site id for this comment
+        comment.setSiteId(mSiteId);
 
         mFirestore.collection(getString(R.string.collection_comments))
-                .document(comment.getAuthorId())
-                .set(comment)
-                .addOnSuccessListener(this, new OnSuccessListener<Void>() {
+                .add(comment) // Firebase automatically generates a comment Id
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Comment added");
-
+                    public void onSuccess(DocumentReference documentReference) {
                         // Hide keyboard and scroll to top
                         hideKeyboard();
                         mCommentsRecycler.smoothScrollToPosition(0);
@@ -370,7 +350,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void hideKeyboard() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "hideKeyboard()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "hideKeyboard()");
 
         View view = getCurrentFocus();
         if (view != null) {
@@ -388,7 +368,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
      * @param context context of calling activity
      */
     public void displayFacilities(Site site, final Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "displayFacilities");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "displayFacilities");
 
         //get the view and set up new linear layout
         mFacilityIconLinearLayout = ((Activity) context).findViewById(R.id.site_detail_facility_icons);
@@ -443,7 +423,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
      * @param context       context of callin method
      */
     private void addFacilityImage(int imageResource, final String string, Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "addFacilityImage()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "addFacilityImage()");
 
         ImageView image1 = new ImageView((context));
         image1.setLayoutParams(mLayoutParams);
@@ -467,7 +447,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onCreateOptionsMenu()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onCreateOptionsMenu()");
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detail_site, menu);
@@ -484,7 +464,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onOptionsItemSelected()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onOptionsItemSelected()");
 
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -507,7 +487,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
      */
     @Override
     public void onClick(View v) {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onClick()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onClick()");
 
         switch (v.getId()) {
 

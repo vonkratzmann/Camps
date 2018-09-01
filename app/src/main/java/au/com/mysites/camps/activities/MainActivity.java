@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onCreate()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onCreate()");
 
         setContentView(R.layout.activity_main);
 
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onStart() {
         super.onStart();
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onStart()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onStart()");
 
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onActivityResult()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onActivityResult()");
 
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
         UtilDialog.showProgressDialog(mProgressDialog);
         // [END_EXCLUDE]
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements
      * the remote database.
      */
     private void saveUserProfile() {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "saveUserProfile()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveUserProfile()");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param user user information to be saved
      */
     private void saveUserToFirestore(String id, User user) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "saveUserToFirestore()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveUserToFirestore()");
 
         // Initialize Firestore
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        if (Debug.DEBUG_METHOD_ENTRY)
+                        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY)
                             Log.d(TAG, "saveUserProfile() document successfully written");
                         //   Now save the photo to firebase storage
                         if (mFile != null)
@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param user Current logged in user
      */
     private void updateUI(FirebaseUser user) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "updateUI()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "updateUI()");
 
         UtilDialog.hideProgressDialog(mProgressDialog);
         if (user != null) {
@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onBackPressed() {
-        if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onBackPressed()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onBackPressed()");
 
         new AlertDialog.Builder(this)
                 .setIcon(R.mipmap.warning)
@@ -376,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onClick()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onClick()");
 
         int i = v.getId();
         if (i == R.id.main_sign_in_button) {
@@ -400,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         protected File doInBackground(String... string) {
-            if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "doInBackground()");
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground()");
 
             File file = null;
             try {
@@ -422,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements
          */
         @Override
         protected void onPostExecute(File result) {
-            if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onPostExecute()");
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onPostExecute()");
 
             try {
                 UtilFile.copyFile(result, mFile);

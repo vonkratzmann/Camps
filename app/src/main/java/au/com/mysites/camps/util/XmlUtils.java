@@ -24,7 +24,7 @@ public class XmlUtils {
 
 
     public void initXmlFile(Context context, String filename) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "initXmlFile()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "initXmlFile()");
 
         mFileName = filename;
         mBuffer = new StringBuilder();
@@ -43,7 +43,7 @@ public class XmlUtils {
 
 
     public void siteSaveToXMLFile(Site s) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "siteSaveToXMLFile()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "siteSaveToXMLFile()");
 
         // save site to buffer
         // format site into xml
@@ -52,7 +52,7 @@ public class XmlUtils {
     }
 
    public boolean endXmlFile(Context context) {
-       if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "endXmlFile()");
+       if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "endXmlFile()");
 
        //add a camps end tag to the end of the file
         mXmlformatter.xmlEndTag(mBuffer, context.getString(R.string.camps));
@@ -74,7 +74,7 @@ public class XmlUtils {
      *
      */
     public boolean readXmlfile(Context context, String filename, String path, ArrayList<Site> sites) {
-        if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "readXmlFile()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readXmlFile()");
 
         // Read the xml file and populate the list called sites
         //Setup new file operations to call read and write methods

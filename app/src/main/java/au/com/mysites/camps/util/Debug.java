@@ -7,13 +7,11 @@ public final class Debug {
      */
 
     // To log a message at the start of the method
-    public static final boolean DEBUG_METHOD_ENTRY = true;
+    public static final boolean DEBUG_METHOD_ENTRY_ACTIVITY = true;
     public static final boolean DEBUG_METHOD_ENTRY_ADAPTER = true;
-    public static final boolean DEBUG_METHOD_ENTRY_COMMENT = true;
-    public static final boolean DEBUG_METHOD_ENTRY_DBMAINT = true;
+    public static final boolean DEBUG_METHOD_ENTRY_FRAGMENT = true;
     public static final boolean DEBUG_METHOD_ENTRY_MAP = true;
-    public static final boolean DEBUG_METHOD_ENTRY_RATING= false;
-    public static final boolean DEBUG_METHOD_ENTRY_SITE = true;
+    public static final boolean DEBUG_METHOD_ENTRY_SERVICE = false;
     public static final boolean DEBUG_METHOD_ENTRY_UTIL = true;
     public static final boolean DEBUG_METHOD_ENTRY_UTIL_OPERATIONSIMAGE = true;
 
