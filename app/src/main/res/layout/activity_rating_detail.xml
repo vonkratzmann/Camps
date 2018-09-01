@@ -5,7 +5,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#E0E0E0"
-                tools:context="au.com.mysites.camps.comment.CommentDetailActivity">
+                tools:context="au.com.mysites.camps.activities.RatingDetailActivity">
 
     <RelativeLayout
         android:id="@+id/site_top_card"
@@ -15,6 +15,7 @@
 
         <ImageView
             android:id="@+id/site_image"
+            android:contentDescription="@null"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:alpha="1.0"
@@ -28,11 +29,11 @@
         <!-- Back button -->
         <ImageView
             android:id="@+id/site_detail_button_back"
+            android:contentDescription="@null"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/site_name"
+            android:layout_alignStart="@+id/site_name"
             android:layout_marginTop="16dp"
-            android:background="?attr/selectableItemBackground"
             app:srcCompat="@drawable/ic_close_white_24px"/>
 
         <TextView
@@ -53,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/site_street"
-            android:layout_alignLeft="@+id/site_name"
+            android:layout_alignStart="@+id/site_name"
             app:mrb_progressTint="@android:color/white"
             app:mrb_secondaryProgressTint="@android:color/white"/>
 
@@ -65,7 +66,7 @@
             android:layout_alignBottom="@+id/site_detail_rating"
             android:layout_alignTop="@+id/site_detail_rating"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/site_detail_rating"
+            android:layout_toEndOf="@+id/site_detail_rating"
             android:gravity="center"
             android:textColor="@android:color/white"
             tools:text="(10)"/>
@@ -76,7 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/site_image"
-            android:layout_alignLeft="@+id/site_name"
+            android:layout_alignStart="@+id/site_name"
             android:textColor="@android:color/white"
             tools:text="Italian"/>
 
@@ -84,7 +85,7 @@
             android:id="@+id/site_city_divider"
             style="@style/AppTheme.TextDivider"
             android:layout_alignTop="@+id/site_street"
-            android:layout_toRightOf="@+id/site_street"
+            android:layout_toEndOf="@+id/site_street"
             android:text="@string/divider_bullet"
             android:textColor="@android:color/white"/>
 
@@ -95,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/site_street"
             android:layout_below="@+id/site_street"
-            android:layout_toRightOf="@+id/site_city_divider"
+            android:layout_toEndOf="@+id/site_city_divider"
             android:textColor="@android:color/white"
             tools:text="San Francisco"/>
 
@@ -103,7 +104,7 @@
             android:id="@+id/site_state_divider"
             style="@style/AppTheme.TextDivider"
             android:layout_alignTop="@+id/site_street"
-            android:layout_toRightOf="@+id/site_city"
+            android:layout_toEndOf="@+id/site_city"
             android:text="@string/divider_bullet"
             android:textColor="@android:color/white"/>
 
@@ -114,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/site_city"
-            android:layout_toRightOf="@+id/site_state_divider"
+            android:layout_toEndOf="@+id/site_state_divider"
             android:textColor="@android:color/white"
             tools:text="state"/>
 
@@ -141,7 +142,7 @@
         android:paddingBottom="16dp"
         android:paddingTop="28dp"
         android:visibility="gone"
-        tools:listitem="@layout/item_rating"/>
+        tools:listitem="@layout/recycler_rating"/>
 
     <!-- View for empty ratings -->
     <LinearLayout
@@ -158,6 +159,7 @@
 
         <ImageView
             style="@style/AppTheme.PizzaGuy"
+            android:contentDescription="@null"
             android:src="@drawable/pizza_monster"/>
 
         <TextView

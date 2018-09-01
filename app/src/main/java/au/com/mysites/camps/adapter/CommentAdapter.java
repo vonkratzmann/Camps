@@ -33,7 +33,7 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
         if (Debug.DEBUG_METHOD_ENTRY_ADAPTER) Log.d(TAG, "onCreateViewHolder()");
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new ViewHolder(inflater.inflate(R.layout.item_comment, parent, false));
+        return new ViewHolder(inflater.inflate(R.layout.recycler_comment, parent, false));
     }
 
     @Override

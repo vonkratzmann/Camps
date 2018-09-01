@@ -35,6 +35,7 @@ public class Site {
     private String name;
     private String street;
     private String city;
+    private String postcode;
     private String state;
 
     private int numRatings;
@@ -74,14 +75,14 @@ public class Site {
 
     public Site() {
         //initialise comments
-        comments = new ArrayList<Comment>();
+        comments = new ArrayList<>();
         //add a date created
-        DateFormat dateFormat = new SimpleDateFormat(Constants.DATEFORMAT);
+        DateFormat dateFormat = new SimpleDateFormat(Constants.DATEFORMAT, Locale.ENGLISH);
         dateCreated = dateFormat.format(new Date());
     }
 
     @SuppressLint("StringFormatInvalid")
-    public Site(String name, String street, String city, String state,
+    public Site(String name, String street, String city, String postcode, String state,
                 String sitePhoto, String thumbnail,
                 int numRatings, double avgRating, int price,
                 String latitude, String longitude,
@@ -90,12 +91,13 @@ public class Site {
                 boolean swimming, boolean toilets, boolean tvReception,
                 boolean drinkingWater) {
         //initialise comments
-        comments = new ArrayList<Comment>();
+        comments = new ArrayList<>();
 
         this.name = name;
         this.street = street;
         this.state = state;
         this.city = city;
+        this.postcode = postcode;
         this.numRatings = numRatings;
         this.avgRating = avgRating;
         this.price = price;
@@ -148,6 +150,14 @@ public class Site {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
     }
 
     public String getState() {

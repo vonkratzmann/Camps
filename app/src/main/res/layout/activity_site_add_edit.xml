@@ -122,9 +122,8 @@
         android:inputType="textShortMessage"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
-        app:layout_constraintBottom_toTopOf="@+id/add_site_city_text"
-        app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
-        app:layout_constraintTop_toBottomOf="@+id/add_site_name_text"/>
+        app:layout_constraintTop_toBottomOf="@+id/add_site_name_text"
+        app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"/>
 
     <EditText
         android:id="@+id/add_site_city_text"
@@ -137,7 +136,7 @@
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
         app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
-        app:layout_constraintBottom_toBottomOf="@+id/add_site_thumbnail"/>
+        app:layout_constraintTop_toBottomOf="@+id/add_site_street_text"/>
 
     <EditText
         android:id="@+id/add_site_postcode_text"

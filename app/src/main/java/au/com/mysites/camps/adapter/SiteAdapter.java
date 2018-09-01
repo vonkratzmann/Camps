@@ -41,7 +41,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
         if (Debug.DEBUG_METHOD_ENTRY) Log.d(TAG, "onCreateViewHolder()");
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new ViewHolder(inflater.inflate(R.layout.item_site, parent, false));
+        return new ViewHolder(inflater.inflate(R.layout.recycler_site, parent, false));
     }
 
     @Override
@@ -59,8 +59,9 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
         MaterialRatingBar ratingBar;
         TextView numRatingsView;
         TextView streetView;
-        TextView stateView;
         TextView cityView;
+        TextView postcodeView;
+        TextView stateView;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -72,6 +73,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
             numRatingsView = itemView.findViewById(R.id.site_item_num_ratings);
             streetView = itemView.findViewById(R.id.site_item_street);
             cityView = itemView.findViewById(R.id.site_item_city);
+            postcodeView = itemView.findViewById(R.id.site_item_postcode);
             stateView = itemView.findViewById(R.id.site_item_state);
         }
 
@@ -87,6 +89,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
             ratingBar.setRating((float) site.getAvgRating());
             streetView.setText(site.getStreet());
             cityView.setText(site.getCity());
+            postcodeView.setText(site.getPostcode());
             stateView.setText(site.getState());
 
             /* Check if there is a valid thumbnail. If on local device load into imageView, else

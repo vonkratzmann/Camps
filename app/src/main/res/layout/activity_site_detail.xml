@@ -24,7 +24,7 @@
     <ImageView
         android:id="@+id/site_detail_photo"
         android:layout_width="match_parent"
-        android:layout_height="225dp"
+        android:layout_height="200dp"
         android:alpha="1.0"
         android:contentDescription="@string/site_detail_photo_hint"
         android:scaleType="centerInside"
@@ -71,6 +71,7 @@
         style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:textColor="@color/Gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/site_detail_rating"
@@ -79,24 +80,38 @@
     <TextView
         android:id="@+id/site_detail_city_divider"
         style="@style/AppTheme.TextDivider"
+        android:layout_marginStart="8dp"
         android:text="@string/divider_bullet"
         android:textColor="@color/Gray"
-        app:layout_constraintStart_toEndOf="@id/site_detail_street"
-        app:layout_constraintTop_toBottomOf="@+id/site_detail_rating"/>
+        app:layout_constraintStart_toEndOf="@+id/site_detail_postcode"
+        app:layout_constraintTop_toBottomOf="@+id/site_detail_street"/>
 
     <TextView
         android:id="@+id/site_detail_city"
         style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:textColor="@color/Gray"
-        app:layout_constraintStart_toEndOf="@id/site_detail_city_divider"
-        app:layout_constraintTop_toBottomOf="@+id/site_detail_rating"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/site_detail_street"
         tools:text="Down Town Geelong"/>
+
+    <TextView
+        android:id="@+id/site_detail_postcode"
+        style="@style/AppTheme.Subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/Gray"
+        app:layout_constraintStart_toEndOf="@+id/site_detail_state_divider"
+        app:layout_constraintTop_toBottomOf="@+id/site_detail_street"
+        tools:text="postcode"/>
 
     <TextView
         android:id="@+id/site_detail_state_divider"
         style="@style/AppTheme.TextDivider"
+        android:layout_marginStart="8dp"
         android:text="@string/divider_bullet"
         android:textColor="@color/Gray"
         app:layout_constraintStart_toEndOf="@id/site_detail_city"
@@ -107,9 +122,10 @@
         style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:textColor="@color/Gray"
-        app:layout_constraintStart_toEndOf="@id/site_detail_state_divider"
-        app:layout_constraintTop_toBottomOf="@+id/site_detail_rating"
+        app:layout_constraintStart_toEndOf="@+id/site_detail_city_divider"
+        app:layout_constraintTop_toBottomOf="@+id/site_detail_street"
         tools:text="Vic"/>
 
     <TextView
@@ -140,7 +156,7 @@
     <TextView
         android:id="@+id/site_detail_coordinates_lat_divider"
         style="@style/AppTheme.TextDivider"
-        android:text="@string/divider_bullet"
+        android:text="@string/add_edit_site_spacer"
         android:textColor="@color/Gray"
         app:layout_constraintEnd_toStartOf="@+id/site_detail_map_coordinates_long"
         app:layout_constraintStart_toEndOf="@id/site_detail_map_coordinates_lat"
@@ -219,7 +235,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.44"/>
+        app:layout_constraintGuide_percent="0.39"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/site_details_guideline_coordinates"
@@ -252,6 +268,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_facilities"
-        tools:listitem="@layout/item_comment"/>
+        tools:listitem="@layout/recycler_comment"/>
+
 
 </android.support.constraint.ConstraintLayout>

@@ -83,6 +83,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     private EditText mNameEditText;
     private EditText mStreetEditText;
     private EditText mCityEditText;
+    private EditText mPostcodeEditText;
     private EditText mStateEditText;
     private EditText mLatitudeEditText;
     private EditText mLongitudeEditText;
@@ -127,6 +128,53 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     private DetailSiteViewModel mViewModel;
 
+    // Set up a text watcher to monitor if the EditText fields have changed.
+    private final TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        /* Clear the hint: if the hint char count is longer than the entered character count,
+         *  then the field width is too wide, as the field width is that of the hint. */
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            if (mStreetEditText.getText().hashCode() == s.hashCode()) mStreetEditText.setHint("");
+
+            if (mCityEditText.getText().hashCode() == s.hashCode()) mCityEditText.setHint("");
+
+            if (mPostcodeEditText.getText().hashCode() == s.hashCode()) mPostcodeEditText.setHint("");
+
+            if (mStateEditText.getText().hashCode() == s.hashCode()) mStateEditText.setHint("");
+        }
+        @Override
+        // Do not use this one
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+        @Override
+        public void afterTextChanged(Editable s) {
+            // Record the site has been changed
+            mSiteHasChanged = true;
+        }
+    };
+
+    /* Set up a specific text watcher to monitor if the name edit text field has changed
+     * as the name of the site is displayed in the toolbar.
+     */
+    private final TextWatcher mNameTextWatcher = new TextWatcher() {
+        @Override
+        // Do not use this one
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+        @Override
+        // Do not use this one
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+        @Override
+        public void afterTextChanged(Editable s) {
+            // Record the site has been changed
+            mSiteHasChanged = true;
+            // Update the toolbar title
+            if (s != null)
+                toolbar.setTitle(s.toString());
+        }
+    };
+
     @Override
     @CallSuper
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,66 +209,17 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
             // Get reference to this site in the database
             assert siteId != null;
-            /* In {@link #onStart()} implements snapshot listener using mSiteDocumentRef
-             * as the reference, the initial call to the callback {@link #onEvent()} as a result
-             * of using addSnapshotListener() immediately creates a document snapshot with the
-             * current contents of the single document. */
+
             mSiteDocumentRef = mFirestore
                     .collection(getString(R.string.collection_sites))
                     .document(siteId);
         }
-
         // Display and enable toggling of the facility presence, indicating if present or not
         displayStatusOfAllFacilities(mSite);
 
         // View models
         mViewModel = ViewModelProviders.of(this).get(DetailSiteViewModel.class);
     }
-
-    /**
-     * Set up a text watcher to monitor if the EditText fields have changed.
-     */
-    private final TextWatcher mTextWatcher = new TextWatcher() {
-        @Override
-        // Do not use this one
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        // Do not use this one
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // Record the site has been changed
-            mSiteHasChanged = true;
-        }
-    };
-
-    /* Set up a specific text watcher to monitor if the name edit text field has changed
-     * as the name of the site is displayed in the toolbar.
-     */
-    private final TextWatcher mNameTextWatcher = new TextWatcher() {
-        @Override
-        // Do not use this one
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        // Do not use this one
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // Record the site has been changed
-            mSiteHasChanged = true;
-            // Update the toolbar title
-            if (s != null)
-                toolbar.setTitle(s.toString());
-        }
-    };
 
     /**
      * Initialise views and set up listeners. There is a common listener used for the buttons
@@ -234,6 +233,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         (mNameEditText = findViewById(R.id.add_site_name_text)).addTextChangedListener(mNameTextWatcher);
         (mStreetEditText = findViewById(R.id.add_site_street_text)).addTextChangedListener(mTextWatcher);
         (mCityEditText = findViewById(R.id.add_site_city_text)).addTextChangedListener(mTextWatcher);
+        (mPostcodeEditText = findViewById(R.id.add_site_postcode_text)).addTextChangedListener(mTextWatcher);
         (mStateEditText = findViewById(R.id.add_site_state_text)).addTextChangedListener(mTextWatcher);
         (mLatitudeEditText = findViewById(R.id.add_site_map_coordinates_lat)).addTextChangedListener(mTextWatcher);
         (mLongitudeEditText = findViewById(R.id.add_site_map_coordinates_long)).addTextChangedListener(mTextWatcher);
@@ -320,6 +320,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         mNameEditText.setText(site.getName());
         mStreetEditText.setText(site.getStreet());
         mCityEditText.setText(site.getCity());
+        mPostcodeEditText.setText(site.getPostcode());
         mStateEditText.setText(site.getState());
         mLatitudeEditText.setText(site.getLatitude());
         mLongitudeEditText.setText(site.getLongitude());
@@ -439,6 +440,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         // get site city
         mSite.setCity(mCityEditText.getText().toString());
+
+        // get site city
+        mSite.setPostcode(mPostcodeEditText.getText().toString());
 
         // get site state
         mSite.setState(mStateEditText.getText().toString());
@@ -917,8 +921,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                         }
                     });
         } catch (
-                SecurityException e)
-        {
+                SecurityException e) {
             Toast.makeText(this, getString(R.string.ERROR_Security_exception),
                     Toast.LENGTH_LONG).show();
         }
@@ -944,8 +947,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Gets address using the longitude and latitude coordinates displayed on the UI.
      * These could have been entered by the user or loaded from the database
      * when a site was selected to be edited or a combination of the both.
-     * <p>
      * Requires a Location object to fetch the address.
+     * <p>
+     * Address is returned in {@link  AddressResultReceiver#onReceiveResult(int, Bundle)}
      */
     private void getAddress() {
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "getAddress()");
@@ -997,7 +1001,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             StringTokenizer st = new StringTokenizer(address, System.getProperty("line.separator"));
             int tokens = st.countTokens();
 
-            if (tokens <= 4 ) {  // Only need 4 as country code is ignored
+            if (tokens <= 4) {  // Only need 4 as country code is ignored
                 makeText(this, getString(R.string.ERROR_Address), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -1008,6 +1012,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
             mStreetEditText.setText(street);
             mCityEditText.setText(city);
+            mPostcodeEditText.setText(postcode);
             mStateEditText.setText(state);
         }
     }
@@ -1130,18 +1135,19 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     *
+     * Implement snapshot listener, the initial call of the callback
+     * {@link #onEvent(DocumentSnapshot, FirebaseFirestoreException)} as a result of
+     * using addSnapshotListener() immediately creates a document snapshot with the
+     * current contents of the single document. Then, each time the contents change,
+     * another call updates the document snapshot. Results are returned in the
+     * overridden {@link #onEvent(DocumentSnapshot, FirebaseFirestoreException)} method.
      */
     @Override
     public void onStart() {
         super.onStart();
         if (Debug.DEBUG_METHOD_ENTRY_SITE) Log.d(TAG, "onStart()");
 
-        /* Implement snapshot listener, the initial call of the callback {@link #onEvent()}
-         * as a result of using addSnapshotListener() immediately creates a document snapshot with the
-         * current contents of the single document.
-         * Then, each time the contents change, another call updates the document snapshot.
-         * Results are returned in the overridden {@link #onEvent} method. */
+
         if (mSiteDocumentRef != null) {
             //if this a new site mSiteDocumentRef will be null, so don't start the listener
             mSiteRegistration = mSiteDocumentRef.addSnapshotListener(this);
@@ -1233,8 +1239,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         /**
          * Get address returned from service an display it on the UI
          *
-         * @param resultCode        Results of address request
-         * @param resultData        Contains address
+         * @param resultCode Results of address request
+         * @param resultData Contains address
          */
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {

@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
-                    android:layout_toRightOf="@+id/summary_button_filter"
+                    android:layout_toEndOf="@+id/summary_button_filter"
                     android:orientation="vertical"
                     android:paddingBottom="8dp"
                     android:paddingTop="16dp">
@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/summary_filter_bar_container"
         android:background="@android:color/white"
-        tools:listitem="@layout/item_site" />
+        tools:listitem="@layout/recycler_site" />
 
     <!-- Shadow below toolbar -->
     <View

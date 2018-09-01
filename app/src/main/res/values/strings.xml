@@ -39,6 +39,7 @@
     <string name="name" translatable="false">name</string>
     <string name="street" translatable="false">street</string>
     <string name="city" translatable="false">city</string>
+    <string name="postcode" translatable="false">postcode</string>
     <string name="state" translatable="false">state</string>
     <string name="comment" translatable="false">comment</string>
     <string name="facilities" translatable="false">facilities</string>
@@ -78,6 +79,7 @@
     <string name="add_edit_site_ok">OK</string>
     <string name="add_edit_site_site_photo">Site photo</string>
     <string name="add_edit_site_thumbnail">Thumbnail</string>
+    <string name="add_edit_site_spacer"> </string>
 
 
     <!-- Add Edit Site layout hints -->

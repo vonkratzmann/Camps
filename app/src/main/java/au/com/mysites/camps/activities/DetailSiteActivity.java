@@ -69,6 +69,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     private TextView mNumRatingsView;
     private TextView mStreetView;
     private TextView mCityView;
+    private TextView mPostcodeView;
     private TextView mStateView;
     private Group mEmptyView;
     private TextView mLatitudeView;
@@ -158,6 +159,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         mNumRatingsView = findViewById(R.id.site_num_ratings);
         mStreetView = findViewById(R.id.site_detail_street);
         mCityView = findViewById(R.id.site_detail_city);
+        mPostcodeView = findViewById(R.id.site_detail_postcode);
         mStateView = findViewById(R.id.site_detail_state);
         mLatitudeView = findViewById(R.id.site_detail_map_coordinates_lat);
         mLongitudeView = findViewById(R.id.site_detail_map_coordinates_long);
@@ -313,6 +315,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         mSite = site;
         mStreetView.setText(site.getStreet());
         mCityView.setText(site.getCity());
+        mPostcodeView.setText(site.getPostcode());
         mStateView.setText(site.getState());
         mLatitudeView.setText(site.getLatitude());
         mLongitudeView.setText(site.getLongitude());
