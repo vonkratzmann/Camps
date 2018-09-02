@@ -29,7 +29,7 @@ public class User {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -45,16 +45,15 @@ public class User {
     }
 
     public String getPhoto() {
-        return photo;
+        return this.photo;
     }
 
     public void setPhoto(String photo) {
         this.photo = photo;
     }
 
-
     public String getLastUsed() {
-        return lastUsed;
+        return this.lastUsed;
     }
 
     public void setLastUsed(String lastUsed) {

@@ -16,11 +16,11 @@ public class Comment {
     private final static String TAG = Comment.class.getSimpleName();
     public static final String FIELD_SITEID = "siteId";
 
-    private String mText;
-    private String mCreatedDate;
-    private String mAuthor;
-    private String mSiteId;
-    private String mPhoto;
+    private String text;
+    private String createdDate;
+    private String author;
+    private String siteId;
+    private String photo;
 
     /**
      * Constructor
@@ -44,9 +44,9 @@ public class Comment {
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
         Date now = new Date();
 
-        this.mCreatedDate = sdf.format(now);
-        this.mText = text;
-        this.mAuthor = author;
+        this.createdDate = sdf.format(now);
+        this.text = text;
+        this.author = author;
            }
 
     /**
@@ -60,49 +60,49 @@ public class Comment {
      */
     public Comment(String text, String date, String format, String author, String siteId) {
 
-        mText = text;
-        mCreatedDate = date;
-        mAuthor = author;
-        this.mSiteId = siteId;
+        this.text = text;
+        this.createdDate = date;
+        this.author = author;
+        this.siteId = siteId;
     }
 
     public String getText() {
-        return mText;
+        return this.text;
     }
 
     public void setText(String text) {
-        this.mText = text;
+        this.text = text;
     }
 
     public String getCreatedDate() {
-        return mCreatedDate;
+        return this.createdDate;
     }
 
     public void setCreatedDate(String createdDate) {
-        this.mCreatedDate = createdDate;
+        this.createdDate = createdDate;
     }
 
     public String getAuthor() {
-        return mAuthor;
+        return this.author;
     }
 
     public void setAuthor(String author) {
-        this.mAuthor = author;
+        this.author = author;
     }
 
     public String getSiteId() {
-        return mSiteId;
+        return this.siteId;
     }
 
     public void setSiteId(String siteId) {
-        this.mSiteId = siteId;
+        this.siteId = siteId;
     }
 
     public String getPhoto() {
-        return mPhoto;
+        return this.photo;
     }
 
     public void setPhoto(String photo) {
-        this.mPhoto = photo;
+        this.photo = photo;
     }
 }

@@ -67,6 +67,7 @@ public class XmlUtils {
 
         mXmlformatter.formatUser(mBuffer, u);
     }
+
    public boolean endXmlFile(Context context) {
        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "endXmlFile()");
 

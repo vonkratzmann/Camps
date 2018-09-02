@@ -254,10 +254,6 @@ class XmlFormatter {
         xmlStartTag(buffer, context.getString(R.string.xml_comment));
         buffer.append('\n');
 
-        // convert comment name to xml and add to the buffer
-        xmlElement(buffer, context.getString(R.string.xml_comment_author), comment.getAuthor());
-        buffer.append('\n');
-
         // convert author to xml and add to the buffer
         xmlElement(buffer, context.getString(R.string.xml_comment_author), comment.getAuthor());
         buffer.append('\n');
@@ -275,7 +271,7 @@ class XmlFormatter {
         buffer.append('\n');
 
         // add the closing site tag to the buffer
-        xmlEndTag(buffer, context.getString(R.string.xml_site));
+        xmlEndTag(buffer, context.getString(R.string.xml_comment));
         // add a return at the end
         buffer.append('\n');
     }
@@ -311,10 +307,11 @@ class XmlFormatter {
         buffer.append('\n');
 
         // add the closing site tag to the buffer
-        xmlEndTag(buffer, context.getString(R.string.xml_site));
+        xmlEndTag(buffer, context.getString(R.string.xml_user));
         // add a return at the end
         buffer.append('\n');
     }
+
     /**
      * Append a start tag with an element name of name,
      * then with the content of text

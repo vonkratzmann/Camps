@@ -125,7 +125,7 @@ public class Site {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -133,7 +133,7 @@ public class Site {
     }
 
     public String getStreet() {
-        return street;
+        return this.street;
     }
 
     public void setStreet(String street) {
@@ -141,7 +141,7 @@ public class Site {
     }
 
     public String getCity() {
-        return city;
+        return this.city;
     }
 
     public void setCity(String city) {
@@ -149,7 +149,7 @@ public class Site {
     }
 
     public String getPostcode() {
-        return postcode;
+        return this.postcode;
     }
 
     public void setPostcode(String postcode) {
@@ -157,7 +157,7 @@ public class Site {
     }
 
     public String getState() {
-        return state;
+        return this.state;
     }
 
     public void setState(String state) {
@@ -165,7 +165,7 @@ public class Site {
     }
 
     public int getNumRatings() {
-        return numRatings;
+        return this.numRatings;
     }
 
     public void setNumRatings(int numRatings) {
@@ -173,7 +173,7 @@ public class Site {
     }
 
     public double getAvgRating() {
-        return avgRating;
+        return this.avgRating;
     }
 
     public void setAvgRating(double avgRating) {
@@ -181,7 +181,7 @@ public class Site {
     }
 
     public int getPrice() {
-        return price;
+        return this.price;
     }
 
     public void setPrice(int price) {
@@ -189,11 +189,11 @@ public class Site {
     }
 
     public String getDateCreated() {
-        return dateCreated;
+        return this.dateCreated;
     }
 
     public void setDateCreated(String s) {
-        dateCreated = s;
+        this.dateCreated = s;
     }
 
     /**
@@ -202,7 +202,7 @@ public class Site {
      * @return String   return longitude as degrees:minutes:seconds
      */
     public String getLongitude() {
-        return longitude;
+        return this.longitude;
     }
 
     /**
@@ -234,7 +234,7 @@ public class Site {
     }
 
     public String getSitePhoto() {
-        return sitePhoto;
+        return this.sitePhoto;
     }
 
     public void setSitePhoto(String sitePhoto) {
@@ -242,7 +242,7 @@ public class Site {
     }
 
     public String getThumbnail() {
-        return thumbnail;
+        return this.thumbnail;
     }
 
     public void setThumbnail(String thumbnail) {
@@ -250,7 +250,7 @@ public class Site {
     }
 
     public boolean isFree() {
-        return free;
+        return this.free;
     }
 
     public void setFree(boolean free) {
@@ -258,7 +258,7 @@ public class Site {
     }
 
     public boolean isDumpPoint() {
-        return dumpPoint;
+        return this.dumpPoint;
     }
 
     public void setDumpPoint(boolean dumpPoint) {
@@ -266,7 +266,7 @@ public class Site {
     }
 
     public boolean isMobile() {
-        return mobile;
+        return this.mobile;
     }
 
     public void setMobile(boolean mobile) {
@@ -274,7 +274,7 @@ public class Site {
     }
 
     public boolean isPlayEquipment() {
-        return playEquipment;
+        return this.playEquipment;
     }
 
     public void setPlayEquipment(boolean playEquipment) {
@@ -282,7 +282,7 @@ public class Site {
     }
 
     public boolean isScenic() {
-        return scenic;
+        return this.scenic;
     }
 
     public void setScenic(boolean scenic) {
@@ -290,7 +290,7 @@ public class Site {
     }
 
     public boolean isShowers() {
-        return showers;
+        return this.showers;
     }
 
     public void setShowers(boolean showers) {

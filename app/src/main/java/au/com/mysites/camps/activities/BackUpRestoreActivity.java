@@ -172,7 +172,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     private boolean saveSites(final String filename) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSites()");
 
-        ArrayList<Site> sites = new ArrayList<>();
+        ArrayList<Site> sites;
         //do in background thread
         GetSitesAsyncTask getSites = new GetSitesAsyncTask();
         try {
@@ -204,15 +204,15 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     /**
      * Read the comments from the Firestore database into memory and save to xml file
      *
-     * @param filename save sites to this file
+     * @param filename save comments to this file
      * @return true if success
      */
     private boolean saveComments(final String filename) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveComments()");
 
-        ArrayList<Comment> comments = new ArrayList<>();
+        ArrayList<Comment> comments;
         //do in background thread
-        GetSitesAsyncTask getComments = new GetSitesAsyncTask();
+        GetCommentsAsyncTask getComments = new GetCommentsAsyncTask();
         try {
             //read the database into an arraylist
             comments = (ArrayList<Comment>) getComments
@@ -240,21 +240,21 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     }
 
     /**
-     * Read the comments from the Firestore database into memory and save to xml file
+     * Read the users from the Firestore database into memory and save to xml file
      *
-     * @param filename save sites to this file
+     * @param filename save users to this file
      * @return true if success
      */
     private boolean saveUsers(final String filename) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveUsers()");
 
-        ArrayList<User> users = new ArrayList<>();
+        ArrayList<User> users;
 
         //do in background thread
-        GetSitesAsyncTask getSites = new GetSitesAsyncTask();
+        GetUsersAsyncTask getUsers = new GetUsersAsyncTask();
         try {
             //read the database into an arraylist
-            users = (ArrayList<User>) getSites
+            users = (ArrayList<User>) getUsers
                     .execute(getString(R.string.collection_users))
                     .get();
         } catch (ExecutionException | InterruptedException e) {
@@ -266,14 +266,15 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             return false;
         }
         // Add extension to filename, so separate different files
-        String fileNamePlusExt = filename + "." + getString(R.string.collection_sites);
+        String fileNamePlusExt = filename + "." + getString(R.string.collection_users);
 
-        mXmlUtils.initXmlFile(BackUpRestoreActivity.this, filename);
+        //write opening tags to buffer
+        mXmlUtils.initXmlFile(BackUpRestoreActivity.this, fileNamePlusExt);
 
         //save it to the file
-//        for (User user : users) {
-//            mXmlUtils.siteSaveToXMLFile(user);
-//        }
+        for (User user : users) {
+            mXmlUtils.userSaveToXMLFile(user);
+        }
         //write closing tags to buffer and write buffer to file
         return mXmlUtils.endXmlFile(BackUpRestoreActivity.this);
     }
@@ -391,8 +392,9 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     *
+     * @param requestCode  code to identifier caller
+     * @param permissions  being requested
+     * @param grantResults results
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -427,7 +429,6 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
     }
 
-    //todo add some time limits on these methods
     public static class GetSitesAsyncTask extends AsyncTask {
         private final String TAG = GetSitesAsyncTask.class.getSimpleName();
 
@@ -454,8 +455,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 //process each document
                 for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                     site = document.toObject(Site.class);
-                    if (Debug.DEBUG_DBMAINT_BACKUP)
-                        Log.d(TAG, "site: " + site.getName());
+                    if (Debug.DEBUG_DBMAINT_BACKUP && site != null) Log.d(TAG, "site: " + site.getName());
                     sites.add(site);
                 }
             } catch (ExecutionException | InterruptedException e) {
@@ -468,47 +468,89 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * @param site site containing the comments
-     */
-    void getCommentsForSite(Site site, String collRefSites, String collRefComments) {
-        if (Debug.DEBUG_DBMAINT_BACKUP) Log.d(TAG, "getCommentsForSite()");
+    public static class GetCommentsAsyncTask extends AsyncTask {
+        private final String TAG = GetCommentsAsyncTask.class.getSimpleName();
 
-        //uses Google play Task API
-        Task<QuerySnapshot> task = FirebaseFirestore
-                .getInstance()
-                .collection(collRefSites)
-                .document(site.getName())
-                .collection(collRefComments)
-                .get();
+        @Override
+        protected ArrayList<Comment> doInBackground(Object[] objects) {
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
 
-        Comment comment;
+            //uses Google play Task API
+            Task<QuerySnapshot> task = FirebaseFirestore
+                    .getInstance()
+                    .collection((String) objects[0])
+                    .get();
 
-        try {
-            //Get the result synchronously as executing the task inside a background thread.
-            QuerySnapshot querySnapshot = Tasks.await(task);
+            ArrayList<Comment> comments = new ArrayList<>();
+            Comment comment;
 
-            //check we have something
-            if (querySnapshot.isEmpty())
-                return;
-            //process each comment
-            for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                comment = document.toObject(Comment.class);
-                if (Debug.DEBUG_DBMAINT_BACKUP)
-                    Log.d(TAG, "comment text: " + comment.getText());
-                //add to comment to the site
-                site.addComment(comment);
+            try {
+                /* Get the result synchronously as executing the task inside a background thread.
+                 * Add timeout so that application does not hang */
+                QuerySnapshot querySnapshot = Tasks.await(task, 500, TimeUnit.MILLISECONDS);
+
+                if (querySnapshot.isEmpty())     //check we have something
+                    return null;
+                //process each document
+                for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                    comment = document.toObject(Comment.class);
+                    if (Debug.DEBUG_DBMAINT_BACKUP && comment != null)
+                        Log.d(TAG, "comment: " + comment.getText());
+                    comments.add(comment);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                // The Task failed
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                // Task timed out before it could complete.
             }
-        } catch (ExecutionException | InterruptedException e) {
-            // The Task failed, this is the same exception you'd get in a non-blocking
-            // An interrupt occurred while waiting for the task to complete.
-            e.printStackTrace();
+            return comments;
+        }
+    }
+
+    public static class GetUsersAsyncTask extends AsyncTask {
+        private final String TAG = GetUsersAsyncTask.class.getSimpleName();
+
+        @Override
+        protected ArrayList<User> doInBackground(Object[] objects) {
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
+
+            //uses Google play Task API
+            Task<QuerySnapshot> task = FirebaseFirestore
+                    .getInstance()
+                    .collection((String) objects[0])
+                    .get();
+
+            ArrayList<User> users = new ArrayList<>();
+            User user;
+
+            try {
+                /* Get the result synchronously as executing the task inside a background thread.
+                 * Add timeout so that application does not hang */
+                QuerySnapshot querySnapshot = Tasks.await(task, 500, TimeUnit.MILLISECONDS);
+
+                if (querySnapshot.isEmpty())     //check we have something
+                    return null;
+                //process each document
+                for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                    user = document.toObject(User.class);
+                    if (Debug.DEBUG_DBMAINT_BACKUP && user != null)
+                        Log.d(TAG, "user: " + user.getEmail());
+                    users.add(user);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                // The Task failed
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                // Task timed out before it could complete.
+            }
+            return users;
         }
     }
 
     //todo add some time limits on these methods
 
-    public class DeleteSitesAsyncTask extends AsyncTask {
+    public static class DeleteSitesAsyncTask extends AsyncTask {
         private final String TAG = DeleteSitesAsyncTask.class.getSimpleName();
 
         @Override
@@ -549,9 +591,9 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
 
         /**
-         * @param docRefId
-         * @param collectionRefSites
-         * @param collectionRefComments
+         * @param docRefId              comment to be deleted
+         * @param collectionRefSites      site ref
+         * @param collectionRefComments comment ref
          */
         void deleteCommentsForSite(String docRefId
                 , String collectionRefSites
