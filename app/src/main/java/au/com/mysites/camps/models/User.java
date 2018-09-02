@@ -8,9 +8,9 @@ package au.com.mysites.camps.models;
 public class User {
     private final static String TAG = User.class.getSimpleName();
 
-    private String displayName;
+    private String name;
     private String email;
-    private String photoFileName;
+    private String photo;
     private String lastUsed;
     /**
      * Constructors
@@ -22,18 +22,18 @@ public class User {
                 String email,
                 String photoFileName,
                 String lastUsed) {
-        this.displayName = displayName;
+        this.name = displayName;
         this.email = email;
-        this.photoFileName = photoFileName;
+        this.photo = photoFileName;
         this.lastUsed = lastUsed;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getName() {
+        return name;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -44,12 +44,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPhotoFileName() {
-        return photoFileName;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setPhotoFileName(String photoFileName) {
-        this.photoFileName = photoFileName;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
 

@@ -56,9 +56,9 @@ public class XmlParser {
                     continue;
                 }
                 //skip over the initial <camps> tag
-                if (xpp.getName().equals(context.getString(R.string.camps))) {
+                if (xpp.getName().equals(context.getString(R.string.xml_camps))) {
                     continue;
-                } else if (xpp.getName().equals(context.getString(R.string.site))) {
+                } else if (xpp.getName().equals(context.getString(R.string.xml_site))) {
                     addSite(xpp, mySites);
                 } else {
                     skip(xpp);
@@ -83,7 +83,7 @@ public class XmlParser {
 
         try { // Test if the current event is the type START_TAG and the string is "site",
             // otherwise an exception is thrown
-            p.require(XmlPullParser.START_TAG, null, context.getString(R.string.site));
+            p.require(XmlPullParser.START_TAG, null, context.getString(R.string.xml_site));
             // create empty site
             Site site = new Site();
             while (p.next() != XmlPullParser.END_TAG) {
@@ -91,29 +91,29 @@ public class XmlParser {
                 if (p.getEventType() != XmlPullParser.START_TAG) {
                     continue;
                 }
-                if (p.getName().equals(context.getString(R.string.name))) {
+                if (p.getName().equals(context.getString(R.string.xml_site_name))) {
                     site.setName(readName(p));
-                } else if (p.getName().equals(context.getString(R.string.street))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_street))) {
                     site.setStreet(readStreet(p));
-                } else if (p.getName().equals(context.getString(R.string.city))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_city))) {
                     site.setCity(readCity(p));
-                } else if (p.getName().equals(context.getString(R.string.postcode))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_postcode))) {
                     site.setPostcode(readPostcode(p));
-                } else if (p.getName().equals(context.getString(R.string.state))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_state))) {
                     site.setState(readState(p));
-                } else if (p.getName().equals(context.getString(R.string.date_created))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_date_created))) {
                     site.setDateCreated(readDateCreated(p));
-                } else if (p.getName().equals(context.getString(R.string.latitude))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_latitude))) {
                     site.setLatitude(readLatitude(p));
-                } else if (p.getName().equals(context.getString(R.string.longitude))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_longitude))) {
                     site.setLongitude(readLongitude(p));
-                } else if (p.getName().equals(context.getString(R.string.comment))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_comment))) {
                     site.addComment(readComment(p));
-                } else if (p.getName().equals(context.getString(R.string.facilities))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_facilities))) {
                     getFacility(p, site);
-                } else if (p.getName().equals(context.getString(R.string.thumbnail))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_thumbnail))) {
                     site.setThumbnail(readThumbnail(p));
-                } else if (p.getName().equals(context.getString(R.string.photo))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_photo))) {
                     site.setSitePhoto(readPhoto(p));
                 } else {
                     skip(p);
@@ -138,9 +138,9 @@ public class XmlParser {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readName()");
 
         String myName;
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.name)));
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_name)));
         myName = readText(XmlPP);
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.name)));
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_name)));
 
         if (Debug.DEBUG_PARSING) Log.d(TAG, "Name: " + myName);
         return myName;
@@ -158,9 +158,9 @@ public class XmlParser {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readCity()");
 
         String myCity;
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.city)));
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_city)));
         myCity = readText(XmlPP);
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.city)));
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_city)));
 
         if (Debug.DEBUG_PARSING) Log.d(TAG, "City: " + myCity);
         return myCity;
@@ -178,9 +178,9 @@ public class XmlParser {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readPostcode()");
 
         String myPostcode;
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.postcode)));
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_postcode)));
         myPostcode = readText(XmlPP);
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.postcode)));
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_postcode)));
 
         if (Debug.DEBUG_PARSING) Log.d(TAG, "Postcode: " + myPostcode);
         return myPostcode;
@@ -198,9 +198,9 @@ public class XmlParser {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readStreet()");
 
         String myStreet;
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.street)));
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_street)));
         myStreet = readText(XmlPP);
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.street)));
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_street)));
 
         if (Debug.DEBUG_PARSING) Log.d(TAG, "Street: " + myStreet);
         return myStreet;
@@ -218,9 +218,9 @@ public class XmlParser {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readState()");
 
         String myState;
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.state)));
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_state)));
         myState = readText(XmlPP);
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.state)));
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_state)));
 
         if (Debug.DEBUG_PARSING) Log.d(TAG, "State: " + myState);
         return myState;
@@ -240,10 +240,10 @@ public class XmlParser {
 
         String myDateCreated;
         // Check if we have the correct start tag
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.date_created)));
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_date_created)));
         myDateCreated = readText(XmlPP);
         // Check if we have the correct end tag
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.date_created)));
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_date_created)));
 
         if (Debug.DEBUG_PARSING) Log.d(TAG, "Date Created: " + myDateCreated);
         return myDateCreated;
@@ -263,9 +263,9 @@ public class XmlParser {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readLatitude()");
 
         String myLatitude;
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.latitude)));
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_latitude)));
         myLatitude = readText(XmlPP);
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.latitude)));
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_latitude)));
 
         if (Debug.DEBUG_PARSING) Log.d(TAG, "Latitude: " + myLatitude);
         return myLatitude;
@@ -284,9 +284,9 @@ public class XmlParser {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readLongitude()");
 
         String myLongitude;
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.longitude)));
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_longitude)));
         myLongitude = readText(XmlPP);
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.longitude)));
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_longitude)));
 
         if (Debug.DEBUG_PARSING) Log.d(TAG, "Longitude: " + myLongitude);
         return myLongitude;
@@ -309,19 +309,19 @@ public class XmlParser {
         String commentAuthor = null;
         String commentAuthorId = null;
 
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.comment)));
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_comment)));
         String commentAttribute;
-        commentAttribute = XmlPP.getAttributeValue(null, context.getString(R.string.commentdate));
+        commentAttribute = XmlPP.getAttributeValue(null, context.getString(R.string.xml_comment_date));
         if (commentAttribute != null) {
             commentDate = commentAttribute;
             if (Debug.DEBUG_PARSING_COMMENTS) Log.d(TAG, "commentDate: " + commentDate);
         }
-        commentAttribute = XmlPP.getAttributeValue(null, context.getString(R.string.commentauthor));
+        commentAttribute = XmlPP.getAttributeValue(null, context.getString(R.string.xml_comment_author));
         if (commentAttribute != null) {
             commentAuthor = commentAttribute;
             if (Debug.DEBUG_PARSING_COMMENTS) Log.d(TAG, "commentAuthor: " + commentAuthor);
         }
-        commentAttribute = XmlPP.getAttributeValue(null, context.getString(R.string.commentauthorId));
+        commentAttribute = XmlPP.getAttributeValue(null, context.getString(R.string.xml_comment_photo));
         if (commentAttribute != null) {
             commentAuthorId = commentAttribute;
             if (Debug.DEBUG_PARSING_COMMENTS) Log.d(TAG, "commentAuthorId: " + commentAuthorId);
@@ -331,7 +331,7 @@ public class XmlParser {
 
         Comment c = new Comment(commentText, commentDate,
                 context.getString(R.string.dateformat), commentAuthor, commentAuthorId);
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.comment)));
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_comment)));
         return c;
     }
 
@@ -345,7 +345,7 @@ public class XmlParser {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getFacility()");
 
         try {
-            XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.facilities)));
+            XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_facilities)));
 
             String facilityAttribute;
             facilityAttribute = XmlPP.getAttributeValue(null, context.getString(R.string.facilitytype));
@@ -374,7 +374,7 @@ public class XmlParser {
             } else if (facilityAttribute.equals(context.getString(R.string.water))) {
                 mySite.setWaterDrinking(Boolean.valueOf(readText(XmlPP)));
             }
-            XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.facilities)));
+            XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_facilities)));
 
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
@@ -395,9 +395,9 @@ public class XmlParser {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readThumbnail()");
 
         String myThumbnail;
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.thumbnail)));
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_thumbnail)));
         myThumbnail = readText(XmlPP);
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.thumbnail)));
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_thumbnail)));
 
         if (Debug.DEBUG_PARSING) Log.d(TAG, "thumbnail: " + myThumbnail);
         return myThumbnail;
@@ -416,9 +416,9 @@ public class XmlParser {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readPhoto()");
 
         String myPhoto;
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.photo)));
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_photo)));
         myPhoto = readText(XmlPP);
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.photo)));
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_photo)));
 
         if (Debug.DEBUG_PARSING) Log.d(TAG, "photo: " + myPhoto);
         return myPhoto;

@@ -11,7 +11,17 @@
     <string name="query_database_title">Query Database</string>
     <string name="ratings_title">Enter Rating</string>
 
-    <!-- Intent Extras -->
+    <!-- Collection names for Firestore database,
+         these are also used for extensions of the file names in backup and restore) -->
+    <string name="collection_sites" translatable="false">sites</string>
+    <string name="collection_comments" translatable="false">comments</string>
+    <string name="collection_users" translatable="false">users</string>
+    <string name="collection_ratings" translatable="false">ratings</string>
+
+    <!-- Folder names for Firebase storage -->
+   <string name="firebase_photos" translatable="false">photos</string>
+
+   <!-- Intent Extras -->
     <string name="intent_site_number" translatable="false">siteNumber</string>
     <string name="intent_edit_site_number" translatable="false">editSiteNumber</string>
     <string name="intent_site_name" translatable="false">siteName</string>
@@ -33,27 +43,40 @@
     <!-- Environment.DIRECTORY_DOWNLOADS = "Download"; -->
     <string name="directory" translatable="false">Download</string>
 
-    <!-- XML file tag names -->
-    <string name="camps" translatable="false">camps</string>
-    <string name="site" translatable="false">site</string>
-    <string name="name" translatable="false">name</string>
-    <string name="street" translatable="false">street</string>
-    <string name="city" translatable="false">city</string>
-    <string name="postcode" translatable="false">postcode</string>
-    <string name="state" translatable="false">state</string>
-    <string name="comment" translatable="false">comment</string>
-    <string name="facilities" translatable="false">facilities</string>
-    <string name="date_created" translatable="false">date_created</string>
-    <string name="latitude" translatable="false">latitude</string>
-    <string name="longitude" translatable="false">longitude</string>
-    <string name="thumbnail" translatable="false">thumbnail</string>
-    <string name="photo" translatable="false">photo</string>
+    <!-- Xml tags -->
+    <string name="xml_camps" translatable="false">camps</string>
 
-    <!-- XML file attribute and comment values -->
-    <string name="commentdate" translatable="false">date</string>
-    <string name="commentauthor" translatable="false">author</string>
-    <string name="commentauthorId" translatable="false">authorid</string>
-    <string name="commentby" translatable="false">By:</string>
+    <!-- XML site file tag names -->
+    <string name="xml_site" translatable="false">site</string>
+    <string name="xml_site_site" translatable="false">site</string>
+    <string name="xml_site_name" translatable="false">name</string>
+    <string name="xml_site_street" translatable="false">street</string>
+    <string name="xml_site_city" translatable="false">city</string>
+    <string name="xml_site_postcode" translatable="false">postcode</string>
+    <string name="xml_site_state" translatable="false">state</string>
+    <string name="xml_site_comment" translatable="false">comment</string>
+    <string name="xml_site_facilities" translatable="false">facilities</string>
+    <string name="xml_site_date_created" translatable="false">date_created</string>
+    <string name="xml_site_latitude" translatable="false">latitude</string>
+    <string name="xml_site_longitude" translatable="false">longitude</string>
+    <string name="xml_site_thumbnail" translatable="false">thumbnail</string>
+    <string name="xml_site_photo" translatable="false">photo</string>
+
+    <!-- XML comment file tag names -->
+    <string name="xml_comment" translatable="false">comment</string>
+    <string name="xml_comment_author" translatable="false">author</string>
+    <string name="xml_comment_date" translatable="false">date</string>
+    <string name="xml_comment_photo" translatable="false">photo</string>
+    <string name="xml_comment_siteid" translatable="false">siteid</string>
+    <string name="xml_comment_text" translatable="false">text</string>
+
+    <!-- XML user file tag names -->
+    <string name="xml_user" translatable="false">user</string>
+    <string name="xml_user_name" translatable="false">name</string>
+    <string name="xml_user_email" translatable="false">email</string>
+    <string name="xml_user_photo" translatable="false">photo</string>
+    <string name="xml_user_lastused" translatable="false">lastused</string>
+
     <string name="facilitytype" translatable="false">type</string>
 
     <!-- Main layout text -->
@@ -105,12 +128,6 @@
     <string name="maint_restore_database">Restore database</string>
     <string name="maint_filename">Enter filename</string>
 
-    <!-- Database collection names -->
-    <string name="collection_sites" translatable="false">sites</string>
-    <string name="collection_comments" translatable="false">comments</string>
-    <string name="collection_ratings" translatable="false">ratings</string>
-    <string name="document_comment_name" translatable="false">comment</string>
-
     <!-- Facility Types, description text -->
     <string name="dumppoint">dumppoint</string>
     <string name="free">free</string>
@@ -131,7 +148,9 @@
     <string name="ERROR_Comment_not_saved">Error: comment not saved</string>
     <string name="ERROR_Contacts">Error: contacts and accounts access denied</string>
     <string name="ERROR_Database">Error: database site not saved</string>
-    <string name="ERROR_Database_backup_failed">Database backup failed</string>
+    <string name="ERROR_Database_sites_backup_failed">Database sites backup failed</string>
+    <string name="ERROR_Database_comments_backup_failed">Database comments backup failed</string>
+    <string name="ERROR_Database_users_backup_failed">Database users backup failed</string>
     <string name="ERROR_File_not_available">Error: file not available</string>
     <string name="ERROR_File_not_saved">Error: file not saved</string>
     <string name="ERROR_File_format">Error: file format incorrect</string>
@@ -169,11 +188,6 @@
     <string name="summary_sign_out">Sign Out</string>
     <string name="summary_database_manage">Manage Database</string>
     <string name="detail_edit_site">Edit site</string>
-
-    <!-- File path on Firebase storage -->
-    <string name="firebase_collection_camps">camps</string>
-    <string name="firebase_collection_users">users</string>
-    <string name="firebase_collection_comments">comments</string>
 
     <string name="firebase_status_fmt">Firebase User: %s</string>
     <string name="firebase_user_management">Firebase User Management</string>

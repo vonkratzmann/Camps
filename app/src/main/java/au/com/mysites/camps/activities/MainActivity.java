@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements
         // User Id is used as the document reference
         assert id != null;
 
-        mFirestore.collection(getString(R.string.firebase_collection_users))
+        mFirestore.collection(getString(R.string.collection_users))
                 .document(id)
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements
                         //   Now save the photo to firebase storage
                         if (mFile != null)
                             UtilDatabase.saveFileFirestore(MainActivity.this, mFile,
-                                    getString(R.string.firebase_collection_users));
+                                    getString(R.string.collection_users));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

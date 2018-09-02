@@ -28,10 +28,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.Comment;
 import au.com.mysites.camps.models.Site;
+import au.com.mysites.camps.models.User;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
 import au.com.mysites.camps.util.UtilDatabase;
@@ -40,8 +43,9 @@ import au.com.mysites.camps.util.XmlUtils;
 import static android.widget.Toast.LENGTH_SHORT;
 
 /**
- * Used to backup and restore database to XML file,
- * can be used to do initial loads of data and testing
+ * Used to backup and restore database to XML file.
+ * Used to do initial loads of small of data amounts of data only mainly
+ * for testing purposes.
  */
 
 public class BackUpRestoreActivity extends AppCompatActivity {
@@ -62,6 +66,8 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     private FirebaseFirestore mFirestore;
     private CollectionReference mSitesCollectionRef;
 
+    XmlUtils mXmlUtils;
+
     /**
      * Constructor
      */
@@ -76,7 +82,6 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_backup_restore);
 
         // Find the toolbar view inside the activity layout
-
         Toolbar toolbar = findViewById(R.id.maintbackuprestoretoolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.backup_restore_database_title));
@@ -86,7 +91,6 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         //Initialise reference to the sites
         mSitesCollectionRef = mFirestore
                 .collection(getString(R.string.collection_sites));
-
         // set up the listeners for the buttons
         // Listeners will call check storage permissions before doing the backup or restore
         Button buttonBackup = findViewById(R.id.backup);
@@ -103,17 +107,23 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 checkStoragePermission();
             }
         });
+        //get instance of utilities
+        mXmlUtils = new XmlUtils();
     }
 
     /**
-     * get filename and backup the database in an XML format to the supplied filename
-     * Database read from firestore, stored in an array then written to a filename
-     * provide by the user
+     * Gets the user supplied filename and backups the Firestore database in an XML format to
+     * three files with a base filename set to the user supplied filename and different
+     * extensions for the sites, comments and users files.
      * <p>
-     * As comments are in a sub-collection the data base is accessed twice for each site,
-     * once for the site and once for the comments.
-     * The two sequential database accesses for each site are done synchronously
-     * to avoid race conditions. As each read is done in an async task, the task is blocked
+     * In turn the different portions of the database are read into memory and then
+     * written to the appropriate file. As the the entire portion of the database,
+     * ie the sites or the comments or the users is each read into memory in turn, the backup
+     * is only meant to be used for backing up a small number of sites. This is meant to be used
+     * for testing and development for when a small version of the database can be quickly
+     * backed up and restored.
+     * <p>
+     * Each read of the database is done in an async task, so that task is blocked
      * until the read is complete.
      *
      * @param context context to be used
@@ -130,55 +140,150 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             Toast.makeText(this, "Backup Database - no filename", LENGTH_SHORT).show();
             return;
         }
-        //read the database and save to xml file
+        boolean saveSuccessful = true;
+
+        if (!saveSites(filename)) { // Warn the user   
+
+            Toast.makeText(context, getString(R.string.ERROR_Database_sites_backup_failed),
+                    Toast.LENGTH_SHORT).show();
+            saveSuccessful = false;
+        }
+        if (!saveComments(filename)) { // Warn the user
+            Toast.makeText(context, getString(R.string.ERROR_Database_comments_backup_failed),
+                    Toast.LENGTH_SHORT).show();
+            saveSuccessful = false;
+        }
+        if (!saveUsers(filename)) { // Warn the user
+            Toast.makeText(context, getString(R.string.ERROR_Database_users_backup_failed),
+                    Toast.LENGTH_SHORT).show();
+            saveSuccessful = false;
+        }
+        if (saveSuccessful) {  // tell the user
+            Toast.makeText(context, getString(R.string.Database_backup_success), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Read the sites from the Firestore database into memory and save to xml file.
+     *
+     * @param filename save sites to this file
+     * @return true if success
+     */
+    private boolean saveSites(final String filename) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSites()");
+
         ArrayList<Site> sites = new ArrayList<>();
+        //do in background thread
+        GetSitesAsyncTask getSites = new GetSitesAsyncTask();
+        try {
+            //read the database into an arraylist
+            sites = (ArrayList<Site>) getSites
+                    .execute(getString(R.string.collection_sites))
+                    .get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
+        //check we got something to backup
+        if (sites == null) {
+            return false;
+        }
+        // Add extension to filename, so separate different files
+        String fileNamePlusExt = filename + "." + getString(R.string.collection_sites);
+
+        //write opening tags to buffer
+        mXmlUtils.initXmlFile(BackUpRestoreActivity.this, fileNamePlusExt);
+        //save it to the file
+        for (Site site : sites) {
+            mXmlUtils.siteSaveToXMLFile(site);
+        }
+        //write closing tags to buffer and write buffer to file
+        return mXmlUtils.endXmlFile(BackUpRestoreActivity.this);
+    }
+
+    /**
+     * Read the comments from the Firestore database into memory and save to xml file
+     *
+     * @param filename save sites to this file
+     * @return true if success
+     */
+    private boolean saveComments(final String filename) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveComments()");
+
+        ArrayList<Comment> comments = new ArrayList<>();
+        //do in background thread
+        GetSitesAsyncTask getComments = new GetSitesAsyncTask();
+        try {
+            //read the database into an arraylist
+            comments = (ArrayList<Comment>) getComments
+                    .execute(getString(R.string.collection_comments))
+                    .get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
+        //check we got something to backup
+        if (comments == null) {
+            return false;
+        }
+        // Add extension to filename, so separate different files
+        String fileNamePlusExt = filename + "." + getString(R.string.collection_comments);
+
+        //write opening tags to buffer
+        mXmlUtils.initXmlFile(BackUpRestoreActivity.this, fileNamePlusExt);
+        //save it to the file
+        for (Comment comment : comments) {
+            mXmlUtils.commentSaveToXMLFile(comment);
+        }
+        //write closing tags to buffer and write buffer to file
+        return mXmlUtils.endXmlFile(BackUpRestoreActivity.this);
+    }
+
+    /**
+     * Read the comments from the Firestore database into memory and save to xml file
+     *
+     * @param filename save sites to this file
+     * @return true if success
+     */
+    private boolean saveUsers(final String filename) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveUsers()");
+
+        ArrayList<User> users = new ArrayList<>();
 
         //do in background thread
         GetSitesAsyncTask getSites = new GetSitesAsyncTask();
         try {
             //read the database into an arraylist
-
-            sites = (ArrayList<Site>) getSites
-                    .execute(getString(R.string.collection_sites), getString(R.string.collection_comments))
+            users = (ArrayList<User>) getSites
+                    .execute(getString(R.string.collection_users))
                     .get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
+            return false;
         }
-
         //check we got something to backup
-        if (sites == null) {
-            //no warn the user
-            Toast.makeText(context, getString(R.string.Database_backup_null),
-                    Toast.LENGTH_SHORT).show();
-            return;
+        if (users == null) {
+            return false;
         }
+        // Add extension to filename, so separate different files
+        String fileNamePlusExt = filename + "." + getString(R.string.collection_sites);
 
-        //get instance of utilities
-        final XmlUtils xmlUtils = new XmlUtils();
-        //write opening tags to buffer
-        xmlUtils.initXmlFile(BackUpRestoreActivity.this, filename);
+        mXmlUtils.initXmlFile(BackUpRestoreActivity.this, filename);
 
         //save it to the file
-        for (Site site : sites) {
-            xmlUtils.siteSaveToXMLFile(site);
-        }
+//        for (User user : users) {
+//            mXmlUtils.siteSaveToXMLFile(user);
+//        }
         //write closing tags to buffer and write buffer to file
-        Boolean result = xmlUtils.endXmlFile(BackUpRestoreActivity.this);
-        // Tell the user the result
-        if (result) {
-            Toast.makeText(context, getString(R.string.Database_backup_success),
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, getString(R.string.ERROR_Database_backup_failed),
-                    Toast.LENGTH_SHORT).show();
-        }
+        return mXmlUtils.endXmlFile(BackUpRestoreActivity.this);
     }
 
     /**
-     * Gets the user supplied filename,
-     * read the data from the XML supplied filename,
-     * delete the existing firebase documents,
-     * load the data into the firebase database.
+     * Gets the user supplied filename and reads the data from the XML supplied filenames
+     * into memory. If successful, deletes all of the existing firestore database documents
+     * in each of collections for sites,  users and comments.
+     * Then loads the data from memory into the firestore database.
+     * The firebase storage photo files are not touched.
      *
      * @param context context of calling activity
      */
@@ -323,7 +428,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     }
 
     //todo add some time limits on these methods
-    public class GetSitesAsyncTask extends AsyncTask {
+    public static class GetSitesAsyncTask extends AsyncTask {
         private final String TAG = GetSitesAsyncTask.class.getSimpleName();
 
         @Override
@@ -340,27 +445,24 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             Site site;
 
             try {
-                //Get the result synchronously as executing the task inside a background thread.
-                QuerySnapshot querySnapshot = Tasks.await(task);
+                /* Get the result synchronously as executing the task inside a background thread.
+                 * Add timeout so that application does not hang */
+                QuerySnapshot querySnapshot = Tasks.await(task, 500, TimeUnit.MILLISECONDS);
 
-                //check we have something
-                if (querySnapshot.isEmpty())
+                if (querySnapshot.isEmpty())     //check we have something
                     return null;
                 //process each document
                 for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                     site = document.toObject(Site.class);
                     if (Debug.DEBUG_DBMAINT_BACKUP)
                         Log.d(TAG, "site: " + site.getName());
-
-                    //Get comments as they are in a sub-collection, then add to the site
-                    getCommentsForSite(site, (String) objects[0], (String) objects[1]);
                     sites.add(site);
                 }
-
             } catch (ExecutionException | InterruptedException e) {
-                // The Task failed, this is the same exception you'd get in a non-blocking
-                // An interrupt occurred while waiting for the task to complete.
+                // The Task failed
                 e.printStackTrace();
+            } catch (TimeoutException e) {
+                // Task timed out before it could complete.
             }
             return sites;
         }
@@ -447,7 +549,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
 
         /**
-         * @param docRefId              
+         * @param docRefId
          * @param collectionRefSites
          * @param collectionRefComments
          */

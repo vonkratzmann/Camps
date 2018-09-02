@@ -7,7 +7,9 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import au.com.mysites.camps.R;
+import au.com.mysites.camps.models.Comment;
 import au.com.mysites.camps.models.Site;
+import au.com.mysites.camps.models.User;
 
 /*
  * Various utilities to process xml files
@@ -31,7 +33,7 @@ public class XmlUtils {
         mXmlformatter = new XmlFormatter(context);
         // format sites into xml
         // add a camps start tag to the beginning of the file
-        mXmlformatter.xmlStartTag(mBuffer, context.getString(R.string.camps));
+        mXmlformatter.xmlStartTag(mBuffer, context.getString(R.string.xml_camps));
         mBuffer.append('\n');
 
         mFop = new UtilFile();
@@ -45,21 +47,35 @@ public class XmlUtils {
     public void siteSaveToXMLFile(Site s) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "siteSaveToXMLFile()");
 
-        // save site to buffer
-        // format site into xml
+        // save site to buffer, format site into xml
 
         mXmlformatter.formatSite(mBuffer, s);
     }
 
+    public void commentSaveToXMLFile(Comment c) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "commentSaveToXMLFile()");
+
+        // save comment to buffer, format site into xml
+
+        mXmlformatter.formatComment(mBuffer, c);
+    }
+
+    public void userSaveToXMLFile(User u) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "userSaveToXMLFile()");
+
+        // save site to buffer, format site into xml
+
+        mXmlformatter.formatUser(mBuffer, u);
+    }
    public boolean endXmlFile(Context context) {
        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "endXmlFile()");
 
        //add a camps end tag to the end of the file
-        mXmlformatter.xmlEndTag(mBuffer, context.getString(R.string.camps));
+        mXmlformatter.xmlEndTag(mBuffer, context.getString(R.string.xml_camps));
 
         UtilFile fop = new UtilFile();
         //write the xml to file
-        //firsly, get the path for the file
+        //firstly, get the path for the file
         //Write the file, and return the outcome
         return fop.write(context, mPath, mFileName, mBuffer.toString(), false);
     }

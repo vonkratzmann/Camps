@@ -98,10 +98,6 @@ public class Comment {
         this.mSiteId = siteId;
     }
 
-    public void setCommentDate(String s) {
-        mCreatedDate = s;
-    }
-
     public String getPhoto() {
         return mPhoto;
     }
