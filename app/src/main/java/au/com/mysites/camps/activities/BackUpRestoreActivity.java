@@ -37,7 +37,6 @@ import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.models.User;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
-import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.XmlUtils;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -137,12 +136,12 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         final String filename = filenameView.getText().toString();
         //check filename entered
         if (filename.isEmpty()) {
-            Toast.makeText(this, "Backup Database - no filename", LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.ERROR_Database_no_filename), LENGTH_SHORT).show();
             return;
         }
         boolean saveSuccessful = true;
 
-        if (!saveSites(filename)) { // Warn the user   
+        if (!saveSites(filename)) { // Warn the user
 
             Toast.makeText(context, getString(R.string.ERROR_Database_sites_backup_failed),
                     Toast.LENGTH_SHORT).show();
@@ -282,9 +281,11 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     /**
      * Gets the user supplied filename and reads the data from the XML supplied filenames
      * into memory. If successful, deletes all of the existing firestore database documents
-     * in each of collections for sites,  users and comments.
+     * in each of collections for sites, users and comments.
      * Then loads the data from memory into the firestore database.
      * The firebase storage photo files are not touched.
+     * <p>
+     * If errors reading any of the file the restore is aborted.
      *
      * @param context context of calling activity
      */
@@ -293,48 +294,112 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
         //Get the view of where the filename is entered by the user
         EditText filenameView = findViewById(R.id.restorefilename);
+
         // Get the user entered filename
         String filename = filenameView.getText().toString();
+
         //check filename entered
         if (filename.isEmpty()) {
-            Toast.makeText(context, "Restore Database - no filename", LENGTH_SHORT).show();
+            Toast.makeText(context, getString(R.string.ERROR_Database_no_filename), LENGTH_SHORT).show();
             return;
         }
 
-        // Set up storage for sites to be read from file
-        final ArrayList<Site> siteList = new ArrayList<>();
+        if (!readFiles(filename)) {
+            // Warn the user
+            Toast.makeText(this, getString(R.string.ERROR_Database_unable_delete_documents), LENGTH_SHORT).show();
+            return;
+        }
+        //if ok delete sites
+        if (!deleteDatabase()) {
+            Toast.makeText(this, getString(R.string.ERROR_Database_unable_delete_documents), LENGTH_SHORT).show();
+            return;
+        }
+
+        //if ok do restore
+
+    }
+
+    /**
+     * Reads each of the backup files. If any errors returns and aborts the restore.
+     *
+     * @param filename filename to restore database from
+     * @return true if success
+     */
+    private boolean readFiles(String filename) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "readFiles()");
+
+        String filenamePlusExt;     //Used to separate the different files i.e. site, comment, user
+
+        //get instance of utilities
+        XmlUtils xmlUtils = new XmlUtils();
 
         // get the path for the xml file
         String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 .getAbsolutePath();
-        //get class where methods are
-        XmlUtils xmlUtils = new XmlUtils();
 
-        //Read the file
-        if (!xmlUtils.readXmlfile(context, filename, path, siteList)) {
-            Toast.makeText(this, "Restore Database - unable to read file", LENGTH_SHORT).show();
-            return;
-        }
+        // Set up storage for sites to be read from file
+        final ArrayList<Site> siteList = new ArrayList<>();
+        //Read the site file
+        filenamePlusExt = filename + "." + getString(R.string.collection_sites);
+        if (!xmlUtils.readSiteXmlfile(this, filenamePlusExt, path, siteList)) return false;
 
-        // do in background thread, delete all documents from the firebase database,
-        DeleteSitesAsyncTask deleteSites = new DeleteSitesAsyncTask();
+        // Set up storage for comments to be read from file
+        final ArrayList<Comment> commentList = new ArrayList<>();
+        //Read the comment file
+        filenamePlusExt = filename + "." + getString(R.string.collection_comments);
+        if (!xmlUtils.readCommentXmlfile(this, filenamePlusExt, path, commentList)) return false;
+
+        // Set up storage for users to be read from file
+        final ArrayList<User> userList = new ArrayList<>();
+        //Read the user file
+        filenamePlusExt = filename + "." + getString(R.string.collection_users);
+        if (!xmlUtils.readUserXmlfile(this, filenamePlusExt, path, userList)) return false;
+
+        return true;
+    }
+
+    /**
+     * Do in background thread, and wait for each delete to finish.
+     * Delete sites, comments and users.
+     *
+     * @return
+     */
+    private boolean deleteDatabase() {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "deleteDatabase()");
+
+        DeleteDatabaseAsyncTask deleteDatabase = new DeleteDatabaseAsyncTask();
+        boolean result = true;
+
+        // Delete sites
         try {
-            deleteSites
-                    .execute(getString(R.string.collection_sites), getString(R.string.collection_comments))
+            deleteDatabase
+                    .execute(getString(R.string.collection_sites))
                     .get();
         } catch (ExecutionException | InterruptedException e) {
-            // The Task failed, this is the same exception you'd get in a non-blocking
-            // An interrupt occurred while waiting for the task to complete.
             e.printStackTrace();
+            result = false;
         }
-
-        // Add sites & their comments read from the xml file, to cleared database
-        UtilDatabase.addMultipleSitesAndComments(siteList, context);
-        //Tell the user the result
-        Toast.makeText(context, " Database restored, No. of sites inserted: " +
-                        Integer.toString(siteList.size())
-                , LENGTH_SHORT).show();
+        // Delete comments
+        try {
+            deleteDatabase
+                    .execute(getString(R.string.collection_comments))
+                    .get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            result = false;
+        }
+        // Delete users
+        try {
+            deleteDatabase
+                    .execute(getString(R.string.collection_users))
+                    .get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            result = false;
+        }
+        return result;
     }
+
 
     /**
      * Check permissions, if ok carry out either backup or restore
@@ -455,7 +520,8 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 //process each document
                 for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                     site = document.toObject(Site.class);
-                    if (Debug.DEBUG_DBMAINT_BACKUP && site != null) Log.d(TAG, "site: " + site.getName());
+                    if (Debug.DEBUG_DBMAINT_BACKUP && site != null)
+                        Log.d(TAG, "site: " + site.getName());
                     sites.add(site);
                 }
             } catch (ExecutionException | InterruptedException e) {
@@ -548,24 +614,19 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
     }
 
-    //todo add some time limits on these methods
 
-    public static class DeleteSitesAsyncTask extends AsyncTask {
-        private final String TAG = DeleteSitesAsyncTask.class.getSimpleName();
+    public static class DeleteDatabaseAsyncTask extends AsyncTask {
+        private final String TAG = DeleteDatabaseAsyncTask.class.getSimpleName();
 
         @Override
-        protected ArrayList<Site> doInBackground(Object[] objects) {
+        protected Object doInBackground(Object[] objects) {
             if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
 
-            //Get list of sites from the database
+            //Get list of items from the database
             Task<QuerySnapshot> task = FirebaseFirestore
                     .getInstance()
                     .collection((String) objects[0])
                     .get();
-
-            ArrayList<Site> sites = new ArrayList<>();
-            Site site;
-
             try {
             /* Get the result synchronously as executing the task inside a background thread.
             Uses Google play Task API */
@@ -574,12 +635,8 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 //check we have something
                 if (querySnapshot.isEmpty())
                     return null;
-                //process each document
                 for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                    String docRefId = document.getId();
-                    if (Debug.DEBUG_DBMAINT_BACKUP) Log.d(TAG, "docRefId: " + docRefId);
-                    // DeleteSite parameters are: Collection name, document reference
-                    UtilDatabase.deleteSite((String) objects[0], docRefId);
+                    deleteDocument(document);
                 }
 
             } catch (ExecutionException | InterruptedException e) {
@@ -587,57 +644,29 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 // An interrupt occurred while waiting for the task to complete.
                 e.printStackTrace();
             }
-            return sites;
+            return null;
         }
+    }
 
-        /**
-         * @param docRefId              comment to be deleted
-         * @param collectionRefSites      site ref
-         * @param collectionRefComments comment ref
-         */
-        void deleteCommentsForSite(String docRefId
-                , String collectionRefSites
-                , String collectionRefComments) {
+    /**
+     *
+     * @param document
+     * @return
+     */
+    private static boolean deleteDocument(DocumentSnapshot document) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "deleteDocument");
 
-            if (Debug.DEBUG_DBMAINT_BACKUP) Log.d(TAG, "deleteCommentsForSite()");
+        boolean result = true;
+        String docId = document.getId();
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
-            //uses Google play Task API
-            Task<QuerySnapshot> task = FirebaseFirestore
-                    .getInstance()
-                    .collection(collectionRefSites)
-                    .document(docRefId)
-                    .collection(collectionRefComments)
-                    .get();
-
-            String commentId;
-
-            try {
-                //Get the result synchronously as executing the task inside a background thread.
-                QuerySnapshot querySnapshot = Tasks.await(task);
-
-                //check we have something
-                if (querySnapshot.isEmpty())
-                    return;
-                //process each comment, get its id and then delete it, and wait till it finishes
-                for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                    commentId = document.getId();
-                    if (Debug.DEBUG_DBMAINT_BACKUP) Log.d(TAG, "commentID: " + commentId);
-
-                    FirebaseFirestore commentDocRef = FirebaseFirestore.getInstance();
-                    Task<Void> task1 = commentDocRef
-                            .collection(collectionRefSites)
-                            .document(docRefId)
-                            .collection(collectionRefComments)
-                            .document(commentId)
-                            .delete();
-                    //now wait till it finishes
-                    Tasks.await(task1);
-                }
-            } catch (ExecutionException | InterruptedException e) {
-                // The Task failed, this is the same exception you'd get in a non-blocking
-                // An interrupt occurred while waiting for the task to complete.
-                e.printStackTrace();
-            }
+        Task task = mFirestore.document(docId).delete();
+        try {
+            Tasks.await(task);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            result = false;
         }
+        return result;
     }
 }

@@ -151,6 +151,9 @@
     <string name="ERROR_Database_sites_backup_failed">Database sites backup failed</string>
     <string name="ERROR_Database_comments_backup_failed">Database comments backup failed</string>
     <string name="ERROR_Database_users_backup_failed">Database users backup failed</string>
+    <string name="ERROR_Database_no_filename">Database no filename entered</string>
+    <string name="ERROR_Database_unable_read_file">Database error reading file</string>
+    <string name="ERROR_Database_unable_delete_documents">Database error deleting documents</string>
     <string name="ERROR_File_not_available">Error: file not available</string>
     <string name="ERROR_File_not_saved">Error: file not saved</string>
     <string name="ERROR_File_format">Error: file format incorrect</string>

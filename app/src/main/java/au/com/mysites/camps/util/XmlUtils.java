@@ -82,7 +82,8 @@ public class XmlUtils {
     }
 
     /**
-     * Read the xml file and populate the list called sites
+     * Read the site xml file and populate the list called sites
+     * If parsing errors sites will not be loaded into ArrayList
      *
      * @param filename   file with xml data
      * @param path       path to file
@@ -90,20 +91,77 @@ public class XmlUtils {
      * @return boolean   if all ok return true
      *
      */
-    public boolean readXmlfile(Context context, String filename, String path, ArrayList<Site> sites) {
+    public boolean readSiteXmlfile(Context context, String filename, String path, ArrayList<Site> sites) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readXmlFile()");
 
-        // Read the xml file and populate the list called sites
         //Setup new file operations to call read and write methods
         UtilFile fop = new UtilFile();
+        
         //Read the file
-        String text = fop.read(context, filename, path);
-        if (text == null)
+        String siteText = fop.read(context, filename, path);
+        
+        if (siteText == null)
             return false;
         //create a parser to parse the input for the site and display the results
         XmlParser parser = new XmlParser(context);
-        parser.parseSites(text, sites);
-        // If parsing errors sites will not be loaded into ArrayList
+        parser.parseSites(siteText, sites);
+        
+        return true;
+    }
+
+    /**
+     * Read the comment xml file and populate the list called comments
+     * If parsing errors comments will not be loaded into ArrayList
+     *
+     * @param filename   file with xml data
+     * @param path       path to file
+     * @param comments   arraylist where the comments are stored after parsing
+     * @return boolean   if all ok return true
+     *
+     */
+    public boolean readCommentXmlfile(Context context, String filename, String path, ArrayList<Comment> comments) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readXmlFile()");
+
+        //Setup new file operations to call read and write methods
+        UtilFile fop = new UtilFile();
+
+        //Read the file
+        String commentText = fop.read(context, filename, path);
+
+        if (commentText == null)
+            return false;
+        //create a parser to parse the input for the comment and display the results
+        XmlParser parser = new XmlParser(context);
+        parser.parseComments(commentText, comments);
+
+        return true;
+    }
+
+    /**
+     * Read the user xml file and populate the list called users
+     * If parsing errors users will not be loaded into ArrayList
+     *
+     * @param filename   file with xml data
+     * @param path       path to file
+     * @param users   arraylist where the users are stored after parsing
+     * @return boolean   if all ok return true
+     *
+     */
+    public boolean readUserXmlfile(Context context, String filename, String path, ArrayList<User> users) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readXmlFile()");
+
+        //Setup new file operations to call read and write methods
+        UtilFile fop = new UtilFile();
+
+        //Read the file
+        String userText = fop.read(context, filename, path);
+
+        if (userText == null)
+            return false;
+        //create a parser to parse the input for the user and display the results
+        XmlParser parser = new XmlParser(context);
+        parser.parseUsers(userText, users);
+
         return true;
     }
 }
