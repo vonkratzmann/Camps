@@ -405,8 +405,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * Check permissions, if ok carry out either backup or restore
      */
     private void checkStoragePermission() {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY)
-            Log.d(TAG, "checkStoragePermission()()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "checkStoragePermission()()");
 
         int hasWriteContactsPermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -464,8 +463,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY)
-            Log.d(TAG, "onRequestPermissionsResult()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onRequestPermissionsResult()");
 
         switch (requestCode) {
             case Constants.RC_EXTERNAL_STORAGE:
@@ -613,7 +611,6 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             return users;
         }
     }
-
 
     public static class DeleteDatabaseAsyncTask extends AsyncTask {
         private final String TAG = DeleteDatabaseAsyncTask.class.getSimpleName();

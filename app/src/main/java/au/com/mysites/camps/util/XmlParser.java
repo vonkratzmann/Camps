@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.Comment;
 import au.com.mysites.camps.models.Site;
+import au.com.mysites.camps.models.User;
 
 /**
  * Methods to parse the data from site XML file and store the result in the list of sites
@@ -71,6 +72,77 @@ public class XmlParser {
     }
 
     /**
+     * Parse input string and for each comment store the comment in the Array list of myComments
+     *
+     * @param text       input text to be parsed, containing data from read of xml file
+     * @param myComments stores results of parsed comments
+     */
+    void parseComments(String text, ArrayList<Comment> myComments) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "parseComments()");
+
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(false);
+            XmlPullParser xpp = factory.newPullParser();
+
+            xpp.setInput(new StringReader(text));
+
+            while (xpp.next() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                    continue;
+                }
+                //skip over the initial <camps> tag
+                if (xpp.getName().equals(context.getString(R.string.xml_camps))) {
+                    continue;
+                } else if (xpp.getName().equals(context.getString(R.string.xml_comment))) {
+                    addComment(xpp, myComments);
+                } else {
+                    skip(xpp);
+                }
+            }
+        } catch (Exception e) {
+            // tell user error in file format and exit application
+            exitApplication(R.string.ERROR_File_format);
+        }
+    }
+
+
+    /**
+     * Parse input string and for each user store the user in the Array list of myUsers
+     *
+     * @param text    input text to be parsed, containing data from read of xml file
+     * @param myUsers stores results of parsed users
+     */
+    void parseUsers(String text, ArrayList<User> myUsers) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "parseUsers()");
+
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(false);
+            XmlPullParser xpp = factory.newPullParser();
+
+            xpp.setInput(new StringReader(text));
+
+            while (xpp.next() != XmlPullParser.END_DOCUMENT) {
+                if (xpp.getEventType() != XmlPullParser.START_TAG) {
+                    continue;
+                }
+                //skip over the initial <camps> tag
+                if (xpp.getName().equals(context.getString(R.string.xml_camps))) {
+                    continue;
+                } else if (xpp.getName().equals(context.getString(R.string.xml_user))) {
+                    addUser(xpp, myUsers);
+                } else {
+                    skip(xpp);
+                }
+            }
+        } catch (Exception e) {
+            // tell user error in file format and exit application
+            exitApplication(R.string.ERROR_File_format);
+        }
+    }
+
+    /**
      * Parse the site xml and add to the ArrayList of sites
      *
      * @param p       parser
@@ -78,8 +150,6 @@ public class XmlParser {
      */
     private void addSite(XmlPullParser p, ArrayList<Site> mySites) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addSite()");
-
-        // ArrayList<Comment> comments = new ArrayList<>();
 
         try { // Test if the current event is the type START_TAG and the string is "site",
             // otherwise an exception is thrown
@@ -107,8 +177,6 @@ public class XmlParser {
                     site.setLatitude(readLatitude(p));
                 } else if (p.getName().equals(context.getString(R.string.xml_site_longitude))) {
                     site.setLongitude(readLongitude(p));
-                } else if (p.getName().equals(context.getString(R.string.xml_site_comment))) {
-                    site.addComment(readComment(p));
                 } else if (p.getName().equals(context.getString(R.string.xml_site_facilities))) {
                     getFacility(p, site);
                 } else if (p.getName().equals(context.getString(R.string.xml_site_thumbnail))) {
@@ -120,6 +188,84 @@ public class XmlParser {
                 }
             }
             mySites.add(site);
+        } catch (XmlPullParserException | IOException e) {
+            // tell user error in file format and exit application
+            exitApplication(R.string.ERROR_File_format);
+        }
+    }
+
+    /**
+     * Parse the comment xml and add to the ArrayList of comments
+     *
+     * @param p          parser
+     * @param myComments List to add new comment from parsing input
+     */
+    private void addComment(XmlPullParser p, ArrayList<Comment> myComments) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addComment()");
+
+        try { // Test if the current event is the type START_TAG and the string is "comment",
+            // otherwise an exception is thrown
+            p.require(XmlPullParser.START_TAG, null, context.getString(R.string.xml_comment));
+            // create empty comment
+            Comment comment = new Comment();
+            while (p.next() != XmlPullParser.END_TAG) {
+                //ensure we have a start tag
+                if (p.getEventType() != XmlPullParser.START_TAG) {
+                    continue;
+                }
+                if (p.getName().equals(context.getString(R.string.xml_comment_author))) {
+                    comment.setAuthor(readName(p));
+                } else if (p.getName().equals(context.getString(R.string.xml_comment_date_created))) {
+                    comment.setCreatedDate(readDateCreated(p));
+                } else if (p.getName().equals(context.getString(R.string.xml_comment_photo))) {
+                    comment.setPhoto(readPhoto(p));
+                } else if (p.getName().equals(context.getString(R.string.xml_comment_siteid))) {
+                    comment.setSiteId(readSiteId(p));
+                } else if (p.getName().equals(context.getString(R.string.xml_comment_text))) {
+                    comment.setText(readText(p));
+                } else {
+                    skip(p);
+                }
+            }
+            myComments.add(comment);
+        } catch (XmlPullParserException | IOException e) {
+            // tell user error in file format and exit application
+            exitApplication(R.string.ERROR_File_format);
+        }
+    }
+
+    /**
+     * Parse the user xml and add to the ArrayList of users
+     *
+     * @param p       parser
+     * @param myUsers List to add new user from parsing input
+     */
+    private void addUser(XmlPullParser p, ArrayList<User> myUsers) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addUser()");
+
+        try { // Test if the current event is the type START_TAG and the string is "user",
+            // otherwise an exception is thrown
+            p.require(XmlPullParser.START_TAG, null, context.getString(R.string.xml_user));
+            // create empty user
+            User user = new User();
+            while (p.next() != XmlPullParser.END_TAG) {
+                //ensure we have a start tag
+                if (p.getEventType() != XmlPullParser.START_TAG) {
+                    continue;
+                }
+                if (p.getName().equals(context.getString(R.string.xml_user_email))) {
+                    user.setEmail(readEmail(p));
+                } else if (p.getName().equals(context.getString(R.string.xml_user_lastused))) {
+                    user.setLastUsed(readLastUsed(p));
+                } else if (p.getName().equals(context.getString(R.string.xml_user_name))) {
+                    user.setName(readName(p));
+                } else if (p.getName().equals(context.getString(R.string.xml_user_photo))) {
+                    user.setPhoto(readPhoto(p));
+                } else {
+                    skip(p);
+                }
+            }
+            myUsers.add(user);
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
             exitApplication(R.string.ERROR_File_format);
@@ -234,7 +380,6 @@ public class XmlParser {
      * @throws IOException            handle any exceptions
      * @throws XmlPullParserException handle any exceptions
      */
-
     private String readDateCreated(XmlPullParser XmlPP) throws IOException, XmlPullParserException {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readDateCreated()");
 
@@ -249,7 +394,6 @@ public class XmlParser {
         return myDateCreated;
     }
 
-
     /**
      * read the latitude text
      *
@@ -258,7 +402,6 @@ public class XmlParser {
      * @throws IOException            handle any exceptions
      * @throws XmlPullParserException handle any exceptions
      */
-
     private String readLatitude(XmlPullParser XmlPP) throws IOException, XmlPullParserException {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readLatitude()");
 
@@ -279,7 +422,6 @@ public class XmlParser {
      * @throws IOException            handle any exceptions
      * @throws XmlPullParserException handle any exceptions
      */
-
     private String readLongitude(XmlPullParser XmlPP) throws IOException, XmlPullParserException {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readLongitude()");
 
@@ -293,46 +435,63 @@ public class XmlParser {
     }
 
     /**
-     * Reads a comment, extracting date, text and author
+     * read the siteId text
      *
      * @param XmlPP parser
-     * @return the comment
+     * @return siteId text
      * @throws IOException            handle any exceptions
      * @throws XmlPullParserException handle any exceptions
      */
+    private String readSiteId(XmlPullParser XmlPP) throws IOException, XmlPullParserException {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readSiteId()");
 
-    private Comment readComment(XmlPullParser XmlPP) throws IOException, XmlPullParserException {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readComment()");
+        String mySiteId;
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_comment_siteid)));
+        mySiteId = readText(XmlPP);
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_comment_siteid)));
 
-        String commentDate = null;
-        String commentText;
-        String commentAuthor = null;
-        String commentAuthorId = null;
+        if (Debug.DEBUG_PARSING) Log.d(TAG, "Postcode: " + mySiteId);
+        return mySiteId;
+    }
 
-        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_comment)));
-        String commentAttribute;
-        commentAttribute = XmlPP.getAttributeValue(null, context.getString(R.string.xml_comment_date));
-        if (commentAttribute != null) {
-            commentDate = commentAttribute;
-            if (Debug.DEBUG_PARSING_COMMENTS) Log.d(TAG, "commentDate: " + commentDate);
-        }
-        commentAttribute = XmlPP.getAttributeValue(null, context.getString(R.string.xml_comment_author));
-        if (commentAttribute != null) {
-            commentAuthor = commentAttribute;
-            if (Debug.DEBUG_PARSING_COMMENTS) Log.d(TAG, "commentAuthor: " + commentAuthor);
-        }
-        commentAttribute = XmlPP.getAttributeValue(null, context.getString(R.string.xml_comment_photo));
-        if (commentAttribute != null) {
-            commentAuthorId = commentAttribute;
-            if (Debug.DEBUG_PARSING_COMMENTS) Log.d(TAG, "commentAuthorId: " + commentAuthorId);
-        }
-        commentText = readText(XmlPP).trim();
-        if (Debug.DEBUG_PARSING_COMMENTS) Log.d(TAG, "commentText: " + commentText);
+    /**
+     * read the user email text
+     *
+     * @param XmlPP parser
+     * @return email text
+     * @throws IOException            handle any exceptions
+     * @throws XmlPullParserException handle any exceptions
+     */
+    private String readEmail(XmlPullParser XmlPP) throws IOException, XmlPullParserException {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readEmail()");
 
-        Comment c = new Comment(commentText, commentDate,
-                context.getString(R.string.dateformat), commentAuthor, commentAuthorId);
-        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_comment)));
-        return c;
+        String myEmail;
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_user_email)));
+        myEmail = readText(XmlPP);
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_user_email)));
+
+        if (Debug.DEBUG_PARSING) Log.d(TAG, "Postcode: " + myEmail);
+        return myEmail;
+    }
+    
+    /**
+     * read the use last used text
+     *
+     * @param XmlPP parser
+     * @return last used text
+     * @throws IOException            handle any exceptions
+     * @throws XmlPullParserException handle any exceptions
+     */
+    private String readLastUsed(XmlPullParser XmlPP) throws IOException, XmlPullParserException {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readLastUsed()");
+
+        String myLastUsed;
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_user_lastused)));
+        myLastUsed = readText(XmlPP);
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_user_lastused)));
+
+        if (Debug.DEBUG_PARSING) Log.d(TAG, "Postcode: " + myLastUsed);
+        return myLastUsed;
     }
 
     /**

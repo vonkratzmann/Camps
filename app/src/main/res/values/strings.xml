@@ -56,7 +56,7 @@
     <string name="xml_site_state" translatable="false">state</string>
     <string name="xml_site_comment" translatable="false">comment</string>
     <string name="xml_site_facilities" translatable="false">facilities</string>
-    <string name="xml_site_date_created" translatable="false">date_created</string>
+    <string name="xml_site_date_created" translatable="false">date</string>
     <string name="xml_site_latitude" translatable="false">latitude</string>
     <string name="xml_site_longitude" translatable="false">longitude</string>
     <string name="xml_site_thumbnail" translatable="false">thumbnail</string>
@@ -65,9 +65,9 @@
     <!-- XML comment file tag names -->
     <string name="xml_comment" translatable="false">comment</string>
     <string name="xml_comment_author" translatable="false">author</string>
-    <string name="xml_comment_date" translatable="false">date</string>
+    <string name="xml_comment_date_created" translatable="false">date</string>
     <string name="xml_comment_photo" translatable="false">photo</string>
-    <string name="xml_comment_siteid" translatable="false">siteid</string>
+    <string name="xml_comment_siteid" translatable="false">site</string>
     <string name="xml_comment_text" translatable="false">text</string>
 
     <!-- XML user file tag names -->
@@ -75,7 +75,7 @@
     <string name="xml_user_name" translatable="false">name</string>
     <string name="xml_user_email" translatable="false">email</string>
     <string name="xml_user_photo" translatable="false">photo</string>
-    <string name="xml_user_lastused" translatable="false">lastused</string>
+    <string name="xml_user_lastused" translatable="false">date</string>
 
     <string name="facilitytype" translatable="false">type</string>
 

@@ -259,7 +259,7 @@ class XmlFormatter {
         buffer.append('\n');
 
         // convert created date  to xml and add to the buffer
-        xmlElement(buffer, context.getString(R.string.xml_comment_date), comment.getCreatedDate());
+        xmlElement(buffer, context.getString(R.string.xml_comment_date_created), comment.getCreatedDate());
         buffer.append('\n');
 
         // convert siteId to xml and add to the buffer
