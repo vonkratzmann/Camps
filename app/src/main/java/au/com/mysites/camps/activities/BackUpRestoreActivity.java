@@ -373,13 +373,15 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         // Delete sites
         try {
             deleteDatabase
-                    .execute(getString(R.string.collection_sites))
+                    .execute(getString(R.string.collection_sites),
+                            getString(R.string.collection_comments),
+                            getString(R.string.collection_users))
                     .get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             result = false;
         }
-        // Delete comments
+/*        // Delete comments
         try {
             deleteDatabase
                     .execute(getString(R.string.collection_comments))
@@ -396,7 +398,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             result = false;
-        }
+        }*/
         return result;
     }
 
@@ -619,27 +621,30 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         protected Object doInBackground(Object[] objects) {
             if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
 
-            //Get list of items from the database
-            Task<QuerySnapshot> task = FirebaseFirestore
-                    .getInstance()
-                    .collection((String) objects[0])
-                    .get();
-            try {
+            int count = objects.length;
+            for ( int i =0; i < count; i++) {
+                //Get list of items from the database
+                Task<QuerySnapshot> task = FirebaseFirestore
+                        .getInstance()
+                        .collection((String) objects[i])
+                        .get();
+                try {
             /* Get the result synchronously as executing the task inside a background thread.
             Uses Google play Task API */
-                QuerySnapshot querySnapshot = Tasks.await(task);
+                    QuerySnapshot querySnapshot = Tasks.await(task);
 
-                //check we have something
-                if (querySnapshot.isEmpty())
-                    return null;
-                for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                    deleteDocument(document);
+                    //check we have something
+                    if (querySnapshot.isEmpty())
+                        return null;
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        deleteDocument(document, (String) objects[i]);
+                    }
+
+                } catch (ExecutionException | InterruptedException e) {
+                    // The Task failed, this is the same exception you'd get in a non-blocking
+                    // An interrupt occurred while waiting for the task to complete.
+                    e.printStackTrace();
                 }
-
-            } catch (ExecutionException | InterruptedException e) {
-                // The Task failed, this is the same exception you'd get in a non-blocking
-                // An interrupt occurred while waiting for the task to complete.
-                e.printStackTrace();
             }
             return null;
         }
@@ -650,14 +655,14 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * @param document
      * @return
      */
-    private static boolean deleteDocument(DocumentSnapshot document) {
+    private static boolean deleteDocument(DocumentSnapshot document, String myCollection) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "deleteDocument");
 
         boolean result = true;
         String docId = document.getId();
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
-        Task task = mFirestore.document(docId).delete();
+        Task task = mFirestore.collection(myCollection).document(docId).delete();
         try {
             Tasks.await(task);
         } catch (ExecutionException | InterruptedException e) {

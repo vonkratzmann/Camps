@@ -67,7 +67,7 @@ public class XmlParser {
             }
         } catch (Exception e) {
             // tell user error in file format and exit application
-            exitApplication(R.string.ERROR_File_format);
+            exiting(R.string.ERROR_File_format);
         }
     }
 
@@ -102,7 +102,7 @@ public class XmlParser {
             }
         } catch (Exception e) {
             // tell user error in file format and exit application
-            exitApplication(R.string.ERROR_File_format);
+            exiting(R.string.ERROR_File_format);
         }
     }
 
@@ -138,7 +138,7 @@ public class XmlParser {
             }
         } catch (Exception e) {
             // tell user error in file format and exit application
-            exitApplication(R.string.ERROR_File_format);
+            exiting(R.string.ERROR_File_format);
         }
     }
 
@@ -190,7 +190,7 @@ public class XmlParser {
             mySites.add(site);
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
-            exitApplication(R.string.ERROR_File_format);
+            exiting(R.string.ERROR_File_format);
         }
     }
 
@@ -214,7 +214,7 @@ public class XmlParser {
                     continue;
                 }
                 if (p.getName().equals(context.getString(R.string.xml_comment_author))) {
-                    comment.setAuthor(readName(p));
+                    comment.setAuthor(readAuthor(p));
                 } else if (p.getName().equals(context.getString(R.string.xml_comment_date_created))) {
                     comment.setCreatedDate(readDateCreated(p));
                 } else if (p.getName().equals(context.getString(R.string.xml_comment_photo))) {
@@ -222,7 +222,7 @@ public class XmlParser {
                 } else if (p.getName().equals(context.getString(R.string.xml_comment_siteid))) {
                     comment.setSiteId(readSiteId(p));
                 } else if (p.getName().equals(context.getString(R.string.xml_comment_text))) {
-                    comment.setText(readText(p));
+                    comment.setText(readCommentText(p));
                 } else {
                     skip(p);
                 }
@@ -230,7 +230,7 @@ public class XmlParser {
             myComments.add(comment);
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
-            exitApplication(R.string.ERROR_File_format);
+            exiting(R.string.ERROR_File_format);
         }
     }
 
@@ -268,7 +268,7 @@ public class XmlParser {
             myUsers.add(user);
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
-            exitApplication(R.string.ERROR_File_format);
+            exiting(R.string.ERROR_File_format);
         }
     }
 
@@ -450,7 +450,7 @@ public class XmlParser {
         mySiteId = readText(XmlPP);
         XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_comment_siteid)));
 
-        if (Debug.DEBUG_PARSING) Log.d(TAG, "Postcode: " + mySiteId);
+        if (Debug.DEBUG_PARSING) Log.d(TAG, "SiteId: " + mySiteId);
         return mySiteId;
     }
 
@@ -470,7 +470,7 @@ public class XmlParser {
         myEmail = readText(XmlPP);
         XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_user_email)));
 
-        if (Debug.DEBUG_PARSING) Log.d(TAG, "Postcode: " + myEmail);
+        if (Debug.DEBUG_PARSING) Log.d(TAG, "Email: " + myEmail);
         return myEmail;
     }
     
@@ -490,8 +490,48 @@ public class XmlParser {
         myLastUsed = readText(XmlPP);
         XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_user_lastused)));
 
-        if (Debug.DEBUG_PARSING) Log.d(TAG, "Postcode: " + myLastUsed);
+        if (Debug.DEBUG_PARSING) Log.d(TAG, "LastUsed: " + myLastUsed);
         return myLastUsed;
+    }
+
+    /**
+     * read the author
+     *
+     * @param XmlPP parser
+     * @return author
+     * @throws IOException            handle any exceptions
+     * @throws XmlPullParserException handle any exceptions
+     */
+    private String readAuthor(XmlPullParser XmlPP) throws IOException, XmlPullParserException {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readAuthor()");
+
+        String myAuthor;
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_comment_author)));
+        myAuthor = readText(XmlPP);
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_comment_author)));
+
+        if (Debug.DEBUG_PARSING) Log.d(TAG, "Author: " + myAuthor);
+        return myAuthor;
+    }
+
+    /**
+     * read the comment text
+     *
+     * @param XmlPP parser
+     * @return comment text
+     * @throws IOException            handle any exceptions
+     * @throws XmlPullParserException handle any exceptions
+     */
+    private String readCommentText(XmlPullParser XmlPP) throws IOException, XmlPullParserException {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readCommentText()");
+
+        String myCommentText;
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_comment_text)));
+        myCommentText = readText(XmlPP);
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_comment_text)));
+
+        if (Debug.DEBUG_PARSING) Log.d(TAG, "CommentText: " + myCommentText);
+        return myCommentText;
     }
 
     /**
@@ -537,12 +577,12 @@ public class XmlParser {
 
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
-            exitApplication(R.string.ERROR_File_format);
+            exiting(R.string.ERROR_File_format);
         }
     }
 
     /**
-     * read the thumbnail which is in ASCII text
+     * read the thumbnail which is a filename
      *
      * @param XmlPP parser
      * @return street text
@@ -563,7 +603,7 @@ public class XmlParser {
     }
 
     /**
-     * read the photo which is in ASCII text
+     * read the photo which is a filename
      *
      * @param XmlPP parser
      * @return street text
@@ -629,8 +669,8 @@ public class XmlParser {
      *
      * @param id string reference id of message to be displayed
      */
-    private void exitApplication(final int id) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "exit_Application()");
+    private void exiting(final int id) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "exiting()");
 
         Toast.makeText(context, context.getString(id), Toast.LENGTH_LONG).show();
         Toast.makeText(context, context.getString(R.string.Exiting_application),

@@ -67,7 +67,7 @@
     <string name="xml_comment_author" translatable="false">author</string>
     <string name="xml_comment_date_created" translatable="false">date</string>
     <string name="xml_comment_photo" translatable="false">photo</string>
-    <string name="xml_comment_siteid" translatable="false">site</string>
+    <string name="xml_comment_siteid" translatable="false">siteid</string>
     <string name="xml_comment_text" translatable="false">text</string>
 
     <!-- XML user file tag names -->
@@ -75,7 +75,7 @@
     <string name="xml_user_name" translatable="false">name</string>
     <string name="xml_user_email" translatable="false">email</string>
     <string name="xml_user_photo" translatable="false">photo</string>
-    <string name="xml_user_lastused" translatable="false">date</string>
+    <string name="xml_user_lastused" translatable="false">lastused</string>
 
     <string name="facilitytype" translatable="false">type</string>
 

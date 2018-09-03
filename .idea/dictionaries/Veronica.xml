@@ -10,6 +10,7 @@
       <w>commentauthor</w>
       <w>commentby</w>
       <w>commentdate</w>
+      <w>commenttext</w>
       <w>coordinateformat</w>
       <w>couldn</w>
       <w>dateformat</w>
@@ -31,6 +32,7 @@
       <w>guidelinesitename</w>
       <w>hmmss</w>
       <w>imageoperations</w>
+      <w>lastused</w>
       <w>mobilepresent</w>
       <w>myfileprovider</w>
       <w>mysites</w>
@@ -40,6 +42,7 @@
       <w>playequipment</w>
       <w>playequipmentpresent</w>
       <w>pojo</w>
+      <w>ramen</w>
       <w>ratingbar</w>
       <w>realtime</w>
       <w>restorefilename</w>
@@ -48,6 +51,7 @@
       <w>showerspresent</w>
       <w>signin</w>
       <w>signout</w>
+      <w>siteid</w>
       <w>snapshop</w>
       <w>subheader</w>
       <w>swimmingpresent</w>
