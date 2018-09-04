@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -21,6 +23,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.Comment;
@@ -38,61 +41,76 @@ public class UtilDatabase {
 
     /**
      * Write sites to the firebase database with database id equal to the site name
-     * if any comments for each site, then write as a sub-collection
      *
      * @param siteList list of sites to be written to the database
      * @param context  of calling activity
      */
-    public static void addMultipleSitesAndComments(ArrayList<Site> siteList, Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addSitesAndComments()");
+    public static void addSites(ArrayList<Site> siteList, Context context) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addSites()");
+        String collection  = context.getString(R.string.collection_sites);
 
         //for each site write to the database
         int siteCount = siteList.size();
         for (int i = 0; i < siteCount; i++) {
             Site site = siteList.get(i);
-            addOneSiteAndComments(site, context);
+            addDocument(site.getName(), site, context, collection);
         }
     }
 
     /**
-     * Write one site to the firebase database with database id equal to the site name
+     * Write comments to the firebase database, let firebase choose a name
      *
-     * @param site    to be written to the database
-     * @param context of calling activity
+     * @param commentList list of sites to be written to the database
+     * @param context  of calling activity
      */
-    public static void addOneSiteAndComments(final Site site, final Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addOneSiteAndComments()");
+    public static void addComments(ArrayList<Comment> commentList, Context context) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addSites()");
+        String collection  = context.getString(R.string.collection_comments);
 
-        //use the site name as the ID for the database document
-        String siteName = site.getName();
-        final int numberComments = site.getComments().size(); //get number of comments
+        //for each site write to the database
+        int commentCount = commentList.size();
+        for (int i = 0; i < commentCount; i++) {
+            Comment comment = commentList.get(i);
+            addDocument(null, comment, context, collection);
+        }
+    }
 
-        // Initialize Firestore and add site to the database
+
+    /**
+     * Write one document to the firebase database
+     *
+     * @param documentName Name of document to be written to the database, can be null
+     * @param document to be written to the database
+     * @param context of calling activity
+     * @param collection to store the document in
+     */
+    public static void addDocument(final String documentName, Object document,
+                                   final Context context, final String collection) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addDocument()");
+
+        // Initialize Firestore and add document to the database
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-        mFirestore.collection(context.getString(R.string.collection_sites))
-                .document(siteName)
-                .set(site)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void avoid) {
-                        //if no comments, tell caller Ok, otherwise let comments tell caller
-                        if (numberComments <= 0)
-                            UtilDatabase.shortToast(context.getString(R.string.Site_saved),
-                                    Constants.TOASTTIMEDATABASE, context);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //if no comments, tell caller Not Ok, otherwise let comments tell caller
-                        if (numberComments <= 0)
-                            UtilDatabase.shortToast(context.getString(R.string.ERROR_Database),
-                                    Constants.TOASTTIMEDATABASE, context);
-                    }
-                });
-        //check if any comments to write to the database
-        if (numberComments > 0)
-            addComments(site, context);
+
+        Task task = mFirestore.collection(myCollection).document(docId).delete();
+
+        if (document == null) {}
+
+
+
+        String docId = document.getId();
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+
+        Task task = mFirestore.collection(myCollection).document(docId).delete();
+        try {
+            Tasks.await(task);
+            if (Debug.DEBUG_BACKUP_RESTORE) Log.d(TAG, "deleteDocument: " + docId);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            result = false;
+        }
+
+
+
     }
 
     /**
@@ -138,8 +156,8 @@ public class UtilDatabase {
      * Saves a file to Firebase storage, at the supplied path.
      *
      * @param context context from calling activity
-     * @param file file to be saved to storage
-     * @param path file path to use in firebase
+     * @param file    file to be saved to storage
+     * @param path    file path to use in firebase
      */
     public static void saveFileFirestore(final Context context, final File file,
                                          final String path) {
@@ -167,7 +185,7 @@ public class UtilDatabase {
                 Log.w(TAG, "file: " + file.getName() + " upload failure");
                 // Warn the user
                 shortToast(context.getString(R.string.ERROR_File_not_saved)
-                        + "e:" + e , 2000, context);
+                        + "e:" + e, 2000, context);
             }
         });
     }
@@ -175,10 +193,10 @@ public class UtilDatabase {
     /**
      * Checks if file exits on the local device, if yes display it into imageView, else
      * download the file from Firebase Storage and display it in the imageView, so that
-     *  future loads of the site will not require the file to be downloaded again.
+     * future loads of the site will not require the file to be downloaded again.
      *
-     * @param fileName     name of file containing image
-     * @param imageView    view where image is to be displayed
+     * @param fileName  name of file containing image
+     * @param imageView view where image is to be displayed
      */
     public static void getImageAndDisplay(String fileName, ImageView imageView) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getImageAndDisplay()");
@@ -210,10 +228,10 @@ public class UtilDatabase {
      * Gets a file from storage, store on the local storage directory,
      * and displays it on the imageView.
      *
-     * @param fileName      name of file containing image
-     * @param localFile     file containing image
-     * @param storageDir    directory where the local file is to be stored
-     * @param imageView     view where image is to be displayed
+     * @param fileName   name of file containing image
+     * @param localFile  file containing image
+     * @param storageDir directory where the local file is to be stored
+     * @param imageView  view where image is to be displayed
      */
     private static void
     getFileOffFirebaseStorageAndDisplay(final String fileName, final File localFile,
@@ -252,10 +270,10 @@ public class UtilDatabase {
     }
 
     /**
-     * @param docRefId              Document to be deleted
-     * @param collectionRefSites    Reference to collection
+     * @param docRefId           Document to be deleted
+     * @param collectionRefSites Reference to collection
      */
-   public static void deleteSite( final String collectionRefSites, final String docRefId) {
+    public static void deleteSite(final String collectionRefSites, final String docRefId) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "deleteSite");
 
         FirebaseFirestore siteDocRef = FirebaseFirestore.getInstance();
@@ -273,7 +291,7 @@ public class UtilDatabase {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        if (Debug.DEBUG_UTIL) Log.w(TAG, "Error deleting document: "+ docRefId, e);
+                        if (Debug.DEBUG_UTIL) Log.w(TAG, "Error deleting document: " + docRefId, e);
                     }
                 });
     }

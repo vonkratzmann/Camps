@@ -401,7 +401,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             return false;
         }
         //add site to the database
-        UtilDatabase.addOneSiteAndComments(mSite, this);
+        UtilDatabase.addDocument(mSite.getName(), mSite, this, getString(R.string.collection_sites));
 
         return true;
     }

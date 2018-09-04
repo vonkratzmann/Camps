@@ -15,7 +15,7 @@ public final class Debug {
     public static final boolean DEBUG_METHOD_ENTRY_UTIL = true;
 
     // To log a message for specific areas in the code
-    public static final boolean DEBUG_DBMAINT_BACKUP = true;
+    public static final boolean DEBUG_BACKUP_RESTORE = true;
     public static final boolean DEBUG_FILE = true;
     public static final boolean DEBUG_PARSING = true;
     public static final boolean DEBUG_PARSING_COMMENTS = true;

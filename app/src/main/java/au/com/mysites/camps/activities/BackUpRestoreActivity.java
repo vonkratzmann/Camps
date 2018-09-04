@@ -37,6 +37,7 @@ import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.models.User;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
+import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.XmlUtils;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -66,6 +67,13 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     private CollectionReference mSitesCollectionRef;
 
     XmlUtils mXmlUtils;
+
+    // Set up storage for sites to be read from file
+    final ArrayList<Site> mSiteList = new ArrayList<>();
+    // Set up storage for comments to be read from file
+    final ArrayList<Comment> mCommentList = new ArrayList<>();
+    // Set up storage for users to be read from file
+    final ArrayList<User> mUserList = new ArrayList<>();
 
     /**
      * Constructor
@@ -171,12 +179,12 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     private boolean saveSites(final String filename) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSites()");
 
-        ArrayList<Site> sites;
+        ArrayList<Site> mSites;
         //do in background thread
         GetSitesAsyncTask getSites = new GetSitesAsyncTask();
         try {
             //read the database into an arraylist
-            sites = (ArrayList<Site>) getSites
+            mSites = (ArrayList<Site>) getSites
                     .execute(getString(R.string.collection_sites))
                     .get();
         } catch (ExecutionException | InterruptedException e) {
@@ -184,7 +192,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             return false;
         }
         //check we got something to backup
-        if (sites == null) {
+        if (mSites == null) {
             return false;
         }
         // Add extension to filename, so separate different files
@@ -193,7 +201,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         //write opening tags to buffer
         mXmlUtils.initXmlFile(BackUpRestoreActivity.this, fileNamePlusExt);
         //save it to the file
-        for (Site site : sites) {
+        for (Site site : mSites) {
             mXmlUtils.siteSaveToXMLFile(site);
         }
         //write closing tags to buffer and write buffer to file
@@ -299,23 +307,33 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         String filename = filenameView.getText().toString();
 
         //check filename entered
-        if (filename.isEmpty()) {
-            Toast.makeText(context, getString(R.string.ERROR_Database_no_filename), LENGTH_SHORT).show();
+        if (filename.isEmpty()) { // Warn the user if error
+            Toast.makeText(context, getString(R.string.ERROR_Database_no_filename),
+                    LENGTH_SHORT).show();
             return;
         }
-
-        if (!readFiles(filename)) {
-            // Warn the user
-            Toast.makeText(this, getString(R.string.ERROR_Database_unable_delete_documents), LENGTH_SHORT).show();
+        if (!readFiles(filename)) { // Warn the user if error
+            Toast.makeText(this, getString(R.string.ERROR_Database_unable_delete_documents),
+                    LENGTH_SHORT).show();
             return;
         }
         //if ok delete sites
-        if (!deleteDatabase()) {
-            Toast.makeText(this, getString(R.string.ERROR_Database_unable_delete_documents), LENGTH_SHORT).show();
+        if (!deleteDatabase()) { // Warn the user if error
+            Toast.makeText(this, getString(R.string.ERROR_Database_unable_delete_documents),
+                    LENGTH_SHORT).show();
             return;
         }
+        // Add sites to cleared database
+        UtilDatabase.addSites(mSiteList, context);
+        //Tell the user the result
+        Toast.makeText(context, getString(R.string.Database_restore_success) + Integer.toString(mSiteList.size()),
+                LENGTH_SHORT).show();
 
-        //if ok do restore
+        // Add comments to cleared database
+        UtilDatabase.addComments(mCommentList, context);
+        //Tell the user the result
+        Toast.makeText(context, getString(R.string.Database_restore_success) + Integer.toString(mCommentList.size()),
+                LENGTH_SHORT).show();
 
     }
 
@@ -337,30 +355,24 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 .getAbsolutePath();
 
-        // Set up storage for sites to be read from file
-        final ArrayList<Site> siteList = new ArrayList<>();
         //Read the site file
         filenamePlusExt = filename + "." + getString(R.string.collection_sites);
-        if (!xmlUtils.readSiteXmlfile(this, filenamePlusExt, path, siteList)) return false;
+        if (!xmlUtils.readSiteXmlfile(this, filenamePlusExt, path, mSiteList)) return false;
 
-        // Set up storage for comments to be read from file
-        final ArrayList<Comment> commentList = new ArrayList<>();
         //Read the comment file
         filenamePlusExt = filename + "." + getString(R.string.collection_comments);
-        if (!xmlUtils.readCommentXmlfile(this, filenamePlusExt, path, commentList)) return false;
+        if (!xmlUtils.readCommentXmlfile(this, filenamePlusExt, path, mCommentList)) return false;
 
-        // Set up storage for users to be read from file
-        final ArrayList<User> userList = new ArrayList<>();
         //Read the user file
         filenamePlusExt = filename + "." + getString(R.string.collection_users);
-        if (!xmlUtils.readUserXmlfile(this, filenamePlusExt, path, userList)) return false;
+        if (!xmlUtils.readUserXmlfile(this, filenamePlusExt, path, mUserList)) return false;
 
         return true;
     }
 
     /**
-     * Do in background thread, and wait for each delete to finish.
-     * Delete sites, comments and users.
+     * Do in background thread, and wait for each delete to finish, so do not swamp the resources.
+     * Delete collections for sites, comments and users.
      *
      * @return
      */
@@ -381,27 +393,8 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             e.printStackTrace();
             result = false;
         }
-/*        // Delete comments
-        try {
-            deleteDatabase
-                    .execute(getString(R.string.collection_comments))
-                    .get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            result = false;
-        }
-        // Delete users
-        try {
-            deleteDatabase
-                    .execute(getString(R.string.collection_users))
-                    .get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            result = false;
-        }*/
         return result;
     }
-
 
     /**
      * Check permissions, if ok carry out either backup or restore
@@ -520,15 +513,13 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 //process each document
                 for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                     site = document.toObject(Site.class);
-                    if (Debug.DEBUG_DBMAINT_BACKUP && site != null)
+                    if (Debug.DEBUG_BACKUP_RESTORE && site != null)
                         Log.d(TAG, "site: " + site.getName());
                     sites.add(site);
                 }
-            } catch (ExecutionException | InterruptedException e) {
+            } catch (ExecutionException | InterruptedException | TimeoutException e) {
                 // The Task failed
                 e.printStackTrace();
-            } catch (TimeoutException e) {
-                // Task timed out before it could complete.
             }
             return sites;
         }
@@ -560,15 +551,13 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 //process each document
                 for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                     comment = document.toObject(Comment.class);
-                    if (Debug.DEBUG_DBMAINT_BACKUP && comment != null)
+                    if (Debug.DEBUG_BACKUP_RESTORE && comment != null)
                         Log.d(TAG, "comment: " + comment.getText());
                     comments.add(comment);
                 }
-            } catch (ExecutionException | InterruptedException e) {
+            } catch (ExecutionException | InterruptedException | TimeoutException e) {
                 // The Task failed
                 e.printStackTrace();
-            } catch (TimeoutException e) {
-                // Task timed out before it could complete.
             }
             return comments;
         }
@@ -577,6 +566,10 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     public static class GetUsersAsyncTask extends AsyncTask {
         private final String TAG = GetUsersAsyncTask.class.getSimpleName();
 
+        /**
+         * @param objects collections to be delete
+         * @return true if success
+         */
         @Override
         protected ArrayList<User> doInBackground(Object[] objects) {
             if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
@@ -600,14 +593,11 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 //process each document
                 for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                     user = document.toObject(User.class);
-                    if (Debug.DEBUG_DBMAINT_BACKUP && user != null)
+                    if (Debug.DEBUG_BACKUP_RESTORE && user != null)
                         Log.d(TAG, "user: " + user.getEmail());
                     users.add(user);
                 }
-            } catch (ExecutionException | InterruptedException e) {
-                // The Task failed
-                e.printStackTrace();
-            } catch (TimeoutException e) {
+            } catch (TimeoutException | ExecutionException | InterruptedException e) {
                 // Task timed out before it could complete.
             }
             return users;
@@ -617,12 +607,20 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     public static class DeleteDatabaseAsyncTask extends AsyncTask {
         private final String TAG = DeleteDatabaseAsyncTask.class.getSimpleName();
 
+        /**
+         * Reads the documents from each collection and then in turn deletes each document.
+         * Done in a background thread and waits for each read and delete to be completed so
+         * as not to consume too many resources.
+         *
+         * @param objects
+         * @return true if success
+         */
         @Override
         protected Object doInBackground(Object[] objects) {
             if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
 
             int count = objects.length;
-            for ( int i =0; i < count; i++) {
+            for (int i = 0; i < count; i++) {   // Do for each parameter passed to doInBackground
                 //Get list of items from the database
                 Task<QuerySnapshot> task = FirebaseFirestore
                         .getInstance()
@@ -631,7 +629,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 try {
             /* Get the result synchronously as executing the task inside a background thread.
             Uses Google play Task API */
-                    QuerySnapshot querySnapshot = Tasks.await(task);
+                    QuerySnapshot querySnapshot = Tasks.await(task, 500, TimeUnit.MILLISECONDS);
 
                     //check we have something
                     if (querySnapshot.isEmpty())
@@ -639,10 +637,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                     for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                         deleteDocument(document, (String) objects[i]);
                     }
-
-                } catch (ExecutionException | InterruptedException e) {
-                    // The Task failed, this is the same exception you'd get in a non-blocking
-                    // An interrupt occurred while waiting for the task to complete.
+                } catch (ExecutionException | TimeoutException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -651,9 +646,8 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @param document
-     * @return
+     * @param document to be deleted
+     * @return true if success
      */
     private static boolean deleteDocument(DocumentSnapshot document, String myCollection) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "deleteDocument");
@@ -665,6 +659,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         Task task = mFirestore.collection(myCollection).document(docId).delete();
         try {
             Tasks.await(task);
+            if (Debug.DEBUG_BACKUP_RESTORE) Log.d(TAG, "deleteDocument: " + docId);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             result = false;
