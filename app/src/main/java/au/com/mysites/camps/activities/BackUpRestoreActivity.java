@@ -19,9 +19,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -313,7 +316,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             return;
         }
         if (!readFiles(filename)) { // Warn the user if error
-            Toast.makeText(this, getString(R.string.ERROR_Database_unable_delete_documents),
+            Toast.makeText(this, getString(R.string.ERROR_File_error),
                     LENGTH_SHORT).show();
             return;
         }
@@ -325,16 +328,23 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
         // Add sites to cleared database
         UtilDatabase.addSites(mSiteList, context);
-        //Tell the user the result
+        //Tell them the result
         Toast.makeText(context, getString(R.string.Database_restore_success) + Integer.toString(mSiteList.size()),
                 LENGTH_SHORT).show();
 
         // Add comments to cleared database
         UtilDatabase.addComments(mCommentList, context);
-        //Tell the user the result
-        Toast.makeText(context, getString(R.string.Database_restore_success) + Integer.toString(mCommentList.size()),
+        //Tell them the result
+        Toast.makeText(context, getString(R.string.Database_restore_success)
+                        + Integer.toString(mCommentList.size()),
                 LENGTH_SHORT).show();
 
+        // Add users to cleared database
+        UtilDatabase.addUsers(mUserList, context);
+        //Tell them the result
+        Toast.makeText(context, getString(R.string.Database_restore_success)
+                        + Integer.toString(mUserList.size()),
+                LENGTH_SHORT).show();
     }
 
     /**
@@ -617,7 +627,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
          */
         @Override
         protected Object doInBackground(Object[] objects) {
-            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground()");
 
             int count = objects.length;
             for (int i = 0; i < count; i++) {   // Do for each parameter passed to doInBackground
@@ -629,7 +639,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 try {
             /* Get the result synchronously as executing the task inside a background thread.
             Uses Google play Task API */
-                    QuerySnapshot querySnapshot = Tasks.await(task, 500, TimeUnit.MILLISECONDS);
+                    QuerySnapshot querySnapshot = Tasks.await(task, 1000, TimeUnit.MILLISECONDS);
 
                     //check we have something
                     if (querySnapshot.isEmpty())
@@ -649,21 +659,29 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * @param document to be deleted
      * @return true if success
      */
-    private static boolean deleteDocument(DocumentSnapshot document, String myCollection) {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "deleteDocument");
+    private static boolean deleteDocument(final DocumentSnapshot document, final String myCollection) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "deleteDocument()");
 
         boolean result = true;
         String docId = document.getId();
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
         Task task = mFirestore.collection(myCollection).document(docId).delete();
-        try {
-            Tasks.await(task);
-            if (Debug.DEBUG_BACKUP_RESTORE) Log.d(TAG, "deleteDocument: " + docId);
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            result = false;
-        }
+        task.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference document) {
+                if (Debug.DEBUG_UTIL) Log.d(TAG, "Document deleted: " + document.getId());
+            }
+        });
+        task.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                if (Debug.DEBUG_UTIL) Log.d(TAG, "Document not deleted: +  document.getId()");
+            }
+        });
+
         return result;
+
+
     }
 }

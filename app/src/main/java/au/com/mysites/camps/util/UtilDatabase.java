@@ -13,8 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -23,11 +22,11 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.Comment;
 import au.com.mysites.camps.models.Site;
+import au.com.mysites.camps.models.User;
 
 import static android.widget.Toast.makeText;
 
@@ -38,6 +37,8 @@ import static android.widget.Toast.makeText;
 public class UtilDatabase {
     private final static String TAG = UtilDatabase.class.getSimpleName();
 
+    // Initialize Firestore database
+    private final static FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
     /**
      * Write sites to the firebase database with database id equal to the site name
@@ -47,7 +48,7 @@ public class UtilDatabase {
      */
     public static void addSites(ArrayList<Site> siteList, Context context) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addSites()");
-        String collection  = context.getString(R.string.collection_sites);
+        String collection = context.getString(R.string.collection_sites);
 
         //for each site write to the database
         int siteCount = siteList.size();
@@ -61,11 +62,11 @@ public class UtilDatabase {
      * Write comments to the firebase database, let firebase choose a name
      *
      * @param commentList list of sites to be written to the database
-     * @param context  of calling activity
+     * @param context     of calling activity
      */
     public static void addComments(ArrayList<Comment> commentList, Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addSites()");
-        String collection  = context.getString(R.string.collection_comments);
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addComments()");
+        String collection = context.getString(R.string.collection_comments);
 
         //for each site write to the database
         int commentCount = commentList.size();
@@ -75,78 +76,66 @@ public class UtilDatabase {
         }
     }
 
+    /**
+     * Write users to the firebase database, let firebase choose a name
+     *
+     * @param userList list of sites to be written to the database
+     * @param context  of calling activity
+     */
+    public static void addUsers(ArrayList<User> userList, Context context) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addUsers()");
+        String collection = context.getString(R.string.collection_users);
+
+        //for each site write to the database
+        int userCount = userList.size();
+        for (int i = 0; i < userCount; i++) {
+            User user = userList.get(i);
+            addDocument(null, user, context, collection);
+        }
+    }
 
     /**
      * Write one document to the firebase database
      *
      * @param documentName Name of document to be written to the database, can be null
-     * @param document to be written to the database
-     * @param context of calling activity
-     * @param collection to store the document in
+     * @param document     to be written to the database
+     * @param context      of calling activity
+     * @param collection   to store the document in
      */
-    public static void addDocument(final String documentName, Object document,
+    public static void addDocument(final String documentName, final Object document,
                                    final Context context, final String collection) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addDocument()");
 
-        // Initialize Firestore and add document to the database
-        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-
-        Task task = mFirestore.collection(myCollection).document(docId).delete();
-
-        if (document == null) {}
-
-
-
-        String docId = document.getId();
-        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-
-        Task task = mFirestore.collection(myCollection).document(docId).delete();
-        try {
-            Tasks.await(task);
-            if (Debug.DEBUG_BACKUP_RESTORE) Log.d(TAG, "deleteDocument: " + docId);
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            result = false;
-        }
-
-
-
-    }
-
-    /**
-     * Write comments to the firebase database, comments written as a sub-collection
-     *
-     * @param site    containing comments to be written to the database
-     * @param context of calling activity
-     */
-    private static void addComments(final Site site, final Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addComments()");
-
-        String siteName = site.getName(); //use the site name as the ID for the database document
-
-        // Initialize Firestore
-        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-
-        int commentCount = site.getComments().size();
-        for (int j = 0; j < commentCount; j++) {
-            Comment comment = site.getComments().get(j);
-            mFirestore.collection(context.getString(R.string.collection_sites))
-                    .document(siteName)
-                    .collection(context.getString(R.string.collection_comments))
-                    .document()
-                    .set(comment)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+        if (documentName == null) {
+            mFirestore.collection(collection).add(document)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
-                        public void onSuccess(Void avoid) {
-                            UtilDatabase.shortToast(context.getString(R.string.Comment_saved),
-                                    Constants.TOASTTIMEDATABASE, context);
+                        public void onSuccess(DocumentReference documentReference) {
+                            if (Debug.DEBUG_UTIL)
+                                Log.d(TAG, context.getString(R.string.Document_saved) + documentReference.getId());
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            UtilDatabase.shortToast(context.getString(R.string.ERROR_Database),
-                                    Constants.TOASTTIMEDATABASE, context);
+                            if (Debug.DEBUG_UTIL)
+                                Log.d(TAG, context.getString(R.string.Document_not_saved));
+                        }
+                    });
+        } else {  // Specify the name of the document
+            mFirestore.collection(collection).document(documentName).set(document)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            if (Debug.DEBUG_UTIL)
+                                Log.d(TAG, context.getString(R.string.Document_saved));
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            if (Debug.DEBUG_UTIL)
+                                Log.d(TAG, context.getString(R.string.Document_not_saved));
                         }
                     });
         }

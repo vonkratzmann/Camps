@@ -181,7 +181,8 @@
     <string name="Database_backup_null">Database: nothing to backup</string>
     <string name="Database_backup_success">Database: backup success</string>
     <string name="Database_restore_success">Database restored, sites inserted: </string>
-    <string name="Document_saved">Document: saved to database</string>
+    <string name="Document_saved">Document written to database: </string>
+    <string name="Document_not_saved">Document not written to database: </string>
     <string name="Location_null">"Location: empty</string>
     <string name="Exiting_application">Exiting Application</string>
     <string name="Site_deleted">Site: has been deleted</string>
