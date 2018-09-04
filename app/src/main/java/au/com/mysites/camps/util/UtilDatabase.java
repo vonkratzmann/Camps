@@ -68,7 +68,7 @@ public class UtilDatabase {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addComments()");
         String collection = context.getString(R.string.collection_comments);
 
-        //for each site write to the database
+        //for each comment write to the database
         int commentCount = commentList.size();
         for (int i = 0; i < commentCount; i++) {
             Comment comment = commentList.get(i);
@@ -86,7 +86,7 @@ public class UtilDatabase {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addUsers()");
         String collection = context.getString(R.string.collection_users);
 
-        //for each site write to the database
+        //for each user write to the database
         int userCount = userList.size();
         for (int i = 0; i < userCount; i++) {
             User user = userList.get(i);

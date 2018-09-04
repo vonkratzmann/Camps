@@ -24,7 +24,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -639,11 +638,12 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 try {
             /* Get the result synchronously as executing the task inside a background thread.
             Uses Google play Task API */
-                    QuerySnapshot querySnapshot = Tasks.await(task, 1000, TimeUnit.MILLISECONDS);
+                    QuerySnapshot querySnapshot = Tasks.await(task, 2000, TimeUnit.MILLISECONDS);
 
                     //check we have something
                     if (querySnapshot.isEmpty())
                         return null;
+                    // Delete documents retruned for collection
                     for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                         deleteDocument(document, (String) objects[i]);
                     }
@@ -659,29 +659,24 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * @param document to be deleted
      * @return true if success
      */
-    private static boolean deleteDocument(final DocumentSnapshot document, final String myCollection) {
+    private static void deleteDocument(final DocumentSnapshot document, final String myCollection) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "deleteDocument()");
 
-        boolean result = true;
-        String docId = document.getId();
+        final String docId = document.getId();
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
-        Task task = mFirestore.collection(myCollection).document(docId).delete();
-        task.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference document) {
-                if (Debug.DEBUG_UTIL) Log.d(TAG, "Document deleted: " + document.getId());
-            }
-        });
-        task.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                if (Debug.DEBUG_UTIL) Log.d(TAG, "Document not deleted: +  document.getId()");
-            }
-        });
-
-        return result;
-
-
+        mFirestore.collection(myCollection).document(docId).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Document deleted: " + docId);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Document not deleted: " + docId, e);
+                    }
+                });
     }
 }
