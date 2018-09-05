@@ -145,56 +145,42 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
         //Get the view of where the filename is entered by the user
         EditText filenameView = findViewById(R.id.backupfilename);
+
         // Get the user entered filename
         final String filename = filenameView.getText().toString();
+
         //check filename entered
-
-        String statusMessage[];
-
-        mProgressTextView.setText("started");
-        try {  // Pause to get the message displayed
-            Thread.sleep(1000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
         if (filename.isEmpty()) {
             mToast.setText(R.string.ERROR_Database_no_filename);
             mToast.show();
             return;
-        } else {
-            mToast.setText(R.string.Database_backup_started);
-            mToast.show();
         }
-        boolean saveSuccessful = true;
+
+        //Store status messages as UI will be locked as we do a wait for the asynctasks to finish
+        ArrayList<String> statusMessages = new ArrayList();
+
+        statusMessages.add(getString(R.string.Database_backup_started));
 
         if (!saveSites(filename)) { // Warn the user
-            mToast.setText(R.string.ERROR_Database_sites_backup_failed);
-            mToast.show();
-            saveSuccessful = false;
+            statusMessages.add(getString(R.string.ERROR_Database_sites_backup_failed));
         }
         if (!saveComments(filename)) { // Warn the user
-            mToast.setText(R.string.ERROR_Database_comments_backup_failed);
-            mToast.show();
-            saveSuccessful = false;
+            statusMessages.add(getString(R.string.ERROR_Database_comments_backup_failed));
         }
         if (!saveUsers(filename)) { // Warn the user
-            mToast.setText(R.string.ERROR_Database_users_backup_failed);
-            mToast.show();
-            saveSuccessful = false;
+            statusMessages.add(getString(R.string.ERROR_Database_users_backup_failed));
         }
-        if (saveSuccessful) {  // Tell the user
+
+        if (statusMessages.size() == 0) {  // Tell the user
             mToast.setText(R.string.Database_backup_success);
             mToast.show();
         } else {    // Warn the user
-            mToast.setText(R.string.Database_backup_failed);
-            mToast.show();
+             int size = statusMessages.size();
+             for (int i = 0; i < size; i++ ) {
+                 mToast.setText(R.string.Database_backup_failed);
+                 mToast.show();
+             }
         }
-
-        mProgressTextView.setText("Finished");
-
-
     }
 
     /**
