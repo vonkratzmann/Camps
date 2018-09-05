@@ -29,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -39,7 +40,6 @@ import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.models.User;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
-import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.XmlUtils;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -71,17 +71,11 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     XmlUtils mXmlUtils;
 
     // Set up storage for sites to be read from file
-    final ArrayList<Site> mSiteList = new ArrayList<>();
+    public final static ArrayList<Site> mSiteList = new ArrayList<>();
     // Set up storage for comments to be read from file
-    final ArrayList<Comment> mCommentList = new ArrayList<>();
+    public final static ArrayList<Comment> mCommentList = new ArrayList<>();
     // Set up storage for users to be read from file
-    final ArrayList<User> mUserList = new ArrayList<>();
-
-    /**
-     * Constructor
-     */
-    public BackUpRestoreActivity() {
-    }
+    public final static ArrayList<User> mUserList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,31 +139,112 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         // Get the user entered filename
         final String filename = filenameView.getText().toString();
         //check filename entered
+
+        Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         if (filename.isEmpty()) {
-            Toast.makeText(this, getString(R.string.ERROR_Database_no_filename), LENGTH_SHORT).show();
+            toast.setText(R.string.ERROR_Database_no_filename);
+            toast.show();
             return;
+        } else {
+            toast.setText(R.string.Database_backup_started);
+            toast.show();
         }
         boolean saveSuccessful = true;
 
         if (!saveSites(filename)) { // Warn the user
-
-            Toast.makeText(context, getString(R.string.ERROR_Database_sites_backup_failed),
-                    Toast.LENGTH_SHORT).show();
+            toast.setText(R.string.ERROR_Database_sites_backup_failed);
+            toast.show();
             saveSuccessful = false;
         }
         if (!saveComments(filename)) { // Warn the user
-            Toast.makeText(context, getString(R.string.ERROR_Database_comments_backup_failed),
-                    Toast.LENGTH_SHORT).show();
+            toast.setText(R.string.ERROR_Database_comments_backup_failed);
+            toast.show();
             saveSuccessful = false;
         }
         if (!saveUsers(filename)) { // Warn the user
-            Toast.makeText(context, getString(R.string.ERROR_Database_users_backup_failed),
-                    Toast.LENGTH_SHORT).show();
+            toast.setText(R.string.ERROR_Database_users_backup_failed);
+            toast.show();
             saveSuccessful = false;
         }
         if (saveSuccessful) {  // tell the user
-            Toast.makeText(context, getString(R.string.Database_backup_success), Toast.LENGTH_SHORT).show();
+            toast.setText(R.string.Database_backup_success);
+            toast.show();
+        } else {
+            toast.setText(R.string.Database_backup_failed);
+            toast.show();
         }
+
+    }
+
+    /**
+     * Gets the user supplied filename and reads the data from the XML supplied filenames
+     * into memory. If successful, deletes all of the existing firestore database documents
+     * in each of collections for sites, users and comments.
+     * Then loads the data from memory into the firestore database.
+     * The firebase storage photo files are not touched.
+     * <p>
+     * If errors reading any of the file the restore is aborted.
+     *
+     * @param context context of calling activity
+     */
+    public void restoreDatabase(final Context context) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "restoreDatabase()");
+
+        //Get the view of where the filename is entered by the user
+        EditText filenameView = findViewById(R.id.restorefilename);
+
+        // Get the user entered filename
+        String filename = filenameView.getText().toString();
+
+        //check filename entered
+        if (filename.isEmpty()) { // Warn the user if error
+            Toast.makeText(context, getString(R.string.ERROR_Database_no_filename),
+                    LENGTH_SHORT).show();
+            return;
+        } else {
+            Toast.makeText(context, getString(R.string.Database_restore_started), LENGTH_SHORT).show();
+        }
+
+        if (!readFiles(filename)) { // Warn the user if error
+            Toast.makeText(this, getString(R.string.ERROR_File_error),
+                    LENGTH_SHORT).show();
+            return;
+        }
+        //if ok delete sites
+        if (!deleteDatabase()) { // Warn the user if error
+            Toast.makeText(this, getString(R.string.ERROR_Database_unable_delete_documents),
+                    LENGTH_SHORT).show();
+            return;
+        }
+
+        // Add sites to cleared database
+        String string = null;
+        try {
+            string = new AddSiteAsyncTask().execute(mSiteList).get(5000L, TimeUnit.MILLISECONDS);
+        } catch (CancellationException | ExecutionException | InterruptedException | TimeoutException e) {
+            Log.w(TAG, e);
+        }
+        //Tell them the result
+        Toast.makeText(context, "message: " + string, LENGTH_SHORT).show();
+
+        // Add comments to cleared database
+        try {
+            string = new AddCommentAsyncTask().execute(mCommentList).get(5000L, TimeUnit.MILLISECONDS);
+        } catch (CancellationException | ExecutionException | InterruptedException | TimeoutException e) {
+            Log.w(TAG, e);
+        }
+        //Tell them the result
+        Toast.makeText(context, "message: " + string, LENGTH_SHORT).show();
+
+        // Add users to cleared database
+        try {
+            string = new AddUserAsyncTask().execute(mUserList).get(5000L, TimeUnit.MILLISECONDS);
+        } catch (CancellationException | ExecutionException | InterruptedException |
+                TimeoutException e) {
+            Log.w(TAG, e);
+        }
+        //Tell them the result
+        Toast.makeText(context, "message: " + string, LENGTH_SHORT).show();
     }
 
     /**
@@ -286,64 +361,6 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
         //write closing tags to buffer and write buffer to file
         return mXmlUtils.endXmlFile(BackUpRestoreActivity.this);
-    }
-
-    /**
-     * Gets the user supplied filename and reads the data from the XML supplied filenames
-     * into memory. If successful, deletes all of the existing firestore database documents
-     * in each of collections for sites, users and comments.
-     * Then loads the data from memory into the firestore database.
-     * The firebase storage photo files are not touched.
-     * <p>
-     * If errors reading any of the file the restore is aborted.
-     *
-     * @param context context of calling activity
-     */
-    public void restoreDatabase(final Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "restoreDatabase()");
-
-        //Get the view of where the filename is entered by the user
-        EditText filenameView = findViewById(R.id.restorefilename);
-
-        // Get the user entered filename
-        String filename = filenameView.getText().toString();
-
-        //check filename entered
-        if (filename.isEmpty()) { // Warn the user if error
-            Toast.makeText(context, getString(R.string.ERROR_Database_no_filename),
-                    LENGTH_SHORT).show();
-            return;
-        }
-        if (!readFiles(filename)) { // Warn the user if error
-            Toast.makeText(this, getString(R.string.ERROR_File_error),
-                    LENGTH_SHORT).show();
-            return;
-        }
-        //if ok delete sites
-        if (!deleteDatabase()) { // Warn the user if error
-            Toast.makeText(this, getString(R.string.ERROR_Database_unable_delete_documents),
-                    LENGTH_SHORT).show();
-            return;
-        }
-        // Add sites to cleared database
-        UtilDatabase.addSites(mSiteList, context);
-        //Tell them the result
-        Toast.makeText(context, getString(R.string.Database_restore_success) + Integer.toString(mSiteList.size()),
-                LENGTH_SHORT).show();
-
-        // Add comments to cleared database
-        UtilDatabase.addComments(mCommentList, context);
-        //Tell them the result
-        Toast.makeText(context, getString(R.string.Database_restore_success)
-                        + Integer.toString(mCommentList.size()),
-                LENGTH_SHORT).show();
-
-        // Add users to cleared database
-        UtilDatabase.addUsers(mUserList, context);
-        //Tell them the result
-        Toast.makeText(context, getString(R.string.Database_restore_success)
-                        + Integer.toString(mUserList.size()),
-                LENGTH_SHORT).show();
     }
 
     /**
@@ -679,4 +696,133 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    private static class AddSiteAsyncTask extends AsyncTask<ArrayList, Void, String> {
+        private final String TAG = AddSiteAsyncTask.class.getSimpleName();
+
+        /**
+         * @param sites contains sites to be added
+         * @return string with result description
+         */
+        @Override
+        protected String doInBackground(ArrayList... sites) {
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
+
+            ArrayList<Site> mySites = sites[0];
+            Site site;
+            String result = "Added sites success";
+
+            //for each site write to the database
+            int siteCount = mySites.size();
+            for (int i = 0; i < siteCount; i++) {
+                site = mySites.get(i);
+
+                //uses Google play Task API
+                Task task = FirebaseFirestore
+                        .getInstance()
+                        .collection("sites")
+                        .document(site.getName())
+                        .set(site);
+                try {
+                    /* Get the result synchronously as executing the task inside a background thread.
+                     * Add timeout so that application does not hang */
+                    Tasks.await(task, 1000, TimeUnit.MILLISECONDS);
+                } catch (TimeoutException | ExecutionException | InterruptedException e) {
+                    // Task timed out before it could complete.
+                    Log.w(TAG, "Site not added: " + site.getName());
+                    result = "Sites not added";
+                }
+            }
+            return result;
+        }
+
+        protected void onPostExecute(String result) {
+
+        }
+
+    }
+
+    private static class AddCommentAsyncTask extends AsyncTask<ArrayList, Void, String> {
+        private final String TAG = AddCommentAsyncTask.class.getSimpleName();
+
+        /**
+         * @param comments to be added to the database
+         * @return string with result description
+         */
+        @Override
+        protected String doInBackground(ArrayList... comments) {
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
+
+            ArrayList<Comment> myComments = comments[0];
+            Comment comment;
+            String result = "Added comments success";
+
+            //for each comment write to the database
+            int commentCount = myComments.size();
+            for (int i = 0; i < commentCount; i++) {
+                comment = myComments.get(i);
+                //uses Google play Task API
+                Task task = FirebaseFirestore
+                        .getInstance()
+                        .collection("comments")
+                        .add(comment);
+                try {
+                    /* Get the result synchronously as executing the task inside a background thread.
+                     * Add timeout so that application does not hang */
+                    Tasks.await(task, 1000, TimeUnit.MILLISECONDS);
+                } catch (TimeoutException | ExecutionException | InterruptedException e) {
+                    // Task timed out before it could complete.
+                    Log.w(TAG, "Comment not added: " + comment.getAuthor());
+                    result = "Comments not added";
+                }
+            }
+            return result;
+        }
+
+        protected void onPostExecute(String result) {
+
+
+        }
+    }
+
+    private static class AddUserAsyncTask extends AsyncTask<ArrayList, Void, String> {
+        private final String TAG = AddUserAsyncTask.class.getSimpleName();
+
+        /**
+         * @param users users to be added
+         * @return string with result description
+         */
+        @Override
+        protected String doInBackground(ArrayList... users) {
+            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
+
+            ArrayList<User> myUsers = users[0];
+            User user;
+            String result = "Added users success";
+
+            //for each user write to the database
+            int userCount = myUsers.size();
+            for (int i = 0; i < userCount; i++) {
+                user = myUsers.get(i);
+
+                //uses Google play Task API
+                Task task = FirebaseFirestore
+                        .getInstance()
+                        .collection("users")
+                        .add(user);
+                try {
+                    /* Get the result synchronously as executing the task inside a background thread.
+                     * Add timeout so that application does not hang */
+                    Tasks.await(task, 1000, TimeUnit.MILLISECONDS);
+                } catch (TimeoutException | ExecutionException | InterruptedException e) {
+                    // Task timed out before it could complete.
+                    Log.w(TAG, "User not added: " + user.getEmail());
+                    result = "Users not added";
+                }
+            }
+            return result;
+        }
+    }
+
 }

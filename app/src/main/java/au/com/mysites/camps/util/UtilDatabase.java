@@ -21,12 +21,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import au.com.mysites.camps.R;
-import au.com.mysites.camps.models.Comment;
-import au.com.mysites.camps.models.Site;
-import au.com.mysites.camps.models.User;
 
 import static android.widget.Toast.makeText;
 
@@ -40,59 +36,6 @@ public class UtilDatabase {
     // Initialize Firestore database
     private final static FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
-    /**
-     * Write sites to the firebase database with database id equal to the site name
-     *
-     * @param siteList list of sites to be written to the database
-     * @param context  of calling activity
-     */
-    public static void addSites(ArrayList<Site> siteList, Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addSites()");
-        String collection = context.getString(R.string.collection_sites);
-
-        //for each site write to the database
-        int siteCount = siteList.size();
-        for (int i = 0; i < siteCount; i++) {
-            Site site = siteList.get(i);
-            addDocument(site.getName(), site, context, collection);
-        }
-    }
-
-    /**
-     * Write comments to the firebase database, let firebase choose a name
-     *
-     * @param commentList list of sites to be written to the database
-     * @param context     of calling activity
-     */
-    public static void addComments(ArrayList<Comment> commentList, Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addComments()");
-        String collection = context.getString(R.string.collection_comments);
-
-        //for each comment write to the database
-        int commentCount = commentList.size();
-        for (int i = 0; i < commentCount; i++) {
-            Comment comment = commentList.get(i);
-            addDocument(null, comment, context, collection);
-        }
-    }
-
-    /**
-     * Write users to the firebase database, let firebase choose a name
-     *
-     * @param userList list of sites to be written to the database
-     * @param context  of calling activity
-     */
-    public static void addUsers(ArrayList<User> userList, Context context) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "addUsers()");
-        String collection = context.getString(R.string.collection_users);
-
-        //for each user write to the database
-        int userCount = userList.size();
-        for (int i = 0; i < userCount; i++) {
-            User user = userList.get(i);
-            addDocument(null, user, context, collection);
-        }
-    }
 
     /**
      * Write one document to the firebase database
@@ -207,8 +150,9 @@ public class UtilDatabase {
             // Get the file from storage and display it
             UtilDatabase.getFileOffFirebaseStorageAndDisplay(fileName, localFile,
                     storageDir, imageView);
-            if (Debug.DEBUG_UTIL) Log.d(TAG, "getImageAndDisplay() get file from Firebase storage: "
-                    + localFile.toString());
+            if (Debug.DEBUG_UTIL)
+                Log.d(TAG, "getImageAndDisplay() get file from Firebase storage: "
+                        + localFile.toString());
         }
     }
 
@@ -280,7 +224,8 @@ public class UtilDatabase {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        if (Debug.DEBUG_UTIL) Log.w(TAG, "Error deleting document: " + docRefId, e);
+                        if (Debug.DEBUG_UTIL)
+                            Log.w(TAG, "Error deleting document: " + docRefId, e);
                     }
                 });
     }
@@ -305,6 +250,4 @@ public class UtilDatabase {
             }
         }, milliseconds);
     }
-
-
 }

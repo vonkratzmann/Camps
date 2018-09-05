@@ -179,7 +179,10 @@
     <string name="Comment_updated">Comment: has been updated</string>
     <string name="Comment_saved">Comment: saved to database</string>
     <string name="Database_backup_null">Database: nothing to backup</string>
+    <string name="Database_backup_started">Database backup started</string>
     <string name="Database_backup_success">Database: backup success</string>
+    <string name="Database_backup_failed">Database: backup failed</string>
+    <string name="Database_restore_started">Database restore started</string>
     <string name="Database_restore_success">Database restored, sites inserted: </string>
     <string name="Document_saved">Document written to database: </string>
     <string name="Document_not_saved">Document not written to database: </string>
