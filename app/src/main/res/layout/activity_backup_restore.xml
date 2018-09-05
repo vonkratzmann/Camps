@@ -33,9 +33,9 @@
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
         android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintBottom_toTopOf="@+id/guidelinebackup"
+        app:layout_constraintBottom_toTopOf="@+id/backup_restore_guideline_backup"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <EditText
@@ -45,14 +45,14 @@
         android:layout_margin="8dp"
         android:gravity="center"
         android:hint="@string/maint_filename"
+        android:inputType="text"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
         android:textStyle="bold"
-        android:inputType="text"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guidelinebackup"/>
+        app:layout_constraintTop_toTopOf="@+id/backup_restore_guideline_backup"/>
 
     <Button
         android:id="@+id/restore"
@@ -64,9 +64,9 @@
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
         android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintBottom_toTopOf="@+id/guidelinerestore"
+        app:layout_constraintBottom_toTopOf="@+id/backup_restore_guideline_restore"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <EditText
@@ -76,27 +76,46 @@
         android:layout_margin="8dp"
         android:gravity="center"
         android:hint="@string/maint_filename"
+        android:inputType="text"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
         android:textStyle="bold"
-        android:inputType="text"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guidelinerestore"/>
+        app:layout_constraintTop_toTopOf="@+id/backup_restore_guideline_restore"/>
 
     <android.support.constraint.Guideline
-        android:id="@+id/guidelinebackup"
+        android:id="@+id/backup_restore_guideline_backup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".4"/>
+        app:layout_constraintGuide_percent="0.32"/>
 
     <android.support.constraint.Guideline
-        android:id="@+id/guidelinerestore"
+        android:id="@+id/backup_restore_guideline_restore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".7"/>
+        app:layout_constraintGuide_percent="0.6"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.77"/>
+
+    <TextView
+        android:id="@+id/backup_restore_progress_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
