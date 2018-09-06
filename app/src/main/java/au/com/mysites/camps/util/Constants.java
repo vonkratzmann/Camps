@@ -3,7 +3,7 @@ package au.com.mysites.camps.util;
 public final class Constants {
 
 
-    public static final String PACKAGE_NAME = "au.com.mysites.camps";
+    private static final String PACKAGE_NAME = "au.com.mysites.camps";
 
 
 
@@ -21,8 +21,8 @@ public final class Constants {
     public static int TOASTTIMEFACILITIES = 500;
     public static int TOASTTIMEDATABASE = 1000;
 
-    public static long QUERYTIMEOUT = 1000L;
-    public static long ASYNCTIMEOUT = 2000L;
+    public static long QUERYTIMEOUT = 10000L;
+    public static long ASYNCTIMEOUT = 5000L;
 
     // Date format
     // Note there is also a Resources string version
