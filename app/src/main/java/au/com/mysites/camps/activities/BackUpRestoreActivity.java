@@ -59,14 +59,11 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    static boolean havePermissionAccessStorage = false;
 
     // Constants to select method after permission checks
     private static final int BACKUP = 0;
     private static final int RESTORE = 1;
     private static int mBackupRestoreFlag = 0;
-
-    private FirebaseFirestore mFirestore;
 
     XmlUtils mXmlUtils;
 
@@ -92,9 +89,6 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.maintbackuprestoretoolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.backup_restore_database_title));
-
-        // Initialize Firestore
-        mFirestore = FirebaseFirestore.getInstance();
 
         // set up the listeners for the buttons
         // Listeners will call check storage permissions before doing the backup or restore
@@ -134,10 +128,8 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * <p>
      * Each read of the database is done in an async task, so that task is blocked
      * until the read is complete.
-     *
-     * @param context context to be used
      */
-    public void backupDatabase(final Context context) {
+    public void backupDatabase() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "backupDatabase()");
 
         //Get the view of where the filename is entered by the user
@@ -154,6 +146,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
 
         //Store status messages as UI will be locked as we do a wait for the asynctasks to finish
+        @SuppressWarnings("unchecked")
         ArrayList<String> statusMessages = new ArrayList();
 
         statusMessages.add(getString(R.string.Database_backup_started));
@@ -226,7 +219,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         }
 
         // Add sites to cleared database
-        Boolean result = Boolean.valueOf(true);
+        boolean result;
         try {
             result = new AddSiteAsyncTask()
                     .execute(mSiteList)
@@ -234,29 +227,29 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                     TimeUnit.MILLISECONDS);
         } catch (CancellationException | ExecutionException | InterruptedException | TimeoutException e) {
             Log.w(TAG, "restoreDatabase() add sites exception " + e);
-            result = Boolean.valueOf(false);
+            result = false;
         }
 
         // Add comments to cleared database
         try {
-            result = new AddCommentAsyncTask()
+            result = result & new AddCommentAsyncTask() // Any false result will make result false
                     .execute(mCommentList)
                     .get(Constants.ASYNCTIMEOUT,
                     TimeUnit.MILLISECONDS);
         } catch (CancellationException | ExecutionException | InterruptedException | TimeoutException e) {
             Log.w(TAG, "restoreDatabase() add comments exception " + e);
-            result = Boolean.valueOf(false);
+            result = false;
         }
 
         // Add users to cleared database
         try {
-            result = new AddUserAsyncTask()
+            result = result & new AddUserAsyncTask()
                     .execute(mUserList)
                     .get(Constants.ASYNCTIMEOUT,
                     TimeUnit.MILLISECONDS);
         } catch (CancellationException | ExecutionException | InterruptedException | TimeoutException e) {
             Log.w(TAG, "restoreDatabase() add users exception " + e);
-            result = Boolean.valueOf(false);
+            result = false;
         }
 
         //Tell them the result
@@ -272,13 +265,12 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * @param filename save sites to this file
      * @return true if success
      */
-    @SuppressWarnings("unchecked")
+
     private boolean saveSites(final String filename) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSites()");
 
         ArrayList<Site> mSites;
         //do in background thread as we want to wait until query completed
-        GetSitesAsyncTask getSites = new GetSitesAsyncTask();
         try {
             //read the database into an arraylist
             mSites = new GetSitesAsyncTask().execute(getString(R.string.collection_sites))
@@ -426,10 +418,10 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     }
 
     /**
-     * Do in background thread, and wait for each delete to finish, so do not swamp the resources.
+     * Do in background thread, and wait for each delete to finish, so as not to swamp the resources.
      * Delete collections for sites, comments and users.
      *
-     * @return
+     * @return  true if delete successful
      */
     private boolean deleteDatabase() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "deleteDatabase()");
@@ -480,7 +472,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         // Permission granted, so do it
         switch (mBackupRestoreFlag) {
             case BACKUP:
-                backupDatabase(this);
+                backupDatabase();
                 break;
 
             case RESTORE:
@@ -521,7 +513,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                     // Permission granted, so do it
                     switch (mBackupRestoreFlag) {
                         case BACKUP:
-                            backupDatabase(this);
+                            backupDatabase();
                             break;
                         case RESTORE:
                             restoreDatabase(this);
@@ -544,7 +536,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
 
     //Start class GetSitesAsyncTask
-    public class GetSitesAsyncTask extends AsyncTask<String, Void, ArrayList> {
+    public final static class GetSitesAsyncTask extends AsyncTask<String, Void, ArrayList> {
         private final String TAG = GetSitesAsyncTask.class.getSimpleName();
 
         /**
@@ -560,7 +552,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             //uses Google play Task API
             Task<QuerySnapshot> task = FirebaseFirestore
                     .getInstance()
-                    .collection((String) strings[0])
+                    .collection(strings[0])
                     .get();
 
             ArrayList<Site> sites = new ArrayList<>();
@@ -593,7 +585,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
 
     /* Class GetCommentsAsyncTask */
-    public class GetCommentsAsyncTask extends AsyncTask<String, Void, ArrayList> {
+    public static class GetCommentsAsyncTask extends AsyncTask<String, Void, ArrayList> {
         private final String TAG = GetCommentsAsyncTask.class.getSimpleName();
 
         /**
@@ -609,7 +601,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             //uses Google play Task API
             Task<QuerySnapshot> task = FirebaseFirestore
                     .getInstance()
-                    .collection((String) strings[0])
+                    .collection(strings[0])
                     .get();
 
             ArrayList<Comment> comments = new ArrayList<>();
@@ -642,7 +634,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
 
     /* Class GetUsersAsyncTask */
-    public class GetUsersAsyncTask extends AsyncTask<String, Void, ArrayList> {
+    public static class GetUsersAsyncTask extends AsyncTask<String, Void, ArrayList> {
         private final String TAG = GetUsersAsyncTask.class.getSimpleName();
 
         /**
@@ -658,7 +650,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             //uses Google play Task API
             Task<QuerySnapshot> task = FirebaseFirestore
                     .getInstance()
-                    .collection((String) strings[0])
+                    .collection(strings[0])
                     .get();
 
             ArrayList<User> users = new ArrayList<>();
@@ -690,7 +682,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
 
     /* class DeleteDatabaseAsyncTask */
-    public class DeleteDatabaseAsyncTask extends AsyncTask<String, Void, Boolean> {
+    public static class DeleteDatabaseAsyncTask extends AsyncTask<String, Void, Boolean> {
         private final String TAG = DeleteDatabaseAsyncTask.class.getSimpleName();
 
         /**
@@ -705,14 +697,13 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
             if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground()");
 
-            Boolean result = Boolean.valueOf(true);
+            Boolean result = true;
 
-            int count = strings.length;
-            for (int i = 0; i < count; i++) {   // Do for each parameter passed to doInBackground
+            for (String string : strings) {   // Do for each parameter passed to doInBackground
                 //Get list of items from the database
                 Task<QuerySnapshot> task = FirebaseFirestore
                         .getInstance()
-                        .collection(strings[i])
+                        .collection(string)
                         .get();
                 try {
                     // Uses Google play Task API. Wait to finish the task as inside a background thread.
@@ -723,12 +714,12 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                     }
                     // Delete documents returned for collection
                     for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                        deleteDocument(document, strings[i]);
+                        deleteDocument(document, string);
                     }
                 } catch (ExecutionException | TimeoutException | InterruptedException e) {
                     e.printStackTrace();
                     Log.w(TAG, "doInBackground() Exception: " + e);
-                    result = Boolean.valueOf(false);
+                    result = false;
                 }
             }
             return result;
@@ -740,12 +731,12 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     /**
      * @param document     to be deleted
      * @param myCollection collection containing the document to be deleted
-     * @return true if success
      */
-    private void deleteDocument(final DocumentSnapshot document, final String myCollection) {
+    private static void deleteDocument(final DocumentSnapshot document, final String myCollection) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "deleteDocument()");
 
         final String docId = document.getId();
+
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
         mFirestore.collection(myCollection).document(docId).delete()
@@ -764,7 +755,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     }
 
     /* class AddSiteAsyncTask  */
-    private class AddSiteAsyncTask extends AsyncTask<ArrayList, Void, Boolean> {
+    private static class AddSiteAsyncTask extends AsyncTask<ArrayList, Void, Boolean> {
         private final String TAG = AddSiteAsyncTask.class.getSimpleName();
 
         /**
@@ -774,10 +765,10 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(ArrayList... sites) {
             if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
-
+            @SuppressWarnings("unchecked")
             ArrayList<Site> mySites = sites[0];
             Site site;
-            Boolean result = Boolean.valueOf(true);
+            Boolean result = true;
 
             //for each site write to the database
             int siteCount = mySites.size();
@@ -796,7 +787,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 } catch (TimeoutException | ExecutionException | InterruptedException e) {
                     // Task timed out before it could complete.
                     Log.w(TAG, "doInBackground() Exception: " + e + " Site not added: " + site.getName());
-                    result = Boolean.valueOf(false);
+                    result = false;
                 }
             }
             return result;
@@ -806,20 +797,21 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
 
     /* class AddCommentAsyncTask */
-    private class AddCommentAsyncTask extends AsyncTask<ArrayList, Void, Boolean> {
+    private static class AddCommentAsyncTask extends AsyncTask<ArrayList, Void, Boolean> {
         private final String TAG = AddCommentAsyncTask.class.getSimpleName();
 
         /**
          * @param comments to be added to the database
          * @return string with result description
          */
+        @SuppressWarnings("unchecked")
         @Override
         protected Boolean doInBackground(ArrayList... comments) {
             if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
 
             ArrayList<Comment> myComments = comments[0];
             Comment comment;
-            Boolean result = Boolean.valueOf(true);
+            Boolean result = true;
 
             //for each comment write to the database
             int commentCount = myComments.size();
@@ -836,8 +828,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 } catch (TimeoutException | ExecutionException | InterruptedException e) {
                     // Task timed out before it could complete.
                     Log.w(TAG, "doInBackground() Exception: " + e + " Comment not added: " + comment.getAuthor());
-                    ;
-                    result = Boolean.valueOf(false);
+                    result = false;
                 }
             }
             return result;
@@ -847,20 +838,21 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
 
     /* Class AddCommentAsyncTask */
-    private class AddUserAsyncTask extends AsyncTask<ArrayList, Void, Boolean> {
+    private static class AddUserAsyncTask extends AsyncTask<ArrayList, Void, Boolean> {
         private final String TAG = AddUserAsyncTask.class.getSimpleName();
 
         /**
          * @param users users to be added to database
          * @return string with result description
          */
+        @SuppressWarnings("unchecked")
         @Override
         protected Boolean doInBackground(ArrayList... users) {
             if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground");
 
             ArrayList<User> myUsers = users[0];
             User user;
-            Boolean result = Boolean.valueOf(true);
+            Boolean result = true;
 
             //for each user write to the database
             int userCount = myUsers.size();
@@ -878,7 +870,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                 } catch (TimeoutException | ExecutionException | InterruptedException e) {
                     // Task timed out before it could complete.
                     Log.w(TAG, "doInBackground() Exception: " + e + " User not added: " + user.getEmail());
-                    result = Boolean.valueOf(false);
+                    result = false;
                 }
             }
             return result;
