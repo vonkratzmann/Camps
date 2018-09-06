@@ -154,6 +154,7 @@
     <string name="ERROR_Database_no_filename">Database no filename entered</string>
     <string name="ERROR_Database_unable_read_file">Database error reading file</string>
     <string name="ERROR_Database_unable_delete_documents">Database error deleting documents</string>
+    <string name="ERROR_Database_restore_failed">Database restore failed</string>
     <string name="ERROR_File_not_available">Error: file not available</string>
     <string name="ERROR_File_not_saved">Error: file not saved</string>
     <string name="ERROR_File_format">Error: file format incorrect</string>
@@ -184,6 +185,8 @@
     <string name="Database_backup_failed">Database: backup failed</string>
     <string name="Database_restore_started">Database restore started</string>
     <string name="Database_restore_success">Database restored, sites inserted: </string>
+    <string name="Database_restore_file_read">Database restore, read files</string>
+    <string name="Database_restore_deleted_documents">Database restore, documents deleted</string>
     <string name="Document_saved">Document written to database: </string>
     <string name="Document_not_saved">Document not written to database: </string>
     <string name="Location_null">"Location: empty</string>
