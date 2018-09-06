@@ -171,7 +171,7 @@
     <string name="ERROR_Nothing_entered">Error: nothing updated</string>
     <string name="ERROR_Photo_not_available">Error: photo not available</string>
     <string name="ERROR_Security_exception">Error: location security error</string>
-    <string name="ERROR_Site_not_added">Error: site not saved</string>
+    <string name="ERROR_Site_not_saved">Error: site not saved</string>
     <string name="ERROR_Site_not_edited">Error: site not able to be edited</string>
     <string name="ERROR_Site_not_updated">Error: site not updated</string>
     <string name="ERROR_Site_not_deleted">Error: site not deleted</string>
@@ -192,7 +192,7 @@
     <string name="Location_null">"Location: empty</string>
     <string name="Exiting_application">Exiting Application</string>
     <string name="Site_deleted">Site: has been deleted</string>
-    <string name="Site_updated">Site: has been updated</string>
+    <string name="Site_saved">Site: has been saved</string>
 
     <!-- Menu items -->
     <string name="summary_settings">Settings</string>

@@ -113,12 +113,13 @@ public class Filters {
     }
 
     public String getOrderDescription(Context context) {
-        if (Site.FIELD_PRICE.equals(sortBy)) {
-            return context.getString(R.string.sorted_by_price);
-        } else if (Site.FIELD_POPULARITY.equals(sortBy)) {
-            return context.getString(R.string.sorted_by_popularity);
-        } else {
-            return context.getString(R.string.sorted_by_rating);
+        switch (sortBy) {
+            case Site.FIELD_PRICE:
+                return context.getString(R.string.sorted_by_price);
+            case Site.FIELD_POPULARITY:
+                return context.getString(R.string.sorted_by_popularity);
+            default:
+                return context.getString(R.string.sorted_by_rating);
         }
     }
 }

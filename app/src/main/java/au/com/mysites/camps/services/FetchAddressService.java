@@ -51,34 +51,24 @@ public class FetchAddressService extends IntentService {
             return;
         }
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        String errorMessage = "";
-        ArrayList<String> addressFragments = new ArrayList<String>();
+        String errorMessage;
+        ArrayList<String> addressFragments = new ArrayList<>();
 
         // Get the location passed to this service through an extra.
         Location location = intent.getParcelableExtra(Constants.LOCATION_DATA_EXTRA);
-        List<Address> addresses = null;
+        List<Address> addresses;
         mReceiver = intent.getParcelableExtra(Constants.RECEIVER);
 
         try {
             //Just a single address.
             addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
             // Catch network or other I/O problems.
             errorMessage = "Service_not_available";
             Log.e (TAG, "Error: " + e);
-            deliverResultToReceiver(Constants.FAILURE_RESULT,
-                    TextUtils.join(System.getProperty("line.separator"), addressFragments));
-            return;
-
-        } catch (IllegalArgumentException e) {
-            // Catch invalid latitude or longitude values.
-            errorMessage = "Invalid_lat_long_used";
-            Log.e (TAG, "Error: " + e);
-            deliverResultToReceiver(Constants.FAILURE_RESULT,
-                    TextUtils.join(System.getProperty("line.separator"), addressFragments));
+            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
             return;
         }
-
         // Handle case where no address was found.
         if (addresses == null || addresses.size() == 0) {
             errorMessage = "Address is null";

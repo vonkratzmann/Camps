@@ -34,7 +34,7 @@ import au.com.mysites.camps.fragments.FilterDialogFragment;
 import au.com.mysites.camps.models.Filters;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
-import au.com.mysites.camps.viewmodel.SummarySiteACtivityViewModel;
+import au.com.mysites.camps.viewmodel.SummarySiteActivityViewModel;
 
 public class SummarySitesActivity extends AppCompatActivity implements
         FilterDialogFragment.FilterListener,
@@ -56,7 +56,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
     private FilterDialogFragment mFilterDialog;
     private SiteAdapter mAdapter;
 
-    private SummarySiteACtivityViewModel mViewModel;
+    private SummarySiteActivityViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
         initViews();
 
         // View models
-        mViewModel = ViewModelProviders.of(this).get(SummarySiteACtivityViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(SummarySiteActivityViewModel.class);
 
         // Enable Firestore logging
         FirebaseFirestore.setLoggingEnabled(true);

@@ -1,7 +1,7 @@
 package au.com.mysites.camps.util;
 
 public final class Constants {
-    
+
     private static final String PACKAGE_NAME = "au.com.mysites.camps";
 
     // Storage Permissions request code

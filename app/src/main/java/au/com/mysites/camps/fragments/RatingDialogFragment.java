@@ -47,9 +47,7 @@ public class RatingDialogFragment extends DialogFragment {
                              @Nullable Bundle savedInstanceState) {
         if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "onCreateView()");
 
-        View v = inflater.inflate(R.layout.dialog_rating, container, false);
-
-        return v;
+        return inflater.inflate(R.layout.dialog_rating, container, false);
     }
 
     void initViews() {

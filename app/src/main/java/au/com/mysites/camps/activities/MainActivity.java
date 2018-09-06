@@ -379,15 +379,20 @@ public class MainActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onClick()");
 
         int i = v.getId();
-        if (i == R.id.main_sign_in_button) {
-            signIn();
-        } else if (i == R.id.main_sign_out_button) {
-            signOut();
-        } else if (i == R.id.main_start_app) {
-            Intent startApp = new Intent(MainActivity.this, SummarySitesActivity.class);
-            startActivity(startApp);
-        } else if (i == R.id.main_disconnect_button) {
-            revokeAccess();
+        switch (i) {
+            case R.id.main_sign_in_button:
+                signIn();
+                break;
+            case R.id.main_sign_out_button:
+                signOut();
+                break;
+            case R.id.main_start_app:
+                Intent startApp = new Intent(MainActivity.this, SummarySitesActivity.class);
+                startActivity(startApp);
+                break;
+            case R.id.main_disconnect_button:
+                revokeAccess();
+                break;
         }
     }
 

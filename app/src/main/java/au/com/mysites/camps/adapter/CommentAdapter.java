@@ -66,8 +66,7 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
         void bind(Comment comment) {
             if (Debug.DEBUG_METHOD_ENTRY_ADAPTER) Log.d(TAG, "bind()");
 
-            // todo Load image
-            assert comment != null;
+            if (comment == null) return;
             Glide.with(imageView.getContext())
                     .load(comment.getPhoto())
                     .into(imageView);

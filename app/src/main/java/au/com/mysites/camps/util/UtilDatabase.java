@@ -56,6 +56,7 @@ public class UtilDatabase {
                         public void onSuccess(DocumentReference documentReference) {
                             if (Debug.DEBUG_UTIL)
                                 Log.d(TAG, context.getString(R.string.Document_saved) + documentReference.getId());
+                            makeText(context, context.getString(R.string.Site_saved), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -63,6 +64,7 @@ public class UtilDatabase {
                         public void onFailure(@NonNull Exception e) {
                             if (Debug.DEBUG_UTIL)
                                 Log.d(TAG, context.getString(R.string.Document_not_saved));
+                            makeText(context, context.getString(R.string.ERROR_Site_not_saved), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {  // Specify the name of the document
@@ -72,6 +74,7 @@ public class UtilDatabase {
                         public void onSuccess(Void aVoid) {
                             if (Debug.DEBUG_UTIL)
                                 Log.d(TAG, context.getString(R.string.Document_saved));
+                            makeText(context, context.getString(R.string.Site_saved), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -79,6 +82,7 @@ public class UtilDatabase {
                         public void onFailure(@NonNull Exception e) {
                             if (Debug.DEBUG_UTIL)
                                 Log.d(TAG, context.getString(R.string.Document_not_saved));
+                            makeText(context, context.getString(R.string.ERROR_Site_not_saved), Toast.LENGTH_SHORT).show();
                         }
                     });
         }

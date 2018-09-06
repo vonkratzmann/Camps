@@ -126,8 +126,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     Toolbar toolbar;
 
-    private DetailSiteViewModel mViewModel;
-
     // Set up a text watcher to monitor if the EditText fields have changed.
     private final TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -215,10 +213,10 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     .document(siteId);
         }
         // Display and enable toggling of the facility presence, indicating if present or not
-        displayStatusOfAllFacilities(mSite);
+        displayStatusOfAllFacilities();
 
         // View models
-        mViewModel = ViewModelProviders.of(this).get(DetailSiteViewModel.class);
+        DetailSiteViewModel mViewModel = ViewModelProviders.of(this).get(DetailSiteViewModel.class);
     }
 
     /**
@@ -371,7 +369,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Images files also saved in external storage so next time the site is loaded, they do not
      * have to be downloaded from Firebase storage.
      * <p>
-     * Does not reflect if database write was successful as database write is done asynchronously.
      * Called by a press of the "ok" button.
      *
      * @return true if entered data is valid
@@ -402,7 +399,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
         //add site to the database
         UtilDatabase.addDocument(mSite.getName(), mSite, this, getString(R.string.collection_sites));
-
         return true;
     }
 
@@ -797,51 +793,54 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         return true;
     }
 
-    public void displayStatusOfAllFacilities(final Site site) {
+    /**
+     * Displays all facilities on the UI, indicating if the facility is present or not
+     * at the site.
+     */
+    public void displayStatusOfAllFacilities() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "displayStatusOfAllFacilities()");
 
-        displayFacility(site, dumppointImageView, dumppointpresentImageView, R.string.dumppoint,
+        displayFacility(dumppointImageView, dumppointpresentImageView, R.string.dumppoint,
                 Site.Facility.DUMPPOINT);
-        displayFacility(site, freeImageView, freepresentImageView, R.string.free,
+        displayFacility(freeImageView, freepresentImageView, R.string.free,
                 Site.Facility.FREE);
-        displayFacility(site, mobileImageView, mobilepresentImageView, R.string.mobile,
+        displayFacility(mobileImageView, mobilepresentImageView, R.string.mobile,
                 Site.Facility.MOBILE);
-        displayFacility(site, playequipmentImageView, playequipmentpresentImageView,
+        displayFacility(playequipmentImageView, playequipmentpresentImageView,
                 R.string.playequipment, Site.Facility.PLAYEQUIPMENT);
-        displayFacility(site, scenicImageView, scenicpresentImageView, R.string.scenic,
+        displayFacility(scenicImageView, scenicpresentImageView, R.string.scenic,
                 Site.Facility.SCENIC);
-        displayFacility(site, showersImageView, showerspresentImageView, R.string.showers,
+        displayFacility(showersImageView, showerspresentImageView, R.string.showers,
                 Site.Facility.SHOWERS);
-        displayFacility(site, swimmingImageView, swimmingpresentImageView, R.string.swimming,
+        displayFacility(swimmingImageView, swimmingpresentImageView, R.string.swimming,
                 Site.Facility.SWIMMING);
-        displayFacility(site, toiletsImageView, toiletspresentImageView, R.string.toilets,
+        displayFacility(toiletsImageView, toiletspresentImageView, R.string.toilets,
                 Site.Facility.TOILETS);
-        displayFacility(site, tvreceptionImageView, tvreceptionpresentImageView, R.string.tvreception,
+        displayFacility(tvreceptionImageView, tvreceptionpresentImageView, R.string.tvreception,
                 Site.Facility.TVRECEPTION);
-        displayFacility(site, waterImageView, waterpresentImageView, R.string.water,
+        displayFacility(waterImageView, waterpresentImageView, R.string.water,
                 Site.Facility.WATER);
     }
 
     /**
-     * Displays all facilities on the UI, indicating if the facility is present or not
-     * at the site. Setups a listener, if the facility icon is touched, shows a short message
+     * Display a facility on the UI, indicating if the facility is present or not
+     * at the site. Setups a listener, which if the facility icon is touched, shows a short message
      * specifying the type of facility, toggles the status of the facility
      * ie present or not and updates the UI.
      *
-     * @param site                     facility to be displayed
-     * @param imageViewFacilityIcon    icon for this facility
-     * @param imageViewFacilityPresent flag indicating if the facility is present or not
-     * @param description              a short description of the facility
+     * @param imageViewFacilityIcon    view to display the facility icon in
+     * @param imageViewFacilityPresent view to display if the facility is present or not
+     * @param description              a string id for a short description of the facility
      * @param type                     the type of facility
      */
-    private void displayFacility(final Site site,
-                                 final ImageView imageViewFacilityIcon,
+    private void displayFacility( final ImageView imageViewFacilityIcon,
                                  final ImageView imageViewFacilityPresent,
-                                 final int description, final Site.Facility type) {
+                                 final int description,
+                                 final Site.Facility type) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "displayFacility()");
 
         //Show if facility is present or not, by displaying a tick or cross
-        imageViewFacilityPresent.setImageResource((site.checkIfFacilityPresent(type))
+        imageViewFacilityPresent.setImageResource((mSite.checkIfFacilityPresent(type))
                 ? R.mipmap.tick : R.mipmap.cross);
 
         //Set up listener for changes to the facility
@@ -851,12 +850,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 UtilDatabase.shortToast(getString(description),
                         TOASTTIMEFACILITIES, AddOrEditSiteActivity.this);
 
-                // Toggle status of the facility
-                site.setFacility(type, !site.checkIfFacilityPresent(type));
+                // Toggle status of the facility. NOTE uses mmSite not mSite otherwise change is lost.
+                mSite.setFacility(type, !mSite.checkIfFacilityPresent(type));
                 // update display
-                imageViewFacilityPresent.setImageResource((site.checkIfFacilityPresent(type))
+                imageViewFacilityPresent.setImageResource((mSite.checkIfFacilityPresent(type))
                         ? R.mipmap.tick : R.mipmap.cross);
-                // record the facility has been changed
+                // record the facility has been changed.
                 mSiteHasChanged = true;
             }
         });
@@ -1228,8 +1227,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     /**
      * Handles results from the Geocoder
      */
+    @SuppressLint("RestrictedApi")
     class AddressResultReceiver extends ResultReceiver {
-        //@SuppressLint("RestrictedApi")
         AddressResultReceiver(Handler handler) {
             super(handler);
         }

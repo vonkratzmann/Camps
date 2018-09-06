@@ -3,7 +3,7 @@ package au.com.mysites.camps.util;
 public class ToDoNotes {
 
     //todo Created 20/6/201 Take api key out of android manifest
-    //remove repository from github, once above fixed add back to reporistory
+    //remove repository from github, once above fixed add back to repository
 
     //todo Created 20/6/201 update database backup and restore so they handle ratings
     //todo Created 20/6/201 convert latitude/Longitude so stored in the database

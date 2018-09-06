@@ -420,7 +420,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
      *
      * @param imageResource image to be added to the layout
      * @param string        message to be displayed when image is clicked
-     * @param context       context of callin method
+     * @param context       context of calling method
      */
     private void addFacilityImage(int imageResource, final String string, Context context) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "addFacilityImage()");
