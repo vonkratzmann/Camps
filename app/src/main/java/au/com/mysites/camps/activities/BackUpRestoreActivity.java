@@ -265,7 +265,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * @param filename save sites to this file
      * @return true if success
      */
-
+    @SuppressWarnings("unchecked")
     private boolean saveSites(final String filename) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSites()");
 
@@ -783,8 +783,8 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                         .set(site);
                 try {
                     // Wait for task to finish, add timeout so that application does not hang
-                    Tasks.await(task, Constants.QUERYTIMEOUT, TimeUnit.MILLISECONDS);
-                } catch (TimeoutException | ExecutionException | InterruptedException e) {
+                   Tasks.await(task, Constants.QUERYTIMEOUT, TimeUnit.MILLISECONDS);
+                } catch ( TimeoutException | ExecutionException | InterruptedException e) {
                     // Task timed out before it could complete.
                     Log.w(TAG, "doInBackground() Exception: " + e + " Site not added: " + site.getName());
                     result = false;

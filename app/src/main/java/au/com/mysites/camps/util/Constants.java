@@ -21,8 +21,8 @@ public final class Constants {
     public static int TOASTTIMEFACILITIES = 500;
     public static int TOASTTIMEDATABASE = 1000;
 
-    public static long QUERYTIMEOUT = 2000L;
-    public static long ASYNCTIMEOUT = 10000L;
+    public static long QUERYTIMEOUT = 1000L;
+    public static long ASYNCTIMEOUT = 2000L;
 
     // Date format
     // Note there is also a Resources string version
