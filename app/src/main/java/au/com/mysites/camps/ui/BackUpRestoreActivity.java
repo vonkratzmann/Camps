@@ -1,4 +1,4 @@
-package au.com.mysites.camps.activities;
+package au.com.mysites.camps.ui;
 
 import android.Manifest;
 import android.content.Context;
@@ -277,7 +277,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                     .get(Constants.ASYNCTIMEOUT, TimeUnit.MILLISECONDS);
         } catch (ExecutionException | InterruptedException | TimeoutException e) {
             e.printStackTrace();
-            Log.d(TAG, "saveSites() Exception: " + e);
+            Log.w(TAG, "saveSites() Exception: " + e);
             return false;
         }
         //check we got something to backup
@@ -318,7 +318,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                     .get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
-            Log.d(TAG, "saveComments() Exception: " + e);
+            Log.w(TAG, "saveComments() Exception: " + e);
 
             return false;
         }

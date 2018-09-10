@@ -1,4 +1,4 @@
-package au.com.mysites.camps.activities;
+package au.com.mysites.camps.ui;
 
 import android.content.Context;
 import android.os.Bundle;

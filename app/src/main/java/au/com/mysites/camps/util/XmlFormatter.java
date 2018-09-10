@@ -24,7 +24,7 @@ class XmlFormatter {
      */
 
     XmlFormatter(Context callerContext) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "XmlFormatter()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "XmlFormatter()");
         context = callerContext;
     }
 
@@ -36,7 +36,7 @@ class XmlFormatter {
      */
 
     void formatSite(StringBuilder buffer, Site site) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "formatSite()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "formatSite()");
 
         // Start with a site start tag and add to the buffer
         xmlStartTag(buffer, context.getString(R.string.xml_site));
@@ -248,7 +248,7 @@ class XmlFormatter {
      */
 
     public void formatComment( StringBuilder buffer, Comment comment) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "formatComment()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "formatComment()");
 
         // Start with a comment start tag and add to the buffer
         xmlStartTag(buffer, context.getString(R.string.xml_comment));
@@ -284,7 +284,7 @@ class XmlFormatter {
      */
 
     public void formatUser( StringBuilder buffer, User user) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "formatuser()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "formatuser()");
 
         // Start with a user start tag and add to the buffer
         xmlStartTag(buffer, context.getString(R.string.xml_user));
@@ -325,7 +325,7 @@ class XmlFormatter {
      */
 
     private void xmlElement(StringBuilder buffer, String name, String text) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "xmlElement()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlElement()");
 
         xmlStartTag(buffer, name);
         buffer.append(text);
@@ -341,7 +341,7 @@ class XmlFormatter {
      */
 
     void xmlStartTag(StringBuilder buffer, String name) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "xmlStartTag()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlStartTag()");
 
         buffer.append('<').append(name).append(">");
     }
@@ -355,7 +355,7 @@ class XmlFormatter {
      */
 
     void xmlEndTag(StringBuilder buffer, String name) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "xmlEndTag()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlEndTag()");
 
         buffer.append("</").append(name).append(">");
     }
@@ -371,7 +371,7 @@ class XmlFormatter {
 
     private void xmlStartTagPlusAttributeName(StringBuilder buffer,
                                               String elementName, String attributeName) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "xmlStartTag()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlStartTag()");
 
         buffer.append("<").append(elementName).append(' ').append(attributeName);
     }
@@ -388,7 +388,7 @@ class XmlFormatter {
 
     private void xmlContentPlusEndTag(StringBuilder buffer,
                                       String elementContent, String elementName) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "xmlContentPlusEndTag()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlContentPlusEndTag()");
 
         buffer.append(elementContent);
         xmlEndTag(buffer, elementName);
@@ -403,7 +403,7 @@ class XmlFormatter {
      */
 
     private void xmlAttributeType(StringBuilder buffer, String attributeType) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "xmlAttributeType()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlAttributeType()");
 
         buffer.append("=\"").append(attributeType).append('"');
     }
@@ -417,7 +417,7 @@ class XmlFormatter {
      */
 
     private void xmlAttributeName(StringBuilder buffer, String attributeName) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "xmlAttributeName()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlAttributeName()");
 
         buffer.append(' ').append(attributeName);
     }
@@ -431,7 +431,7 @@ class XmlFormatter {
      */
 
     private void xmlAttributeValue(StringBuilder buffer, String attributeValue) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "xmlAttributeValue()");
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlAttributeValue()");
 
         buffer.append("=\"").append(attributeValue).append('"');
     }

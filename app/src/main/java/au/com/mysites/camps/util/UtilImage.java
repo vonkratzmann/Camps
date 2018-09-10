@@ -159,7 +159,7 @@ public class UtilImage {
     public static String getRealPathFromUri(Context context, Uri contentUri) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getRealPathFromUri()");
 
-        if (contentUri.getAuthority() != null)
+
             if (Debug.DEBUG_UTIL) Log.d(TAG, "contentUri.getAuthority(): " + contentUri.getAuthority());
         else
             if (Debug.DEBUG_UTIL) Log.d(TAG, "contentUri.getAuthority(): " + contentUri.getAuthority());

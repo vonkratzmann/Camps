@@ -1,4 +1,4 @@
-package au.com.mysites.camps.activities;
+package au.com.mysites.camps.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -136,14 +137,17 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
             if (mCityEditText.getText().hashCode() == s.hashCode()) mCityEditText.setHint("");
 
-            if (mPostcodeEditText.getText().hashCode() == s.hashCode()) mPostcodeEditText.setHint("");
+            if (mPostcodeEditText.getText().hashCode() == s.hashCode())
+                mPostcodeEditText.setHint("");
 
             if (mStateEditText.getText().hashCode() == s.hashCode()) mStateEditText.setHint("");
         }
+
         @Override
         // Do not use this one
         public void onTextChanged(CharSequence s, int start, int before, int count) {
         }
+
         @Override
         public void afterTextChanged(Editable s) {
             // Record the site has been changed
@@ -159,10 +163,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         // Do not use this one
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
+
         @Override
         // Do not use this one
         public void onTextChanged(CharSequence s, int start, int before, int count) {
         }
+
         @Override
         public void afterTextChanged(Editable s) {
             // Record the site has been changed
@@ -694,6 +700,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     /**
      * Start an intent to select a photo
+     * <p>
+     * Results returned in {@link #onActivityResult(int, int, Intent)}
      */
     private void selectPhotoUpdateImageViews() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "selectPhotoUpdateImageView()");
@@ -748,19 +756,36 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     break;
                 }
                 // Extract the file path from the returned data
-                String filePath = UtilImage.getRealPathFromUri(this, data.getData());
+                //String filePath = UtilImage.getRealPathFromUri(this, data.getData());
+                Uri uri = data.getData();
 
-                if (filePath == null) {
+             /*   if (filePath == null) {
                     makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
                     if (Debug.DEBUG_SITE) Log.d(TAG, "filePath = null");
                     break;
+                }*/
+
+                if (uri == null) {
+                    makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
+                    if (Debug.DEBUG_SITE) Log.d(TAG, "uri = null");
+                    break;
                 }
-                if (updateImageViewsFromFile(filePath)) {  // Process the file
+
+                Glide.with(this)
+                        .load(uri)
+                        .into(mThumbnailImageView);
+
+                Glide.with(this)
+                        .load(uri)
+                        .into(mSitePhotoImageView);
+                mSiteHasChanged = true;
+
+               /* if (updateImageViewsFromFile(uri)) {  // Process the file
                     mSiteHasChanged = true;            // If Ok, set flag site details have changed
                 } else { // Warn the user
                     makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
                     if (Debug.DEBUG_SITE) Log.d(TAG, "Update image views failure");
-                }
+                }*/
                 break;
         }
     }
@@ -769,13 +794,13 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Scales image from file in photoPath to thumbnail and sitePhoto ImageViews
      * then displays scaled image in thumbnail and sitePhoto ImageViews
      *
-     * @param photoPath file containing image to be processed
+     * @param photoPath containing image to be processed
      * @return true if operation successful
      */
     private boolean updateImageViewsFromFile(String photoPath) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "updateImageViewsFromFile()");
 
-        // Scale thumbnail
+       // Scale thumbnail
         Bitmap bitmap = scaleImageFile(photoPath, mThumbnailImageView);
         if (bitmap == null) {
             if (Debug.DEBUG_SITE) Log.d(TAG, "Thumbnail image scaling failure");
@@ -833,7 +858,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @param description              a string id for a short description of the facility
      * @param type                     the type of facility
      */
-    private void displayFacility( final ImageView imageViewFacilityIcon,
+    private void displayFacility(final ImageView imageViewFacilityIcon,
                                  final ImageView imageViewFacilityPresent,
                                  final int description,
                                  final Site.Facility type) {

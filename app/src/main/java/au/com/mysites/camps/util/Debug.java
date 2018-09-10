@@ -13,13 +13,13 @@ public final class Debug {
     public static final boolean DEBUG_METHOD_ENTRY_MAP = true;
     public static final boolean DEBUG_METHOD_ENTRY_SERVICE = false;
     public static final boolean DEBUG_METHOD_ENTRY_UTIL = true;
+    public static final boolean DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER = false;
 
     // To log a message for specific areas in the code
     public static final boolean DEBUG_BACKUP_RESTORE = true;
     public static final boolean DEBUG_FILE = true;
-    public static final boolean DEBUG_PARSING = true;
-    public static final boolean DEBUG_PARSING_COMMENTS = true;
-    public static final boolean DEBUG_UTIL = true;
+    public static final boolean DEBUG_PARSING = false;
+    public static final boolean DEBUG_UTIL = false;
     public static final boolean DEBUG_SITE = true;
     public static final boolean DEBUG_SERVICE_ADDRESS = true;
 }

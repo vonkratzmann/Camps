@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.Site;
-import au.com.mysites.camps.activities.DetailSiteMapActivity;
+import au.com.mysites.camps.ui.DetailSiteMapActivity;
 
 /**
  * Methods used to assist with maps
