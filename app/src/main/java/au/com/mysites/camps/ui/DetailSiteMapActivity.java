@@ -30,7 +30,7 @@ public class DetailSiteMapActivity extends FragmentActivity implements OnMapRead
     private String mLongitude;
     private String mName;
 
-    float zoomLevel = 16.0F;
+    final float zoomLevel = 16.0F;
 
     /**
      * Gets the site, latitude, longitude and name from the intent,

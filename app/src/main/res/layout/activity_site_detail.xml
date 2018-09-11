@@ -24,6 +24,7 @@
         android:id="@+id/site_detail_photo"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_marginTop="8dp"
         android:alpha="1.0"
         android:contentDescription="@string/site_detail_photo_hint"
         android:scaleType="centerInside"
@@ -37,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias=".95"
+        app:layout_constraintHorizontal_bias=".975"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/site_details_guideline_fab"
         app:srcCompat="@drawable/ic_add_white_24px"/>
@@ -177,7 +178,9 @@
         style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="2dp"
         android:layout_alignTop="@+id/site_detail_map_coordinates_heading"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/detail_border"
         android:text="@string/detail_site_map_show"
         android:textColor="@color/Gray"
@@ -234,14 +237,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.39"/>
+        app:layout_constraintGuide_percent="0.4"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/site_details_guideline_coordinates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.59"/>
+        app:layout_constraintGuide_percent="0.58"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/site_details_guideline_facilities"
@@ -260,7 +263,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/site_detail_recycler_comments"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="301dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"

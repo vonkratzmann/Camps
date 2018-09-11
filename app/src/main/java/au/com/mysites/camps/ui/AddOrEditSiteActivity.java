@@ -749,21 +749,14 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 break;
 
             case Constants.RC_PICK_IMAGE:
-                // For the chosen image, scale & display in thumbnail and sitePhoto ImageViews.
+                // For the choosen image, scale & display in thumbnail and sitePhoto ImageViews.
                 if (resultCode != Activity.RESULT_OK || data == null) {    // Warn the user
                     makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
                     if (Debug.DEBUG_SITE) Log.d(TAG, "Result code failure or data = null");
                     break;
                 }
-                // Extract the file path from the returned data
-                //String filePath = UtilImage.getRealPathFromUri(this, data.getData());
+                // Extract the URI from the  returned data
                 Uri uri = data.getData();
-
-             /*   if (filePath == null) {
-                    makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
-                    if (Debug.DEBUG_SITE) Log.d(TAG, "filePath = null");
-                    break;
-                }*/
 
                 if (uri == null) {
                     makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
@@ -779,13 +772,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                         .load(uri)
                         .into(mSitePhotoImageView);
                 mSiteHasChanged = true;
-
-               /* if (updateImageViewsFromFile(uri)) {  // Process the file
-                    mSiteHasChanged = true;            // If Ok, set flag site details have changed
-                } else { // Warn the user
-                    makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
-                    if (Debug.DEBUG_SITE) Log.d(TAG, "Update image views failure");
-                }*/
                 break;
         }
     }
