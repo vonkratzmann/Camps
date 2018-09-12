@@ -1,0 +1,158 @@
+<camps>
+<site> 
+	<name>Barbour Park Rest Area</name>
+	<image>something.jpg</image>
+	<city>Gunning</city>
+	<state>NSW</state>
+	<street>Newell A31</street>
+	<date_created>3/7/2017</date_created>
+	<latitude>-34:46:46</latitude>
+	<longitude>149:16:0</longitude>
+	<facilities type="dumppoint">false</facilities>
+	<facilities type="free">true</facilities>
+	<facilities type="mobile">true</facilities>
+	<facilities type="playequipment">true</facilities>
+	<facilities type="showers">false</facilities>
+	<facilities type="swimming">true</facilities>
+	<facilities type="toilets">true</facilities>
+	<facilities type="tvreception">true</facilities>
+	<facilities type="scenic">false</facilities>
+	<facilities type="water">false</facilities>
+	<comment date="2/17/2016"
+			 author="vonkratzmann@gmail.com">
+		Beautiful spot, next to the creek and swimming pool, only small so get in early. Very cold in winter with heavy frost.
+	</comment>
+</site>
+<site>
+	<name>Green Hill Lake Reserve</name>
+	<image>something.jpg</image>
+	<city>Ararat</city>
+	<street>Western Highway A8</street>
+	<state>VIC</state>
+	<date_created>3/07/2017</date_created>
+	<latitude>-37:17:45</latitude>
+	<longitude>142:58:59</longitude>
+	<facilities type="dumppoint">false</facilities>
+	<facilities type="free">true</facilities>
+	<facilities type="mobile">true</facilities>
+	<facilities type="playequipment">true</facilities>
+	<facilities type="showers">true</facilities>
+	<facilities type="swimming">false</facilities>
+	<facilities type="toilets">true</facilities>
+	<facilities type="tvreception">true</facilities>
+	<facilities type="scenic">true</facilities>
+	<facilities type="water">true</facilities>
+	<comment date="3/07/2017"
+			 author="vonkratzmann@gmail.com">
+		Quiet spot just south of Ararat, plenty of room with reasonable facilities. Great spot for kids as you could kyak in the lake. Imagine it would get very busy in summer.
+	</comment>
+</site>
+<site> 
+	<name>WWII Ruins</name>
+	<image>something.jpg</image>
+	<city>Near Barrow Creek</city>
+	<street>Stuart Highway A87</street>
+	<state>NT</state>
+	<date_created>13/07/2017</date_created>
+	<longitude>0</longitude>
+	<latitude>0</latitude>
+	<facilities type="dumppoint">false</facilities>
+	<facilities type="free">true</facilities>
+	<facilities type="mobile">false</facilities>
+	<facilities type="playequipment">false</facilities>
+	<facilities type="showers">false</facilities>
+	<facilities type="swimming">false</facilities>
+	<facilities type="toilets">false</facilities>
+	<facilities type="tvreception">false</facilities>
+	<facilities type="scenic">false</facilities>
+	<facilities type="water">false</facilities>
+	<comment date="3/07/2017"
+			 author="vonkratzmann@gmail.com">
+		Quiet spot about half a kilometer from the street, so no road noise. Beautiful sunset and sunrise and we were able to camp on a concrete slab obviously from when the site was used in the Second World War. Lots of birds.
+	</comment>
+</site>
+<site>
+	<name>Ngumban Cliffs Rest Area</name>
+	<image>something.jpg</image>
+	<city>Fitzroy Crossing</city>
+	<street>Great Northern Highway A1</street>
+	<state>WA</state>
+	<date_created>13/07/2017</date_created>
+	<longitude>0</longitude>
+	<latitude>0</latitude>
+	<facilities type="dumppoint">true</facilities>
+	<facilities type="free">true</facilities>
+	<facilities type="mobile">false</facilities>
+	<facilities type="playequipment">false</facilities>
+	<facilities type="showers">false</facilities>
+	<facilities type="swimming">false</facilities>
+	<facilities type="toilets">true</facilities>
+	<facilities type="tvreception">false</facilities>
+	<facilities type="scenic">true</facilities>
+	<facilities type="water">false</facilities>
+	<comment date="3/07/2017"
+			 author="vonkratzmann@gmail.com">
+		About 100km east of Fitzroy crossing.
+	</comment>
+	<comment date="3/07/2017"
+			 author="vonkratzmann@gmail.com">
+		Quiet spot about half a kilometer from the street, so no road noise.
+	</comment>
+</site>
+<site> 
+	<name>Ellendale Rest Area</name>
+	<image>something.jpg</image>
+	<city>Fitzroy Crossing</city>
+	<street>Great Northern Highway A1</street>
+	<state>WA</state>
+	<date_created>13/07/2017</date_created>
+	<longitude>0</longitude>
+	<latitude>0</latitude>
+	<facilities type="dumppoint">true</facilities>
+	<facilities type="free">true</facilities>
+	<facilities type="mobile">false</facilities>
+	<facilities type="playequipment">false</facilities>
+	<facilities type="showers">false</facilities>
+	<facilities type="swimming">false</facilities>
+	<facilities type="toilets">true</facilities>
+	<facilities type="tvreception">false</facilities>
+	<facilities type="scenic">true</facilities>
+	<facilities type="water">false</facilities>
+	<comment date="3/07/2017"
+			 author="vonkratzmann@gmail.com">
+		Great spot for overnighter about 100km west of Fitzroy Crossing.
+	</comment>
+</site>
+<site> 
+	<name>Racetrack Rec Reserve</name>
+	<image>something.jpg</image>
+	<city>Great Western </city>
+	<street>Western Highway A87</street>
+	<state>VIC</state>
+	<date_created>13/07/2017</date_created>
+	<longitude>0</longitude>
+	<latitude>0</latitude>
+	<facilities type="dumppoint">false</facilities>
+	<facilities type="free">true</facilities>
+	<facilities type="mobile">true</facilities>
+	<facilities type="playequipment">false</facilities>
+	<facilities type="showers">true</facilities>
+	<facilities type="swimming">false</facilities>
+	<facilities type="toilets">true</facilities>
+	<facilities type="tvreception">true</facilities>
+	<facilities type="scenic">false</facilities>
+	<facilities type="water">false</facilities>
+	<comment date="3/07/2017"
+			 author="vonkratzmann@gmail.com">
+		Quiet spot in the racetrack, up behing the Seppellts Winery, so well away from the road noise.
+	</comment>
+		<comment date="4/07/2017"
+				 author="vonkratzmann@gmail.com">
+		Only pay if you want power or showers, otherwise free.
+	</comment>
+		<comment date="5/07/2017"
+				 author="vonkratzmann@gmail.com">
+		They only have an annual race day, so you should check you're not intending to stay there on race day.
+	</comment>
+</site>
+</camps>

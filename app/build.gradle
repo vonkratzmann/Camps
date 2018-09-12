@@ -1,7 +1,4 @@
 apply plugin: 'com.android.application'
-// keys for Google Map API
-def GEO_API_KEY = '"' + GoogleGeoApiKey + '"' ?: '"ERROR Google Geo API key not defined"'
-//
 
 android {
     compileSdkVersion 27
@@ -12,12 +9,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        // Insert values into Manifest file using manifestPlaceholders property using key-value pairs.
-        manifestPlaceholders = [    // This is used for defining the variable for the manifest file.
-                                    // So the key is not visible in the manifest in GitHub public reprository.
-                                    GEO_API_KEY: GEO_API_KEY
-        ]
     }
     buildTypes {
         release {
