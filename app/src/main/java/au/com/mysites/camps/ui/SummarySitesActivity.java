@@ -1,10 +1,13 @@
 package au.com.mysites.camps.ui;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +37,7 @@ import au.com.mysites.camps.fragments.FilterDialogFragment;
 import au.com.mysites.camps.models.Filters;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
+import au.com.mysites.camps.util.Permissions;
 import au.com.mysites.camps.viewmodel.SummarySiteActivityViewModel;
 
 public class SummarySitesActivity extends AppCompatActivity implements
@@ -67,6 +71,11 @@ public class SummarySitesActivity extends AppCompatActivity implements
         Toolbar toolbar = findViewById(R.id.site_summary_toolbar);
         setSupportActionBar(toolbar);
 
+        // Check have permission to access external storage
+        Permissions permissions = new Permissions();
+        permissions.checkPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
+
         initViews();
 
         // View models
@@ -91,6 +100,33 @@ public class SummarySitesActivity extends AppCompatActivity implements
                 startActivity(addNewSite);
             }
         });
+    }
+
+
+    /**
+     * Handles request permission results
+     *
+     * @param requestCode  code to allow identification of original request permissions
+     * @param permissions  permissions requested
+     * @param grantResults results of permission request
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onRequestPermissionsResult()");
+
+        switch (requestCode) {
+            case Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //permission granted, continue
+                } else {
+                    // permission denied exit, tell user
+                    Toast.makeText(this, getString(R.string.ERROR_Storage_external_unavailable),
+                            Toast.LENGTH_LONG).show();
+                    //kk
+                }
+                break;
+        }
     }
 
     void initViews() {

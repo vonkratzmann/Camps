@@ -27,10 +27,10 @@ public final class Constants {
 
     // Permission requests
     public final static int PERMISSIONS_REQUEST_CAMERA = 10;
-    public final static int PERMISSIONS_REQUEST_EXTERNAL_STORAGE_CAMERA = 20;
-    public final static int PERMISSIONS_REQUEST_EXTERNAL_STORAGE_GETPHOTO = 30;
-    public final static int PERMISSIONS_REQUEST_LOCATION = 40;
-    public static final int PERMISSION_REQUEST_CODE = 50;
+    public final static int PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 20;
+    public final static int PERMISSIONS_REQUEST_EXTERNAL_STORAGE_CAMERA = 30;
+    public final static int PERMISSIONS_REQUEST_EXTERNAL_STORAGE_GETPHOTO = 40;
+    public final static int PERMISSIONS_REQUEST_LOCATION = 50;
 
     // Used in FetchAddressService
     public static final int SUCCESS_RESULT = 0;

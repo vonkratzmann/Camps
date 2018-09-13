@@ -131,79 +131,92 @@ public class UtilDatabase {
      * download the file from Firebase Storage and display it in the imageView, so that
      * future loads of the site will not require the file to be downloaded again.
      *
-     * @param fileName  name of file containing image
+     * @param context   of calling activity
+     * @param fileName  name of file in firebase storage containing image
      * @param imageView view where image is to be displayed
      */
-    public static void getImageAndDisplay(String fileName, ImageView imageView) {
+    public static void getImageAndDisplay(Context context, String fileName, ImageView imageView) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getImageAndDisplay()");
 
         // Get the local storage directory
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        // Create local file with directory and name of the file
+        // Create instance of local file with directory and name of the file
         final File localFile = new File(storageDir, fileName);
 
-        if (localFile.exists()) {
-            // File exists on local device
-            if (Debug.DEBUG_UTIL) Log.d(TAG, "getImageAndDisplay() local file exists: " +
-                    localFile.toString());
-            // Display the file
-            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-            imageView.setImageBitmap(bitmap);
-        } else {
-            // Get the file from storage and display it
-            UtilDatabase.getFileOffFirebaseStorageAndDisplay(fileName, localFile,
-                    storageDir, imageView);
-            if (Debug.DEBUG_UTIL)
-                Log.d(TAG, "getImageAndDisplay() get file from Firebase storage: "
-                        + localFile.toString());
+        try {
+            if (localFile.exists()) {
+                // File exists on local device
+                if (Debug.DEBUG_UTIL) Log.d(TAG, "local file exists: " +
+                        localFile.toString());
+                // Display the file
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                imageView.setImageBitmap(bitmap);
+            } else {
+                // Check the local storage directory exits
+                if (!storageDir.exists()) {
+                    storageDir.mkdirs();
+                }
+                // Create an empty local file
+                localFile.createNewFile();
+                // Get the file from Firebase storage, display it, and store locally
+                UtilDatabase.getFileOffFirebaseStorageAndDisplay(context, fileName, localFile,
+                        storageDir, imageView);
+                if (Debug.DEBUG_UTIL) {
+                    Log.d(TAG, "get file from Firebase storage: " + fileName);
+                    Log.d(TAG, "get file from Firebase store in: " + localFile.toString());
+                }
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "getImageAndDisplay() exception e: " + e +
+                    " File: " + localFile.toString());
         }
     }
-
 
     /**
      * Gets a file from storage, store on the local storage directory,
      * and displays it on the imageView.
      *
-     * @param fileName   name of file containing image
-     * @param localFile  file containing image
+     * @param context    of calling routine
+     * @param fileName   name of file in firebase storage containing image
+     * @param localFile  store image retrieved from firebase storage in this file
      * @param storageDir directory where the local file is to be stored
      * @param imageView  view where image is to be displayed
      */
     private static void
-    getFileOffFirebaseStorageAndDisplay(final String fileName, final File localFile,
+    getFileOffFirebaseStorageAndDisplay(final Context context, final String fileName,
+                                        final File localFile,
                                         final File storageDir, final ImageView imageView) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getFileFirebaseOffStorageDisplay()");
-
-        // Check the local storage directory exits
-        if (!storageDir.exists()) {
-            storageDir.mkdirs();
-        }
         // Get a reference to the remote file
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference pathReference = storageRef.child("camps/" + fileName);
+        try {
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+            StorageReference pathReference = storageRef.child(context.getString(R.string.firebase_photos)
+                    + "/" +fileName);
+            pathReference.getFile(localFile).addOnSuccessListener(
+                    new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
 
-        pathReference.getFile(localFile).addOnSuccessListener(
-                new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            if (Debug.DEBUG_UTIL)
+                                Log.d(TAG, "image read from firebase storage: " + fileName);
 
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        if (Debug.DEBUG_UTIL)
-                            Log.d(TAG, "getFileFirebaseStorageDisplay() local file created: " +
-                                    localFile.toString());
+                            // Display the file
+                            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
 
-                        // Display the file
-                        Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                        imageView.setImageBitmap(bitmap);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                if (Debug.DEBUG_UTIL)
-                    Log.d(TAG, "getFileFirebaseStorageDisplay() local file not created: "
-                            + localFile.toString() + exception.toString());
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    if (Debug.DEBUG_UTIL)
+                        Log.w(TAG, "error reading from firebase storage: "
+                                + localFile.toString() + exception.toString());
+                }
+            });
+        } catch (Exception e) {
+            Log.w(TAG, "exception: " + e);
+        }
     }
 
     /**

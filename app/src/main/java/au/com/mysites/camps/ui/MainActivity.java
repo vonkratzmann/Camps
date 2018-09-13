@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private File mFile;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +151,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onStop() {
         super.onStop();
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onStop)");
+
         UtilDialog.hideProgressDialog(mProgressDialog);
     }
 
@@ -297,11 +298,15 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void signIn() {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "signIn()");
+
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, Constants.RC_SIGN_IN);
     }
 
     private void signOut() {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "signOut()");
+
         // Firebase sign out
         mAuth.signOut();
 
@@ -316,6 +321,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void revokeAccess() {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "revokeAccess()");
+
         // Firebase sign out
         mAuth.signOut();
 

@@ -109,7 +109,6 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         if (mSiteId == null) {
             throw new IllegalArgumentException("Must pass extra " + getString(R.string.intent_site_name));
         }
-
         Toolbar toolbar = findViewById(R.id.site_detail_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(mSiteId);
@@ -300,7 +299,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
 
         // only process if site photo is valid
         if (site.getSitePhoto() != null && !site.getSitePhoto().isEmpty()) {
-            UtilDatabase.getImageAndDisplay(site.getSitePhoto(), mPhotoView);
+            UtilDatabase.getImageAndDisplay(this, site.getSitePhoto(), mPhotoView);
         }
         //displays only those facilities present at the site
         displayFacilities(site, this);

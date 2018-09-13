@@ -174,8 +174,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             // Record the site has been changed
             mSiteHasChanged = true;
             // Update the toolbar title
-            if (s != null)
-                toolbar.setTitle(s.toString());
+            if (s != null) toolbar.setTitle(s.toString());
         }
     };
 
@@ -335,12 +334,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         // If we have a file name stored, display the image of the site
         String sitePhoto = site.getSitePhoto();
         if (!UtilGeneral.stringEmpty(sitePhoto)) {
-            UtilDatabase.getImageAndDisplay(sitePhoto, mSitePhotoImageView);
+            UtilDatabase.getImageAndDisplay(this, sitePhoto, mSitePhotoImageView);
         }
         // If we have a file name stored, display the thumbnail of the site
         String thumbnail = site.getThumbnail();
         if (!UtilGeneral.stringEmpty(thumbnail)) {
-            UtilDatabase.getImageAndDisplay(thumbnail, mThumbnailImageView);
+            UtilDatabase.getImageAndDisplay(this, thumbnail, mThumbnailImageView);
         }
         // Update UI to show if facility is present at site or not
         dumppointpresentImageView.setImageResource((site.checkIfFacilityPresent(Site.Facility.DUMPPOINT))
@@ -651,7 +650,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             // Create the File in external storage with a collision resistant file name.
             photoFile = UtilImage.createImageFile(this);
             mPhotoPath = photoFile.getAbsolutePath();
-        } catch (IOException ex) {
+        } catch (IOException ex) { /// Warn the user
             // Error occurred while creating the File, tell the user
             Toast.makeText(this, getString(R.string.ERROR_File_error), Toast.LENGTH_SHORT).show();
         }
@@ -786,7 +785,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     private boolean updateImageViewsFromFile(String photoPath) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "updateImageViewsFromFile()");
 
-       // Scale thumbnail
+        // Scale thumbnail
         Bitmap bitmap = scaleImageFile(photoPath, mThumbnailImageView);
         if (bitmap == null) {
             if (Debug.DEBUG_SITE) Log.d(TAG, "Thumbnail image scaling failure");
@@ -930,10 +929,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                                     getString(R.string.ERROR_GPS_error), Toast.LENGTH_SHORT).show();
                         }
                     });
-        } catch (
-                SecurityException e) {
-            Toast.makeText(this, getString(R.string.ERROR_Security_exception),
-                    Toast.LENGTH_LONG).show();
+        } catch (SecurityException e) { // Warn the user
+            Toast.makeText(this, getString(R.string.ERROR_Security_exception), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -1193,8 +1190,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 /* Flag mSiteHasBeenChanged is set to false if no errors during processing
                  * by getSite(). Does not reflect if write to database was successful
                  * as database write is done asynchronously. */
-                if (getSite())
+                if (getSite()) {
                     mSiteHasChanged = false;
+                }
                 break;
 
             case R.id.add_site_button_take_photo:
