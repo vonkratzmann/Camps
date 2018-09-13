@@ -53,6 +53,7 @@ import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.services.FetchAddressService;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
+import au.com.mysites.camps.util.Permissions;
 import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.UtilGeneral;
 import au.com.mysites.camps.util.UtilImage;
@@ -620,7 +621,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             return;
         }
         // Check permissions to access camera
-        if (checkPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+        Permissions permissions = new Permissions();
+
+        if (permissions.checkPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE_CAMERA)) {
             //permission granted
             takePhotoDispatchIntent();
@@ -1045,29 +1048,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         mSite.setSitePhoto(null);
 
         mSiteHasChanged = true;
-    }
-
-    /**
-     * Checks we have permissions
-     * If we have permission return true.
-     * If permission not granted call {@link #requestPermissions(String[], int)}, and
-     * return false.
-     *
-     * @param permissions Permissions being checked
-     * @param requestId   Used to identify calling method
-     */
-    private boolean checkPermissions(String[] permissions, int requestId) {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "checkPermissions()");
-        //Check permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            //no access, request permissions
-            ActivityCompat.requestPermissions(this, permissions, requestId);
-            return false;
-        } else {
-            //permission already granted
-            return true;
-        }
     }
 
     /**

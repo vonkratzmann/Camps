@@ -102,7 +102,6 @@ public class SummarySitesActivity extends AppCompatActivity implements
         });
     }
 
-
     /**
      * Handles request permission results
      *
@@ -117,13 +116,15 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
         switch (requestCode) {
             case Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //permission granted, continue
-                } else {
-                    // permission denied exit, tell user
-                    Toast.makeText(this, getString(R.string.ERROR_Storage_external_unavailable),
-                            Toast.LENGTH_LONG).show();
-                    //kk
+
+                if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    // permission denied, tell user and exit activity
+                    Toast.makeText(this, getString(R.string.Exiting_application), Toast.LENGTH_LONG).show();
+                    // Cannot continue as external storage needed to run app, so go to signout page
+                    Intent signOut = new Intent(SummarySitesActivity.this, MainActivity.class);
+                    // Signal to new activity the source of this intent
+                    signOut.putExtra(getString(R.string.intent_sign_out), true);
+                    startActivity(signOut);
                 }
                 break;
         }

@@ -19,9 +19,9 @@
     <string name="collection_ratings" translatable="false">ratings</string>
 
     <!-- Folder names for Firebase storage -->
-   <string name="firebase_photos" translatable="false">photos</string>
+    <string name="firebase_photos" translatable="false">photos</string>
 
-   <!-- Intent Extras -->
+    <!-- Intent Extras -->
     <string name="intent_site_number" translatable="false">siteNumber</string>
     <string name="intent_edit_site_number" translatable="false">editSiteNumber</string>
     <string name="intent_site_name" translatable="false">siteName</string>
@@ -34,7 +34,7 @@
     <string name="pref_key_name" translatable="false">pref_key_name</string>
 
     <!-- format of dates -->
-     <!-- Note there is also a version in constants -->
+    <!-- Note there is also a version in constants -->
     <string name="dateformat" translatable="false">dd/MM/yyyy</string>
 
     <!-- format of coordinates  -->
@@ -189,8 +189,8 @@
     <string name="Database_restore_deleted_documents">Database restore, documents deleted</string>
     <string name="Document_saved">Document written to database: </string>
     <string name="Document_not_saved">Document not written to database: </string>
-    <string name="Location_null">"Location: empty</string>
     <string name="Exiting_application">Exiting Application</string>
+    <string name="Location_null">"Location: empty</string>
     <string name="Site_deleted">Site: has been deleted</string>
     <string name="Site_saved">Site: has been saved</string>
 
@@ -224,7 +224,7 @@
     <!-- File name for image files -->
     <string name="Image_File_Name">yyyyMMdd_HHmmss</string>
 
-     <!-- kk sort out -->
+    <!-- kk sort out -->
     <string name="value_any_city">Anywhere</string>
     <string name="value_any_price">Any price</string>
 

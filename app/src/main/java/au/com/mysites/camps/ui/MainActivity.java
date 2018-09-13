@@ -51,7 +51,7 @@ import au.com.mysites.camps.util.UtilImage;
 /**
  * Firebase Authentication using a Google ID Token.
  * Whenever there is a new sign in, saves the users profile information in the database under
- * the collection users with the user google identification string as the document name. The user
+ * the collection users with the user email string as the document name. The user
  * profile picture is save to firebase storage with the name of the photo stored in the database.
  * <p>
  * Each time the application is started the last used date for the user is updated
@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements
          * ie user is presented with sign in or sign out buttons. */
         updateUI(currentUser);
 
+        // Check if a request to sign out
         Intent intent = getIntent();
         boolean signOutRequest;
         if (intent != null) {
@@ -257,14 +258,14 @@ public class MainActivity extends AppCompatActivity implements
             User myUser = new User(name, email, photoFileName, lastUsed);
 
             // Saves user information to database
-            saveUserToFirestore(uid, myUser);
+            saveUserToFirestore(email, myUser);
         }
     }
 
     /**
      * Save copy of user profile information to Firestore database
      *
-     * @param id   User profile id, used as document reference
+     * @param id   use as document reference
      * @param user user information to be saved
      */
     private void saveUserToFirestore(String id, User user) {
