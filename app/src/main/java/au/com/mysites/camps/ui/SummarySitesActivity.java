@@ -40,6 +40,13 @@ import au.com.mysites.camps.util.Debug;
 import au.com.mysites.camps.util.Permissions;
 import au.com.mysites.camps.viewmodel.SummarySiteActivityViewModel;
 
+/**
+ * Displays a summary list of the sites, with photo, name, address and rating, with ability to
+ * select a sort order for the sites.
+ * By touching a site a more detailed display of the site is provided.
+ * From the toolbar a signout option is provided which takes the user to the
+ * signin signout Firebase activity.
+ */
 public class SummarySitesActivity extends AppCompatActivity implements
         FilterDialogFragment.FilterListener,
         SiteAdapter.OnSiteSelectedListener {

@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,8 +32,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.User;
@@ -43,9 +39,7 @@ import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
 import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.UtilDialog;
-import au.com.mysites.camps.util.UtilFile;
 import au.com.mysites.camps.util.UtilGeneral;
-import au.com.mysites.camps.util.UtilImage;
 
 /**
  * Firebase Authentication using a Google ID Token.
@@ -137,9 +131,9 @@ public class MainActivity extends AppCompatActivity implements
         // Display a photo of the user if signed in
         if (currentUser != null) {
             Uri photoUri = currentUser.getPhotoUrl();
-                           Glide.with(MainActivity.this)
-                        .load(photoUri)
-                        .into(mProfilePhotoImageView);
+            Glide.with(MainActivity.this)
+                    .load(photoUri)
+                    .into(mProfilePhotoImageView);
         }
 
         // Check if a request to sign out
@@ -235,34 +229,9 @@ public class MainActivity extends AppCompatActivity implements
             // Name, email address, and profile photo Url
             String name = user.getDisplayName();
             String email = user.getEmail();
-            Uri photoUri = user.getPhotoUrl();
-            String photoFileName = null;    // The name of the file used to store photo in storage
-
-            if (photoUri != null) {
-                // Create a unique file name to be used on local storage to save a copy of the photo
-                try {
-                    mFile = UtilImage.createImageFile(this);
-                } catch (IOException ioe) {
-                    Log.e(TAG, "saveUserProfile() IOException");
-                }
-                if (mFile != null)
-                    photoFileName = mFile.getName();
-
-                String string = photoUri.toString();
-     /*           *//* Display the profile photo. If the user is logged in and if the SummarySitesActivity
-                 * is started the photo will not been seen *//*
-                Glide.with(MainActivity.this)
-                        .load(photoUri)
-                        .into(mProfilePhotoImageView);
-*/
-                // Download the photo in a background task and save it on local storage
-                new AsyncTaskGetPhoto().execute(string);
-
-                //imageViewToNewFile(Context context, ImageView imageView)
-            }
             String lastUsed = UtilGeneral.getTodaysDate(getString(R.string.dateformat));
 
-            User myUser = new User(name, email, photoFileName, lastUsed);
+            User myUser = new User(name, email, lastUsed);
 
             // Saves user information to database
             saveUserToFirestore(email, myUser);
@@ -272,8 +241,8 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Save copy of user profile information to Firestore database
      *
-     * @param docId   use as document ID
-     * @param user user information to be saved
+     * @param docId use as document ID
+     * @param user  user information to be saved
      */
     private void saveUserToFirestore(String docId, User user) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveUserToFirestore()");
@@ -408,47 +377,6 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.main_disconnect_button:
                 revokeAccess();
                 break;
-        }
-    }
-
-    /**
-     * fetches a file containing a photo from the web, copies the result to local storage
-     * in {@link #onPostExecute(File)}
-     */
-    private class AsyncTaskGetPhoto extends AsyncTask<String, Void, File> {
-        private final String TAG = AsyncTaskGetPhoto.class.getSimpleName();
-
-        @Override
-        protected File doInBackground(String... string) {
-            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "doInBackground()");
-
-            File file = null;
-            try {
-                file = Glide.with(MainActivity.this)
-                        .load(string[0])// Get path to the file
-                        .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                        .get();
-
-            } catch (InterruptedException | ExecutionException e) {
-                Log.d(TAG, "copyFile error: " + e);
-            }
-            return file;
-        }
-
-        /**
-         * save file to local storage
-         *
-         * @param result file copied from the web
-         */
-        @Override
-        protected void onPostExecute(File result) {
-            if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onPostExecute()");
-
-            try {
-                UtilFile.copyFile(result, mFile);
-            } catch (IOException e) {
-                Log.w(TAG, "Error while copying file: " + e);
-            }
         }
     }
 }

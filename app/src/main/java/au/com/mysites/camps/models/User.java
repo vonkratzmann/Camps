@@ -10,7 +10,6 @@ public class User {
 
     private String name;
     private String email;
-    private String photo;
     private String lastUsed;
     /**
      * Constructors
@@ -20,11 +19,9 @@ public class User {
 
     public User(String displayName,
                 String email,
-                String photoFileName,
                 String lastUsed) {
         this.name = displayName;
         this.email = email;
-        this.photo = photoFileName;
         this.lastUsed = lastUsed;
     }
 
@@ -42,14 +39,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhoto() {
-        return this.photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 
     public String getLastUsed() {

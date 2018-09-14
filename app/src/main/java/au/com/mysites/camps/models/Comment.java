@@ -20,7 +20,6 @@ public class Comment {
     private String createdDate;
     private String author;
     private String siteId;
-    private String photo;
 
     /**
      * Constructor
@@ -96,13 +95,5 @@ public class Comment {
 
     public void setSiteId(String siteId) {
         this.siteId = siteId;
-    }
-
-    public String getPhoto() {
-        return this.photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 }

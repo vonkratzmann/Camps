@@ -6,30 +6,19 @@
                 android:orientation="vertical"
                 android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/comment_author_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="#757575"
-        android:scaleType="centerCrop"
-        android:contentDescription="@null"
-        android:src="@drawable/eyresrock" />
-
     <TextView
         android:id="@+id/comment_date"
-        style="@style/AppTheme.Body1"
+        style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/comment_author_image"
         android:layout_marginBottom="4dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="-2dp"
-        android:layout_toEndOf="@+id/comment_author_image"
         android:maxLines="1"
         tools:text="01/01/1001" />
 
     <TextView
-        android:id="@+id/site_tem_street_divider"
+        android:id="@+id/site_item_street_divider"
         style="@style/AppTheme.TextDivider"
         android:layout_alignTop="@+id/comment_date"
         android:layout_toEndOf="@+id/comment_date"
@@ -37,11 +26,10 @@
 
     <TextView
         android:id="@+id/comment_author"
-        style="@style/AppTheme.Body1"
+        style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/site_tem_street_divider"
-        android:layout_alignTop="@+id/comment_author_image"
+        android:layout_alignLeft="@+id/site_item_street_divider"
         android:layout_marginBottom="4dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="-2dp"
@@ -53,7 +41,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/comment_date"
-        android:layout_toEndOf="@+id/comment_author_image"
         android:layout_marginBottom="4dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="-2dp"

@@ -68,7 +68,8 @@ public class XmlParser {
         } catch (Exception e) {
             // tell user error in file format and exit application
             exiting(R.string.ERROR_File_format);
-            if (Debug.DEBUG_PARSING) Log.d(TAG, "parseSites " + context.getString(R.string.ERROR_File_format));
+            if (Debug.DEBUG_PARSING)
+                Log.d(TAG, "parseSites " + context.getString(R.string.ERROR_File_format));
         }
     }
 
@@ -104,7 +105,8 @@ public class XmlParser {
         } catch (Exception e) {
             // tell user error in file format and exit application
             exiting(R.string.ERROR_File_format);
-            if (Debug.DEBUG_PARSING) Log.d(TAG, " parseComments " + context.getString(R.string.ERROR_File_format));
+            if (Debug.DEBUG_PARSING)
+                Log.d(TAG, " parseComments " + context.getString(R.string.ERROR_File_format));
         }
     }
 
@@ -141,7 +143,8 @@ public class XmlParser {
         } catch (Exception e) {
             // tell user error in file format and exit application
             exiting(R.string.ERROR_File_format);
-            if (Debug.DEBUG_PARSING) Log.d(TAG, "parseUsers " + context.getString(R.string.ERROR_File_format));
+            if (Debug.DEBUG_PARSING)
+                Log.d(TAG, "parseUsers " + context.getString(R.string.ERROR_File_format));
         }
     }
 
@@ -194,7 +197,8 @@ public class XmlParser {
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
             exiting(R.string.ERROR_File_format);
-            if (Debug.DEBUG_PARSING) Log.d(TAG, "addSite " + context.getString(R.string.ERROR_File_format));
+            if (Debug.DEBUG_PARSING)
+                Log.d(TAG, "addSite " + context.getString(R.string.ERROR_File_format));
         }
     }
 
@@ -221,8 +225,6 @@ public class XmlParser {
                     comment.setAuthor(readAuthor(p));
                 } else if (p.getName().equals(context.getString(R.string.xml_comment_date_created))) {
                     comment.setCreatedDate(readDateCreated(p));
-                } else if (p.getName().equals(context.getString(R.string.xml_comment_photo))) {
-                    comment.setPhoto(readPhoto(p));
                 } else if (p.getName().equals(context.getString(R.string.xml_comment_siteid))) {
                     comment.setSiteId(readSiteId(p));
                 } else if (p.getName().equals(context.getString(R.string.xml_comment_text))) {
@@ -235,7 +237,8 @@ public class XmlParser {
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
             exiting(R.string.ERROR_File_format);
-            if (Debug.DEBUG_PARSING) Log.d(TAG, "addComment " + context.getString(R.string.ERROR_File_format));
+            if (Debug.DEBUG_PARSING)
+                Log.d(TAG, "addComment " + context.getString(R.string.ERROR_File_format));
         }
     }
 
@@ -264,8 +267,6 @@ public class XmlParser {
                     user.setLastUsed(readLastUsed(p));
                 } else if (p.getName().equals(context.getString(R.string.xml_user_name))) {
                     user.setName(readName(p));
-                } else if (p.getName().equals(context.getString(R.string.xml_user_photo))) {
-                    user.setPhoto(readPhoto(p));
                 } else {
                     skip(p);
                 }
@@ -274,7 +275,8 @@ public class XmlParser {
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
             exiting(R.string.ERROR_File_format);
-            if (Debug.DEBUG_PARSING) Log.d(TAG, "addUser " + context.getString(R.string.ERROR_File_format));
+            if (Debug.DEBUG_PARSING)
+                Log.d(TAG, "addUser " + context.getString(R.string.ERROR_File_format));
         }
     }
 
@@ -479,7 +481,7 @@ public class XmlParser {
         if (Debug.DEBUG_PARSING) Log.d(TAG, "Email: " + myEmail);
         return myEmail;
     }
-    
+
     /**
      * read the use last used text
      *
@@ -584,7 +586,8 @@ public class XmlParser {
         } catch (XmlPullParserException | IOException e) {
             // tell user error in file format and exit application
             exiting(R.string.ERROR_File_format);
-            if (Debug.DEBUG_PARSING) Log.d(TAG, "getFacility " + context.getString(R.string.ERROR_File_format));
+            if (Debug.DEBUG_PARSING)
+                Log.d(TAG, "getFacility " + context.getString(R.string.ERROR_File_format));
         }
     }
 

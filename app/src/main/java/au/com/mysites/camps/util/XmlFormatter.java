@@ -302,10 +302,6 @@ class XmlFormatter {
         xmlElement(buffer, context.getString(R.string.xml_user_lastused), user.getLastUsed());
         buffer.append('\n');
 
-        // convert siteId to xml and add to the buffer
-        xmlElement(buffer, context.getString(R.string.xml_user_photo), user.getPhoto());
-        buffer.append('\n');
-
         // add the closing site tag to the buffer
         xmlEndTag(buffer, context.getString(R.string.xml_user));
         // add a return at the end
