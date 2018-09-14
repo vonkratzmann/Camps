@@ -220,7 +220,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         // Display and enable toggling of the facility presence, indicating if present or not
         displayStatusOfAllFacilities();
 
-       // When view touched hide soft keyboard
+       /* Hide the soft keyboard when you touch outside of an edit text.
+        * android.R.id.content gives you the root view of the activity,
+          so when you touch outside of edit text, the soft keyboard is hidden */
         findViewById(android.R.id.content).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
