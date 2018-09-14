@@ -503,7 +503,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         if (file != null) {
             //save new file to firestore storage
-            UtilDatabase.saveFileFirestore(this, file, getString(R.string.firebase_photos));
+            UtilDatabase.saveFileFirebaseStorage(this, file, getString(R.string.firebase_photos));
 
             //save path in storage to the database
             mSite.setThumbnail(file.getName());
@@ -513,7 +513,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         if (file != null) {
             //save new file to firestore storage
-            UtilDatabase.saveFileFirestore(this, file, getString(R.string.firebase_photos));
+            UtilDatabase.saveFileFirebaseStorage(this, file, getString(R.string.firebase_photos));
 
             //save path in storage to the database
             mSite.setSitePhoto(file.getName());
@@ -761,7 +761,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     if (Debug.DEBUG_SITE) Log.d(TAG, "Result code failure or data = null");
                     break;
                 }
-                // Extract the URI from the  returned data
+                // Extract the URI from the returned data
                 Uri uri = data.getData();
 
                 if (uri == null) {
@@ -769,7 +769,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                     if (Debug.DEBUG_SITE) Log.d(TAG, "uri = null");
                     break;
                 }
-
+                // Display image in thumbnail and site image
                 Glide.with(this)
                         .load(uri)
                         .into(mThumbnailImageView);

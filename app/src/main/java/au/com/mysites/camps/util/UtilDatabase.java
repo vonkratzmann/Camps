@@ -95,9 +95,9 @@ public class UtilDatabase {
      * @param file    file to be saved to storage
      * @param path    file path to use in firebase
      */
-    public static void saveFileFirestore(final Context context, final File file,
-                                         final String path) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "saveFileFirestore()");
+    public static void saveFileFirebaseStorage(final Context context, final File file,
+                                               final String path) {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "saveFileFirebaseStorage()");
 
         //Now store file in Firestore storage, create reference
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();

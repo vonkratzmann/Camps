@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.Query;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.Comment;
 import au.com.mysites.camps.util.Debug;
-import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.UtilGeneral;
 
 /**
@@ -70,7 +70,9 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
             if (comment == null) return;
             // Check there is a stored image for the author
             if (!UtilGeneral.stringEmpty(comment.getPhoto())) {
-                UtilDatabase.getImageAndDisplay(imageView.getContext(), comment.getPhoto(), imageView);
+                Glide.with(imageView.getContext())
+                        .load(comment.getPhoto())
+                        .into(imageView);
             }
             dateView.setText(comment.getCreatedDate());
             authorView.setText(comment.getAuthor());

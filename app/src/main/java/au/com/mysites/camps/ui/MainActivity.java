@@ -1,6 +1,5 @@
 package au.com.mysites.camps.ui;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -135,6 +134,14 @@ public class MainActivity extends AppCompatActivity implements
          * ie user is presented with sign in or sign out buttons. */
         updateUI(currentUser);
 
+        // Display a photo of the user if signed in
+        if (currentUser != null) {
+            Uri photoUri = currentUser.getPhotoUrl();
+                           Glide.with(MainActivity.this)
+                        .load(photoUri)
+                        .into(mProfilePhotoImageView);
+        }
+
         // Check if a request to sign out
         Intent intent = getIntent();
         boolean signOutRequest;
@@ -208,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements
                             Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
                         // [START_EXCLUDE]
                         UtilDialog.hideProgressDialog(mProgressDialog);
                         // [END_EXCLUDE]
@@ -219,9 +225,7 @@ public class MainActivity extends AppCompatActivity implements
 
     /**
      * Saves user profile information to Firestore database in case it has changed.
-     * Saves user profile photo to Firebase storage, and saves a copy
-     * to local storage, so that next time the photo can be fetched from local storage rather than
-     * the remote database.
+     * Saves user profile photo to local storage, so photo can be displayed as part of the comments.
      */
     private void saveUserProfile() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveUserProfile()");
@@ -232,11 +236,10 @@ public class MainActivity extends AppCompatActivity implements
             String name = user.getDisplayName();
             String email = user.getEmail();
             Uri photoUri = user.getPhotoUrl();
-            String uid = user.getUid();     // The user's ID, unique to this Firebase project
             String photoFileName = null;    // The name of the file used to store photo in storage
 
             if (photoUri != null) {
-                // Create a unique file name for the photo
+                // Create a unique file name to be used on local storage to save a copy of the photo
                 try {
                     mFile = UtilImage.createImageFile(this);
                 } catch (IOException ioe) {
@@ -246,12 +249,16 @@ public class MainActivity extends AppCompatActivity implements
                     photoFileName = mFile.getName();
 
                 String string = photoUri.toString();
-                /* Display the profile photo. If the user is logged in and if the SummarySitesActivity
-                 * is started the photo will not been seen */
-                Glide.with(MainActivity.this).load(photoUri).into(mProfilePhotoImageView);
+     /*           *//* Display the profile photo. If the user is logged in and if the SummarySitesActivity
+                 * is started the photo will not been seen *//*
+                Glide.with(MainActivity.this)
+                        .load(photoUri)
+                        .into(mProfilePhotoImageView);
+*/
+                // Download the photo in a background task and save it on local storage
+                new AsyncTaskGetPhoto().execute(string);
 
-                // Start AsyncTask and implement onPostExecute Method to retrieve user photo
-                new AsyncTaskGetUri().execute(string);
+                //imageViewToNewFile(Context context, ImageView imageView)
             }
             String lastUsed = UtilGeneral.getTodaysDate(getString(R.string.dateformat));
 
@@ -265,19 +272,19 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Save copy of user profile information to Firestore database
      *
-     * @param id   use as document reference
+     * @param docId   use as document ID
      * @param user user information to be saved
      */
-    private void saveUserToFirestore(String id, User user) {
+    private void saveUserToFirestore(String docId, User user) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveUserToFirestore()");
 
         // Initialize Firestore
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-        // User Id is used as the document reference
-        assert id != null;
+
+        assert docId != null;
 
         mFirestore.collection(getString(R.string.collection_users))
-                .document(id)
+                .document(docId)
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -286,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements
                             Log.d(TAG, "saveUserProfile() document successfully written");
                         //   Now save the photo to firebase storage
                         if (mFile != null)
-                            UtilDatabase.saveFileFirestore(MainActivity.this, mFile,
+                            UtilDatabase.saveFileFirebaseStorage(MainActivity.this, mFile,
                                     getString(R.string.collection_users));
                     }
                 })
@@ -405,11 +412,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * fetches a file from the web, copies the result to local storage
+     * fetches a file containing a photo from the web, copies the result to local storage
+     * in {@link #onPostExecute(File)}
      */
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncTaskGetUri extends AsyncTask<String, Void, File> {
-        private final String TAG = AsyncTaskGetUri.class.getSimpleName();
+    private class AsyncTaskGetPhoto extends AsyncTask<String, Void, File> {
+        private final String TAG = AsyncTaskGetPhoto.class.getSimpleName();
 
         @Override
         protected File doInBackground(String... string) {
