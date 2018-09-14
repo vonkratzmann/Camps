@@ -272,7 +272,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
             Log.w(TAG, "site:onEvent", e);
             return;
         }
-        if (snapshot != null) {  // Now go and process the data loaded from the snapshot
+        if (snapshot !=null && snapshot.exists()) {  // Process the data loaded from the snapshot
             onSiteLoaded(Objects.requireNonNull(snapshot.toObject(Site.class)));
         }
     }

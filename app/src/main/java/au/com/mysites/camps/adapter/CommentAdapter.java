@@ -9,23 +9,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.Query;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.Comment;
 import au.com.mysites.camps.util.Debug;
+import au.com.mysites.camps.util.UtilDatabase;
+import au.com.mysites.camps.util.UtilGeneral;
 
 /**
- * RecyclerView adapter for comments for a single site
+ * RecyclerView adapter for comments when displaying details of a site using
+ * the activity DetailSiteActivity
  */
 
 public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> {
     private final static String TAG = CommentAdapter.class.getSimpleName();
 
     /**
-     *
-     * @param query  database query from the calling routine
+     * @param query database query from the calling routine
      */
     protected CommentAdapter(Query query) {
         super(query);
@@ -67,10 +68,10 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
             if (Debug.DEBUG_METHOD_ENTRY_ADAPTER) Log.d(TAG, "bind()");
 
             if (comment == null) return;
-            Glide.with(imageView.getContext())
-                    .load(comment.getPhoto())
-                    .into(imageView);
-
+            // Check there is a stored image for the author
+            if (!UtilGeneral.stringEmpty(comment.getPhoto())) {
+                UtilDatabase.getImageAndDisplay(imageView.getContext(), comment.getPhoto(), imageView);
+            }
             dateView.setText(comment.getCreatedDate());
             authorView.setText(comment.getAuthor());
             textView.setText(comment.getText());

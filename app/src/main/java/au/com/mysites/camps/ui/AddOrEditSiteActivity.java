@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,6 +25,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -58,7 +58,6 @@ import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.UtilGeneral;
 import au.com.mysites.camps.util.UtilImage;
 import au.com.mysites.camps.util.UtilMap;
-import au.com.mysites.camps.viewmodel.DetailSiteViewModel;
 
 import static android.widget.Toast.makeText;
 import static au.com.mysites.camps.util.Constants.TOASTTIMEFACILITIES;
@@ -221,8 +220,14 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         // Display and enable toggling of the facility presence, indicating if present or not
         displayStatusOfAllFacilities();
 
-        // View models
-        DetailSiteViewModel mViewModel = ViewModelProviders.of(this).get(DetailSiteViewModel.class);
+       // When view touched hide soft keyboard
+        findViewById(android.R.id.content).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                UtilGeneral.hideSoftKeyboard(AddOrEditSiteActivity.this);
+                return false;
+            }
+        });
     }
 
     /**
@@ -306,7 +311,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             Log.w(TAG, "Error: ", e);
             return;
         }
-        if (snapshot.exists()) {
+        if (snapshot != null && snapshot.exists()) {  // Process the data loaded from the snapshot
             onSiteLoaded(Objects.requireNonNull(snapshot.toObject(Site.class)));
         }
     }
@@ -688,14 +693,11 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     private void selectPhoto() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "selectPhoto()");
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            //request permissions
-            ActivityCompat.
-                    requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE_GETPHOTO);
-        } else {
-            //permission already granted
+        // Check have permission to access external storage
+        Permissions permissions = new Permissions();
+        if (permissions.checkPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE_GETPHOTO)) {
+            //permission granted
             selectPhotoUpdateImageViews();
         }
     }
@@ -1167,6 +1169,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         switch (v.getId()) {
             case R.id.add_site_save:
+                // Clear the soft keyboard
+                UtilGeneral.hideSoftKeyboard(this);
                 /* Flag mSiteHasBeenChanged is set to false if no errors during processing
                  * by getSite(). Does not reflect if write to database was successful
                  * as database write is done asynchronously. */

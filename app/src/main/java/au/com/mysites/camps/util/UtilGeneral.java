@@ -1,7 +1,9 @@
 package au.com.mysites.camps.util;
 
 
+import android.app.Activity;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,8 +31,14 @@ public class UtilGeneral {
 
     public static String getTodaysDate(String format) {
 
-    DateFormat dateFormat = new SimpleDateFormat(format);
-    Date date = new Date();
-	return dateFormat.format(date);
-}
+        DateFormat dateFormat = new SimpleDateFormat(format);
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
 }
