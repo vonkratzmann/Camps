@@ -37,6 +37,7 @@ import au.com.mysites.camps.fragments.FilterDialogFragment;
 import au.com.mysites.camps.models.Filters;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
+import au.com.mysites.camps.util.DividerItemDecoration;
 import au.com.mysites.camps.util.Permissions;
 import au.com.mysites.camps.viewmodel.SummarySiteActivityViewModel;
 
@@ -56,7 +57,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
     Toolbar mToolbar;
     TextView mCurrentSearchView;
     TextView mCurrentSortByView;
-    RecyclerView mSitesRecycler;
+    RecyclerView mSitesRecyclerView;
     ViewGroup mEmptyView;
     CardView mFilterBar;
     ImageView mFilterClear;
@@ -146,7 +147,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
         mCurrentSortByView = findViewById(R.id.summary_text_current_sort_by);
 
-        mSitesRecycler = findViewById(R.id.summary_recycler_sites);
+        mSitesRecyclerView = findViewById(R.id.summary_recycler_sites);
 
         mEmptyView = findViewById(R.id.summary_view_empty);
 
@@ -197,10 +198,10 @@ public class SummarySitesActivity extends AppCompatActivity implements
             protected void onDataChanged() {
                 // Show/hide content if the query returns empty.
                 if (getItemCount() == 0) {
-                    mSitesRecycler.setVisibility(View.GONE);
+                    mSitesRecyclerView.setVisibility(View.GONE);
                     mEmptyView.setVisibility(View.VISIBLE);
                 } else {
-                    mSitesRecycler.setVisibility(View.VISIBLE);
+                    mSitesRecyclerView.setVisibility(View.VISIBLE);
                     mEmptyView.setVisibility(View.GONE);
                 }
             }
@@ -212,8 +213,11 @@ public class SummarySitesActivity extends AppCompatActivity implements
                         "Error: check logs for info.", Snackbar.LENGTH_LONG).show();
             }
         };
-        mSitesRecycler.setLayoutManager(new LinearLayoutManager(this));
-        mSitesRecycler.setAdapter(mAdapter);
+        mSitesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Add a line between each item in the recycler view
+        mSitesRecyclerView.addItemDecoration(new
+                DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        mSitesRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -375,10 +379,6 @@ public class SummarySitesActivity extends AppCompatActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
 
         switch (item.getItemId()) {
-            case R.id.menu_summary_settings:
-                Toast.makeText(this, "show option", Toast.LENGTH_SHORT).show();
-                break;
-
             case R.id.menu_summary_sign_out:
                 Intent signOut = new Intent(SummarySitesActivity.this, MainActivity.class);
                 // Signal to new activity the source of this intent

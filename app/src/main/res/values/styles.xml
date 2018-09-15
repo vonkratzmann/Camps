@@ -10,6 +10,7 @@
         <item name="android:textColorSecondary">@color/greySecondary</item>
 
         <item name="android:actionOverflowButtonStyle">@style/AppTheme.Overflow</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">

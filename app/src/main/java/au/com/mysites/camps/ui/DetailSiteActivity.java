@@ -48,6 +48,7 @@ import au.com.mysites.camps.models.Comment;
 import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
+import au.com.mysites.camps.util.DividerItemDecoration;
 import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.UtilMap;
 import au.com.mysites.camps.viewmodel.DetailSiteViewModel;
@@ -57,7 +58,9 @@ import static android.widget.RelativeLayout.CENTER_VERTICAL;
 import static android.widget.Toast.makeText;
 
 /**
- * Displays the detail for a single site with comments for that site
+ * Displays the detail for a single site with comments for that site.
+ * The toolbar provides the option to edit the site, or display a map with a marker
+ * for the site location.
  */
 public class DetailSiteActivity extends AppCompatActivity implements View.OnClickListener,
         EventListener<DocumentSnapshot>, CommentDialogFragment.CommentListener {
@@ -75,7 +78,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     private TextView mLongitudeView;
 
     MaterialRatingBar mRatingIndicator;
-    private RecyclerView mCommentsRecycler;
+    private RecyclerView mCommentsRecyclerView;
 
     private CommentDialogFragment mCommentDialog;
 
@@ -131,16 +134,20 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
             @Override
             protected void onDataChanged() {
                 if (getItemCount() == 0) {
-                    mCommentsRecycler.setVisibility(View.GONE);
+                    mCommentsRecyclerView.setVisibility(View.GONE);
                     mEmptyView.setVisibility(View.VISIBLE);
                 } else {
-                    mCommentsRecycler.setVisibility(View.VISIBLE);
+                    mCommentsRecyclerView.setVisibility(View.VISIBLE);
                     mEmptyView.setVisibility(View.GONE);
                 }
             }
         };
-        mCommentsRecycler.setLayoutManager(new LinearLayoutManager(this));
-        mCommentsRecycler.setAdapter(mCommentAdapter);
+        mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Add a line between each item in the recycler view
+        mCommentsRecyclerView.addItemDecoration(new
+                DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+
+        mCommentsRecyclerView.setAdapter(mCommentAdapter);
     }
 
     /**
@@ -160,7 +167,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
 
         mEmptyView = findViewById(R.id.site_details_no_comments_group);
         mRatingIndicator = findViewById(R.id.site_detail_rating);
-        mCommentsRecycler = findViewById(R.id.site_detail_recycler_comments);
+        mCommentsRecyclerView = findViewById(R.id.site_detail_recycler_comments);
 
         TextView mShowMapView = findViewById(R.id.site_detail_show_map);
         mShowMapView.setOnClickListener(this);
@@ -272,7 +279,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
             Log.w(TAG, "site:onEvent", e);
             return;
         }
-        if (snapshot !=null && snapshot.exists()) {  // Process the data loaded from the snapshot
+        if (snapshot != null && snapshot.exists()) {  // Process the data loaded from the snapshot
             onSiteLoaded(Objects.requireNonNull(snapshot.toObject(Site.class)));
         }
     }
@@ -331,7 +338,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
                     public void onSuccess(DocumentReference documentReference) {
                         // Hide keyboard and scroll to top
                         hideKeyboard();
-                        mCommentsRecycler.smoothScrollToPosition(0);
+                        mCommentsRecyclerView.smoothScrollToPosition(0);
                     }
                 })
                 .addOnFailureListener(this, new OnFailureListener() {
@@ -512,5 +519,8 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
                 break;
         }
     }
+
+
+
 }
 

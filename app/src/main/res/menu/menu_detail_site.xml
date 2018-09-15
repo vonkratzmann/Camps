@@ -7,4 +7,9 @@
         android:orderInCategory="100"
         android:title="@string/detail_edit_site"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menu_detail_show_map"
+        android:orderInCategory="100"
+        android:title="@string/detail_edit_site"
+        app:showAsAction="ifRoom"/>
 </menu>
