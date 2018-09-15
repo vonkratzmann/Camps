@@ -19,9 +19,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/site_item_thumbnail"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="-2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="-6dp"
         android:layout_toEndOf="@+id/site_item_thumbnail"
         android:ellipsize="end"
         android:maxLines="1"
@@ -34,7 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/site_item_name"
         android:layout_below="@+id/site_item_name"
-        android:layout_marginBottom="4dp"/>
+        android:layout_marginTop="-4dp"
+        android:layout_marginBottom="2dp"/>
 
     <TextView
         android:id="@+id/site_item_num_ratings"
@@ -44,6 +45,7 @@
         android:layout_alignBottom="@+id/site_item_rating"
         android:layout_alignTop="@+id/site_item_rating"
         android:layout_marginLeft="4dp"
+        android:layout_marginTop="-2dp"
         android:layout_toEndOf="@+id/site_item_rating"
         android:gravity="center_vertical"
         android:textColor="@color/greyDisabled"
@@ -57,29 +59,25 @@
         android:layout_alignLeft="@+id/site_item_name"
         android:layout_below="@+id/site_item_rating"
         android:textColor="@color/greySecondary"
+        android:maxLines="1"
+        android:layout_marginTop="-6dp"
         tools:text="Logan Road"/>
-
-    <TextView
-        android:id="@+id/site_item_street_divider"
-        style="@style/AppTheme.TextDivider"
-        android:layout_alignTop="@+id/site_item_street"
-        android:layout_toEndOf="@+id/site_item_street"
-        android:text="@string/divider_bullet"/>
 
     <TextView
         android:id="@+id/site_item_city"
         style="@style/AppTheme.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/site_item_street"
-        android:layout_toEndOf="@+id/site_item_street_divider"
+        android:layout_below="@+id/site_item_street"
+        android:layout_alignLeft="@+id/site_item_name"
         android:textColor="@color/greySecondary"
+        android:maxLines="1"
         tools:text="Brisbane"/>
 
     <TextView
         android:id="@+id/site_item_city_divider"
         style="@style/AppTheme.TextDivider"
-        android:layout_alignTop="@+id/site_item_street"
+        android:layout_alignTop="@+id/site_item_city"
         android:layout_toEndOf="@+id/site_item_city"
         android:text="@string/divider_bullet"/>
 
@@ -88,15 +86,16 @@
         style="@style/AppTheme.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/site_item_street"
+        android:layout_alignTop="@+id/site_item_city"
         android:layout_toEndOf="@+id/site_item_city_divider"
         android:textColor="@color/greySecondary"
+        android:maxLines="1"
         tools:text="3000"/>
 
     <TextView
         android:id="@+id/site_item_state_divider"
         style="@style/AppTheme.TextDivider"
-        android:layout_alignTop="@+id/site_item_street"
+        android:layout_alignTop="@+id/site_item_city"
         android:layout_toEndOf="@+id/site_item_postcode"
         android:text="@string/divider_bullet"/>
 
@@ -105,9 +104,10 @@
         style="@style/AppTheme.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/site_item_street"
+        android:layout_alignTop="@+id/site_item_city"
         android:layout_toEndOf="@+id/site_item_state_divider"
         android:textColor="@color/greySecondary"
+        android:maxLines="1"
         tools:text="Qld"/>
 
 </RelativeLayout>
