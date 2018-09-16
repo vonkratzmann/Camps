@@ -43,14 +43,15 @@ import au.com.mysites.camps.viewmodel.SummarySiteActivityViewModel;
 
 /**
  * Displays a summary list of the sites, with photo, name, address and rating, with ability to
- * select a sort order for the sites.
+ * select a sort order and filter the sites.
  * By touching a site a more detailed display of the site is provided.
  * From the toolbar a signout option is provided which takes the user to the
- * signin signout Firebase activity.
+ * signin/signout Firebase activity.
  */
 public class SummarySitesActivity extends AppCompatActivity implements
         FilterDialogFragment.FilterListener,
-        SiteAdapter.OnSiteSelectedListener {
+        SiteAdapter.OnSiteSelectedListener,
+        View.OnClickListener {
 
     private static final String TAG = SummarySitesActivity.class.getSimpleName();
 
@@ -86,7 +87,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
         initViews();
 
-        // View models
+        // Retain filters information over the activity lifecycle using ViewModel
         mViewModel = ViewModelProviders.of(this).get(SummarySiteActivityViewModel.class);
 
         // Enable Firestore logging
@@ -108,6 +109,27 @@ public class SummarySitesActivity extends AppCompatActivity implements
                 startActivity(addNewSite);
             }
         });
+    }
+
+    void initViews() {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initViews()");
+
+        mToolbar = findViewById(R.id.site_summary_toolbar);
+        // Used to display the search criteria in the search container at the top of the UI
+        mCurrentSearchView = findViewById(R.id.summary_text_current_search);
+
+        // Used to display the sort criteria in the search container at the top of the UI
+        mCurrentSortByView = findViewById(R.id.summary_text_current_sort_by);
+
+        mSitesRecyclerView = findViewById(R.id.summary_recycler_sites);
+
+        mEmptyView = findViewById(R.id.summary_view_empty);
+
+        mFilterBar = findViewById(R.id.summary_filter_bar);
+        mFilterBar.setOnClickListener(this);
+
+        mFilterClear = findViewById(R.id.summary_button_clear_filter);
+        mFilterClear.setOnClickListener(this);
     }
 
     /**
@@ -136,37 +158,6 @@ public class SummarySitesActivity extends AppCompatActivity implements
                 }
                 break;
         }
-    }
-
-    void initViews() {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initViews()");
-
-        mToolbar = findViewById(R.id.site_summary_toolbar);
-
-        mCurrentSearchView = findViewById(R.id.summary_text_current_search);
-
-        mCurrentSortByView = findViewById(R.id.summary_text_current_sort_by);
-
-        mSitesRecyclerView = findViewById(R.id.summary_recycler_sites);
-
-        mEmptyView = findViewById(R.id.summary_view_empty);
-
-        mFilterBar = findViewById(R.id.summary_filter_bar);
-        mFilterBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mFilterDialog.show(getSupportFragmentManager(), FilterDialogFragment.TAG);
-            }
-        });
-
-        mFilterClear = findViewById(R.id.summary_button_clear_filter);
-        mFilterClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mFilterDialog.resetFilters();
-                onFilter(Filters.getDefault());
-            }
-        });
     }
 
     private void initFirestore() {
@@ -205,7 +196,6 @@ public class SummarySitesActivity extends AppCompatActivity implements
                     mEmptyView.setVisibility(View.GONE);
                 }
             }
-
             @Override
             protected void onError(FirebaseFirestoreException e) {
                 // Show a snack bar on errors
@@ -258,12 +248,12 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
     /*
      * Dialog to prompt user for yes/no if they want to exit the activity.
-     * Exist the activity if they want to exit.
+     * The other option is they can hit "SignOut" which logouts of Firebase and
+     * takes them back to the login screen.
      */
     @Override
     public void onBackPressed() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onBackPressed()");
-
 
         new AlertDialog.Builder(this)
                 .setIcon(R.mipmap.warning)
@@ -287,22 +277,12 @@ public class SummarySitesActivity extends AppCompatActivity implements
         Query query = mFirestore.collection("sites");
 
         // Category (equality filter)
-        if (filters.hasCategory()) {
-            query = query.whereEqualTo("category", filters.getCategory());
+        if (filters.hasState()) {
+            query = query.whereEqualTo("state", filters.getState());
         }
 
-        // City (equality filter)
-        if (filters.hasCity()) {
-            query = query.whereEqualTo("city", filters.getCity());
-        }
-
-        // Price (equality filter)
-        if (filters.hasPrice()) {
-            query = query.whereEqualTo("price", filters.getPrice());
-        }
-
-        // Sort by (orderBy with direction)
-        if (filters.hasSortBy()) {
+        // Sort by and order by direction
+        if (filters.hasSortBy() && filters.hasSortDirection()) {
             query = query.orderBy(filters.getSortBy(), filters.getSortDirection());
         }
 
@@ -313,14 +293,7 @@ public class SummarySitesActivity extends AppCompatActivity implements
         mQuery = query;
         mAdapter.setQuery(query);
 
-        // Set header
-        mCurrentSearchView.setText(Html.fromHtml(filters.getSearchDescription(this)));
-        mCurrentSortByView.setText(filters.getOrderDescription(this));
-
-        // Save filters
-        mViewModel.setFilters(filters);
-
-        // Set header
+        // Update the search & sort criteria displayed in the search container at the top of the UI
         mCurrentSearchView.setText(Html.fromHtml(filters.getSearchDescription(this)));
         mCurrentSortByView.setText(filters.getOrderDescription(this));
 
@@ -344,20 +317,6 @@ public class SummarySitesActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onActivityResult()");
 
     }
-
-/*
-    @OnClick(R.id.filter_bar)
-    public void onFilterClicked() {
-        // Show the dialog containing filter options
-        mFilterDialog.show(getSupportFragmentManager(), FilterDialogFragment.TAG);
-    }*/
-
-/*    @OnClick(R.id.button_clear_filter)
-    public void onClearFilterClicked() {
-        mFilterDialog.resetFilters();
-
-        onFilter(Filters.getDefault());
-    }*/
 
     @Override
     public void onSiteSelected(DocumentSnapshot site) {
@@ -392,6 +351,33 @@ public class SummarySitesActivity extends AppCompatActivity implements
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Handles onClick Events from the buttons
+     *
+     * @param v View
+     */
+    @Override
+    public void onClick(View v) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onClick()");
+
+        switch (v.getId()) {
+
+            case R.id.summary_filter_bar:
+                //show dialog to filter sites
+                mFilterDialog.show(getSupportFragmentManager(), FilterDialogFragment.TAG);
+                break;
+
+            case R.id.summary_button_clear_filter:
+                // Clear filter
+                mFilterDialog.resetFilters();
+                onFilter(Filters.getDefault());
+                break;
+
+            default:
+                break;
+        }
     }
 }
 

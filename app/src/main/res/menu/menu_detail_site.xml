@@ -4,12 +4,13 @@
       tools:context="au.com.mysites.camps.ui.MainActivity">
     <item
         android:id="@+id/menu_detail_edit_site"
-        android:orderInCategory="100"
+        android:orderInCategory="200"
         android:title="@string/detail_edit_site"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menu_detail_show_map"
         android:orderInCategory="100"
-        android:title="@string/detail_edit_site"
+        android:title=""
+        android:icon="@drawable/ic_place_white_24px"
         app:showAsAction="ifRoom"/>
 </menu>

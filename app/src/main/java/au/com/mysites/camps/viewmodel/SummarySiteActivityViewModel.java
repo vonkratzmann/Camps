@@ -4,6 +4,9 @@ import android.arch.lifecycle.ViewModel;
 
 import au.com.mysites.camps.models.Filters;
 
+/**
+ * Helper class to maintain filters over activity lifecycle
+ */
 public class SummarySiteActivityViewModel extends ViewModel {
 
     private boolean mIsSigningIn;

@@ -84,12 +84,15 @@
     <string name="main_sign_out">Sign Out</string>
     <string name="main_start_app">Start Camps</string>
 
+    <string name="divider_bullet">•</string>
+
     <!-- Detailed Site layout text -->
     <string name="site_detail_no_comments">Be the first to leave a comment!</string>
 
     <!-- Detail Site layout hints -->
     <string name="detail_site_button_back_hint">Back to main screen</string>
     <string name="site_detail_image_pizza_hint">Site picture</string>
+    <string name="site_detail_photo_hint">site photo</string>
 
     <!-- Add Edit Site layout text -->
     <string name="add_edit_site_show_map">Show Map</string>
@@ -224,17 +227,8 @@
     <!-- File name for image files -->
     <string name="Image_File_Name">yyyyMMdd_HHmmss</string>
 
-    <!-- kk sort out -->
-    <string name="value_any_city">Anywhere</string>
-    <string name="value_any_price">Any price</string>
-
-    <string name="price_1">$</string>
-    <string name="price_2">$$</string>
-    <string name="price_3">$$$</string>
-
-    <string name="label_category">Category</string>
-    <string name="label_city">City</string>
-    <string name="label_price">Price</string>
+    <!-- filter strings -->
+    <string name="label_state">State</string>
     <string name="label_sort_by">Sort By</string>
 
     <string name="fmt_num_ratings" translatable="false">(%d)</string>
@@ -243,16 +237,13 @@
     <string name="search">Search</string>
 
     <string name="sort_by_rating">Sort by Rating</string>
-    <string name="sort_by_popularity">Sort by Popularity</string>
-    <string name="sort_by_price">Sort by Price</string>
+    <string name="sort_by_name">Sort by Name</string>
+    <string name="sort_by_state">Sort by State</string>
 
     <string name="sorted_by_rating">sorted by rating</string>
-    <string name="sorted_by_price">sorted by price</string>
-    <string name="sorted_by_popularity">sorted by popularity</string>
+    <string name="sorted_by_name">sorted by name</string>
+    <string name="sorted_by_state">sorted by state</string>
 
-    <string name="add_random_items">Add Random Items</string>
-    <string name="delete_all">Delete All</string>
-    <string name="divider_bullet">•</string>
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
     <string name="message_no_results">Oops, couldn\'t find any results\nthat matched your filter</string>
@@ -262,55 +253,28 @@
     <string name="filter_add_review">Add review</string>
     <string name="filter_add_comment">Add comment</string>
 
-
-    <!-- tidy up -->
-    <string name="value_any_category">All food</string>
+    <string name="value_any_state">All states</string>
     <string name="No_Name_Entered">Name must be entered.</string>
-    <string name="site_detail_photo_hint">site photo</string>
 
     <!-- Array filters -->
-    <string-array name="categories">
-        <item>@string/value_any_category</item>
+    <string-array name="states">
+        <item>@string/value_any_state</item>
 
-        <item>Brunch</item>
-        <item>Burgers</item>
-        <item>Coffee</item>
-        <item>Deli</item>
-        <item>Dim Sum</item>
-        <item>Indian</item>
-        <item>Italian</item>
-        <item>Mediterranean</item>
-        <item>Mexican</item>
-        <item>Pizza</item>
-        <item>Ramen</item>
-        <item>Sushi</item>
-    </string-array>
-    ite
-
-    <!-- 50 most populous cities in the US -->
-    <string-array name="cities">
-        <item>@string/value_any_city</item>
-
-        <item>Albuquerque</item>
-        <item>Arlington</item>
-        <item>Atlanta</item>
-        <item>Austin</item>
-    </string-array>
-
-    <!-- Price filters -->
-    <string-array name="prices">
-        <item>@string/value_any_price</item>
-
-        <item>@string/price_1</item>
-        <item>@string/price_2</item>
-        <item>@string/price_3</item>
+        <item>ACT</item>
+        <item>NSW</item>
+        <item>NT</item>
+        <item>QLD</item>
+        <item>SA</item>
+        <item>TAS</item>
+        <item>VIC</item>
+        <item>WA</item>
     </string-array>
 
     <!-- Ways you can sort sites -->
     <string-array name="sort_by">
+        <item>@string/sort_by_name</item>
+        <item>@string/sort_by_state</item>
         <item>@string/sort_by_rating</item>
-        <item>@string/sort_by_popularity</item>
-        <item>@string/sort_by_price</item>
     </string-array>
 
 </resources>

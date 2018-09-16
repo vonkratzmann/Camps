@@ -9,9 +9,8 @@ import au.com.mysites.camps.R;
 
 public class Filters {
 
-    private String category = null;
-    private String city = null;
-    private int price = -1;
+    private String state = null;
+    private String name = null;
     private String sortBy = null;
     private Query.Direction sortDirection = null;
 
@@ -25,44 +24,24 @@ public class Filters {
         return filters;
     }
 
-    public boolean hasCategory() {
-        return !(TextUtils.isEmpty(category));
-    }
-
-    public boolean hasCity() {
-        return !(TextUtils.isEmpty(city));
-    }
-
-    public boolean hasPrice() {
-        return (price > 0);
+    public boolean hasState() {
+        return !(TextUtils.isEmpty(state));
     }
 
     public boolean hasSortBy() {
         return !(TextUtils.isEmpty(sortBy));
     }
 
-    public String getCategory() {
-        return category;
+    public boolean hasSortDirection() {
+        return (sortDirection != null);
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public String getState() {
+        return state;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getSortBy() {
@@ -81,45 +60,44 @@ public class Filters {
         this.sortDirection = sortDirection;
     }
 
+    /**
+     * Gets search description which is a state or all states
+     * @param context   of calling activity
+     * @return          state used in search description
+     */
     public String getSearchDescription(Context context) {
         StringBuilder desc = new StringBuilder();
 
-        if (category == null && city == null) {
+        if (state == null) {
             desc.append("<b>");
             desc.append(context.getString(R.string.all_sites));
             desc.append("</b>");
         }
-        if (category != null) {
+        if (state != null) {
             desc.append("<b>");
-            desc.append(category);
+            desc.append(state);
             desc.append("</b>");
         }
-        if (category != null && city != null) {
-            desc.append(" in ");
-        }
-        if (city != null) {
-            desc.append("<b>");
-            desc.append(city);
-            desc.append("</b>");
-        }
-        if (price > 0) {
-            desc.append(" for ");
-            desc.append("<b>");
-            //todo recode
-            //desc.append(GenerateSite.getPriceString(price));
-            desc.append("</b>");
-        }
+
+//      Not used, but left code here as an example in case want to expand the filter in the future
+//        if (state!= null && city != null) {
+//            desc.append(" in ");
+//        }
+
         return desc.toString();
     }
 
     public String getOrderDescription(Context context) {
         switch (sortBy) {
-            case Site.FIELD_PRICE:
-                return context.getString(R.string.sorted_by_price);
-            case Site.FIELD_POPULARITY:
-                return context.getString(R.string.sorted_by_popularity);
-            default:
+
+            case Site.FIELD_STATE:
+                return context.getString(R.string.sorted_by_state);
+            case Site.FIELD_AVG_RATING:
                 return context.getString(R.string.sorted_by_rating);
+            case Site.FIELD_NAME:
+                return context.getString(R.string.sorted_by_name);
+            default:
+                return context.getString(R.string.sorted_by_name);
         }
     }
 }

@@ -25,6 +25,10 @@ public class FilterDialogFragment extends DialogFragment {
 
     public static final String TAG = "FilterDialog";
 
+    /**
+     * Implemented in SummarySitesActivity. This pases the selected filters back
+     * to SummarySitesActivity
+     */
     public interface FilterListener {
 
         void onFilter(Filters filters);
@@ -32,10 +36,8 @@ public class FilterDialogFragment extends DialogFragment {
 
     private View mRootView;
 
-    Spinner mCategorySpinner;
-    Spinner mCitySpinner;
+    Spinner mStateSpinner;
     Spinner mSortSpinner;
-    Spinner mPriceSpinner;
 
     Button mButtonCancel;
     Button mButtonSearch;
@@ -51,7 +53,7 @@ public class FilterDialogFragment extends DialogFragment {
         if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "onCreateView()");
 
         mRootView = inflater.inflate(R.layout.dialog_filters, container, false);
-        // ButterKnife.bind(this, mRootView);
+
         initViews();
         return mRootView;
     }
@@ -59,15 +61,10 @@ public class FilterDialogFragment extends DialogFragment {
     void initViews() {
         if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "initViews()");
 
-        mCategorySpinner = getDialog().findViewById(R.id.spinner_category);
+        mStateSpinner = mRootView.findViewById(R.id.spinner_state);
+        mSortSpinner = mRootView.findViewById(R.id.spinner_sort);
 
-        mCitySpinner = getDialog().findViewById(R.id.spinner_city);
-
-        mSortSpinner = getDialog().findViewById(R.id.spinner_sort);
-
-        mPriceSpinner = getDialog().findViewById(R.id.spinner_price);
-
-        mButtonCancel = getDialog().findViewById(R.id.button_cancel);
+        mButtonCancel = mRootView.findViewById(R.id.button_cancel);
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,11 +72,12 @@ public class FilterDialogFragment extends DialogFragment {
             }
         });
 
-        mButtonSearch = getDialog().findViewById(R.id.button_search);
+        mButtonSearch = mRootView.findViewById(R.id.button_search);
         mButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mFilterListener.onFilter(getFilters());
+                getDialog().dismiss();
             }
         });
     }
@@ -104,45 +102,15 @@ public class FilterDialogFragment extends DialogFragment {
                 ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
-    /* @OnClick(R.id.button_search)
-     public void onSearchClicked() {
-         if (mFilterListener != null) {
-             mFilterListener.onFilter(getFilters());
-         }
-
-         dismiss();
-     }
-
-     @OnClick(R.id.button_cancel)
-     public void onCancelClicked() {
-         dismiss();
-     }
- */
-
     @Nullable
-    private String getSelectedCity() {
-        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "getSelectedCity()");
+    private String getSelectedState() {
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "getSelectedState()");
 
-        String selected = (String) mCitySpinner.getSelectedItem();
-        if (getString(R.string.value_any_city).equals(selected)) {
+        String selected = (String) mStateSpinner.getSelectedItem();
+        if (getString(R.string.value_any_state).equals(selected)) {
             return null;
         } else {
             return selected;
-        }
-    }
-
-    private int getSelectedPrice() {
-        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "getSelectedPrice()");
-
-        String selected = (String) mPriceSpinner.getSelectedItem();
-        if (selected.equals(getString(R.string.price_1))) {
-            return 1;
-        } else if (selected.equals(getString(R.string.price_2))) {
-            return 2;
-        } else if (selected.equals(getString(R.string.price_3))) {
-            return 3;
-        } else {
-            return -1;
         }
     }
 
@@ -154,13 +122,12 @@ public class FilterDialogFragment extends DialogFragment {
         if (getString(R.string.sort_by_rating).equals(selected)) {
             return Site.FIELD_AVG_RATING;
         }
-        if (getString(R.string.sort_by_price).equals(selected)) {
-            return Site.FIELD_PRICE;
+        if (getString(R.string.sort_by_state).equals(selected)) {
+            return Site.FIELD_STATE;
         }
-        if (getString(R.string.sort_by_popularity).equals(selected)) {
-            return Site.FIELD_POPULARITY;
+        if (getString(R.string.sort_by_name).equals(selected)) {
+            return Site.FIELD_NAME;
         }
-
         return null;
     }
 
@@ -172,11 +139,8 @@ public class FilterDialogFragment extends DialogFragment {
         if (getString(R.string.sort_by_rating).equals(selected)) {
             return Query.Direction.DESCENDING;
         }
-        if (getString(R.string.sort_by_price).equals(selected)) {
+        if (getString(R.string.sort_by_state).equals(selected)) {
             return Query.Direction.ASCENDING;
-        }
-        if (getString(R.string.sort_by_popularity).equals(selected)) {
-            return Query.Direction.DESCENDING;
         }
 
         return null;
@@ -186,10 +150,7 @@ public class FilterDialogFragment extends DialogFragment {
         if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "resetFilters()");
 
         if (mRootView != null) {
-            mCategorySpinner.setSelection(0);
-            mCitySpinner.setSelection(0);
-            mPriceSpinner.setSelection(0);
-            mSortSpinner.setSelection(0);
+            mStateSpinner.setSelection(0);
         }
     }
 
@@ -199,14 +160,10 @@ public class FilterDialogFragment extends DialogFragment {
         Filters filters = new Filters();
 
         if (mRootView != null) {
-            //todo fix
-       //     filters.setCategory(getSelectedCategory());
-            filters.setCity(getSelectedCity());
-            filters.setPrice(getSelectedPrice());
+            filters.setState(getSelectedState());
             filters.setSortBy(getSelectedSortBy());
             filters.setSortDirection(getSortDirection());
         }
-
         return filters;
     }
 }

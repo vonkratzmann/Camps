@@ -26,7 +26,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_site_summary"/>
+    <include layout="@layout/activity_site_summary_content"/>
 
     <!-- Floating action button that launches AddOrEditSiteActivity when clicked -->
     <android.support.design.widget.FloatingActionButton

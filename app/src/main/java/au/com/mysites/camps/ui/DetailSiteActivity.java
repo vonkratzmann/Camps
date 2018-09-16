@@ -169,9 +169,6 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         mRatingIndicator = findViewById(R.id.site_detail_rating);
         mCommentsRecyclerView = findViewById(R.id.site_detail_recycler_comments);
 
-        TextView mShowMapView = findViewById(R.id.site_detail_show_map);
-        mShowMapView.setOnClickListener(this);
-
         //Create instance of the dialog fragment
         mCommentDialog = new CommentDialogFragment();
 
@@ -482,6 +479,18 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
                 editSite.putExtra(getString(R.string.intent_site_name), mSite.getName());
                 startActivity(editSite);
                 break;
+
+            case R.id.menu_detail_show_map:
+                // Checks latitude and longitude are set,
+                if (UtilMap.checkLatLongSet(mSite)) {
+                    // Ok, display map with a marker at this site's location by creating an intent
+                    UtilMap.mapShow(mSite, this);
+                } else {
+                    //warn the user not valid
+                    makeText(this, getString(R.string.ERROR_GPS_coordinates),
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -502,25 +511,9 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
                 mCommentDialog.show(getSupportFragmentManager(), CommentDialogFragment.TAG);
                 break;
 
-            case R.id.site_detail_show_map:
-                // Checks latitude and longitude are set,
-                if (UtilMap.checkLatLongSet(mSite)) {
-                    // Ok, display map with a marker at this site's location by creating an intent
-                    UtilMap.mapShow(mSite, this);
-
-                } else {
-                    //warn the user not valid
-                    makeText(this, getString(R.string.ERROR_GPS_coordinates),
-                            Toast.LENGTH_SHORT).show();
-                }
-                break;
-
             default:
                 break;
         }
     }
-
-
-
 }
 

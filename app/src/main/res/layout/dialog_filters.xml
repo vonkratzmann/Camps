@@ -14,66 +14,23 @@
         android:layout_marginBottom="8dp"
         android:text="@string/header_filters" />
 
-    <!-- Food Type -->
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/icon_category"
+            android:id="@+id/icon_state"
             style="@style/AppTheme.FilterIcon"
             android:layout_centerVertical="true"
             android:tint="@color/greySecondary"
-            app:srcCompat="@drawable/ic_fastfood_white_24dp" />
+            app:srcCompat="@drawable/caravan" />
 
         <Spinner
-            android:id="@+id/spinner_category"
+            android:id="@+id/spinner_state"
             style="@style/AppTheme.FilterSpinner"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/icon_category"
-            android:entries="@array/categories" />
-
-    </RelativeLayout>
-
-    <!-- Location -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/icon_city"
-            style="@style/AppTheme.FilterIcon"
-            android:layout_centerVertical="true"
-            android:tint="@color/greySecondary"
-            app:srcCompat="@drawable/ic_place_white_24px" />
-
-        <Spinner
-            android:id="@+id/spinner_city"
-            style="@style/AppTheme.FilterSpinner"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/icon_city"
-            android:entries="@array/cities" />
-
-    </RelativeLayout>
-
-    <!-- Price -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/icon_price"
-            style="@style/AppTheme.FilterIcon"
-            android:layout_centerVertical="true"
-            android:tint="@color/greySecondary"
-            app:srcCompat="@drawable/ic_monetization_on_white_24px" />
-
-        <Spinner
-            android:id="@+id/spinner_price"
-            style="@style/AppTheme.FilterSpinner"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/icon_price"
-            android:entries="@array/prices" />
+            android:layout_toRightOf="@+id/icon_state"
+            android:entries="@array/states" />
 
     </RelativeLayout>
 
@@ -117,7 +74,6 @@
             android:text="@string/cancel"
             android:textColor="@color/greySecondary"
             android:theme="@style/ThemeOverlay.FilterButton" />
-
 
         <Button
             android:id="@+id/button_search"
