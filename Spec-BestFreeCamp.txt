@@ -1,0 +1,99 @@
+Best Free Camps
+
+implement data base with Room
+
+Setting preference:
+	use local database only or remote database
+	online updates on wifi only or wifi and mobile
+	set rate of database updates in increments of hours
+	
+Use Firebase job scheduler to schedule database updates
+
+Use Fusion 	location updates to get current location GPS and address
+
+Use intent to take photograph to add to a site in the data base
+	photos are edited in the camera app
+	Look at limiting size of photos added to the data base
+	Provide a preview of the image before saving to the database
+	
+Import photograph
+
+Use a background service to update the database
+
+Use a
+
+Use a 
+
+Logic:
+Start
+Display local database to show user the system is working
+If using remote database update local database and display to user
+
+User Functionality
+Site:
+	add
+	edit
+	delete (Note delete just marks it as deleted but data not destroyed)
+	update date last visited with a singe button or update manually
+	GPS - get app to insert or enter manually
+	Address - get app to insert or enter manually
+
+Comment:
+	add
+	edit
+	delete
+	
+Database
+	force update 
+	
+Photos:
+	Edit photos in photo app
+	Take a photo
+	Import photo
+	Delete a photo
+	Make photo the main photo
+	Share photos
+	add, edit, delete comment for the photo
+	
+Database Schema:
+	Site Table
+		site identification primary key
+		date added - auto generated
+		date last visited
+		name
+		gps coordinates
+		Address - URI, get from GPS
+		Features
+		Main photo - index
+	Comment Table
+		comment number - primary key
+		date updated - auto generated
+		text
+	Cost Table
+		index - primary key
+		date - auto generated
+		rate
+		rate unit
+	Photo Table
+		index - primary key
+		date - auto generated
+		photo
+		comment
+		flag main photo
+		
+Admin Functionality
+		edit local database
+		delete local database
+		edit remote database
+		delete remote database
+		backup local database
+		restore local database
+		backup remote database
+		restore remote database
+		export remote database
+		import remote database
+
+Future:
+	Provide a content provider to allow access to the data		
+
+
