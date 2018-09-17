@@ -241,6 +241,14 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    /*
+     *
+     */
+    @Override
+    public void onBackPressed() {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onBackPressed()");
+    }
+
     private boolean shouldStartSignIn() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "shouldStartSignIn()");
 
@@ -299,7 +307,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         mLongitudeView.setText(site.getLongitude());
 
         mRatingIndicator.setRating((float) site.getAvgRating());
-        mNumRatingsView.setText(getString(R.string.fmt_num_ratings, site.getNumRatings()));
+//        mNumRatingsView.setText(getString(R.string.fmt_num_ratings, site.getNumRatings()));
 
         // only process if site photo is valid
         if (site.getSitePhoto() != null && !site.getSitePhoto().isEmpty()) {

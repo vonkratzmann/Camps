@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -28,8 +27,6 @@ public class RatingDialogFragment extends DialogFragment {
     public static final String TAG = RatingDialogFragment.class.getSimpleName();
 
     MaterialRatingBar mRatingBar;
-
-    EditText mRatingText;
 
     Button mSiteFormSubmit;
     Button mSiteFormCancel;
@@ -55,16 +52,13 @@ public class RatingDialogFragment extends DialogFragment {
 
         mRatingBar = getDialog().findViewById(R.id.site_form_rating);
 
-        mRatingText = getDialog().findViewById(R.id.site_form_text);
-
         mSiteFormSubmit = getDialog().findViewById(R.id.site_form_button_submit);
         mSiteFormSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Rating rating = new Rating(
                         Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()),
-                        mRatingBar.getRating(),
-                        mRatingText.getText().toString());
+                        mRatingBar.getRating());
 
                 if (mRatingListener != null) {
                     mRatingListener.onRating(rating);

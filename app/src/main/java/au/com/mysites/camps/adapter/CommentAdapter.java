@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.Query;
@@ -48,7 +47,6 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imageView;
         TextView dateView;
         TextView authorView;
         TextView textView;

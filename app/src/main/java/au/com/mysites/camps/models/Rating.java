@@ -15,24 +15,20 @@ public class Rating {
     private String userId;
     private String userName;
     private double rating;
-    private String text;
     private @ServerTimestamp
     Date timestamp;
 
     public Rating() {
     }
 
-    public Rating(FirebaseUser user, double rating, String text) {
+    public Rating(FirebaseUser user, double rating) {
         this.userId = user.getUid();
         this.userName = user.getDisplayName();
         if (TextUtils.isEmpty(this.userName)) {
             this.userName = user.getEmail();
         }
-
         this.rating = rating;
-        this.text = text;
     }
-
 
     public String getUserId() {
         return userId;
@@ -56,14 +52,6 @@ public class Rating {
 
     public void setRating(double rating) {
         this.rating = rating;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public Date getTimestamp() {

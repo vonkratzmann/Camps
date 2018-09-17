@@ -54,19 +54,6 @@
         app:mrb_secondaryProgressTint="@color/Gray"/>
 
     <TextView
-        android:id="@+id/site_num_ratings"
-        style="@style/AppTheme.Body1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/Gray"
-        app:layout_constraintBottom_toBottomOf="@+id/site_detail_rating"
-        app:layout_constraintStart_toEndOf="@id/site_detail_rating"
-        app:layout_constraintTop_toTopOf="@+id/site_detail_rating"
-        tools:text="(10)"/>
-
-    <TextView
         android:id="@+id/site_detail_street"
         style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"

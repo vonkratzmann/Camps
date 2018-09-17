@@ -247,10 +247,9 @@
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
     <string name="message_no_results">Oops, couldn\'t find any results\nthat matched your filter</string>
-    <string name="hint_review">How was your experience?</string>
     <string name="hint_comment">What\'s your comment?</string>
     <string name="submit">Submit</string>
-    <string name="filter_add_review">Add review</string>
+    <string name="filter_add_rating">Add rating</string>
     <string name="filter_add_comment">Add comment</string>
 
     <string name="value_any_state">All states</string>
@@ -258,8 +257,6 @@
 
     <!-- Array filters -->
     <string-array name="states">
-        <item>@string/value_any_state</item>
-
         <item>ACT</item>
         <item>NSW</item>
         <item>NT</item>
@@ -268,6 +265,8 @@
         <item>TAS</item>
         <item>VIC</item>
         <item>WA</item>
+        <item>@string/value_any_state</item>
+
     </string-array>
 
     <!-- Ways you can sort sites -->

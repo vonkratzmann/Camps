@@ -14,12 +14,15 @@ public final class Constants {
 
     public static final int LIMIT = 50;
 
-    // used to set the display time for toasts
-    public static int TOASTTIMEFACILITIES = 500;
-    public static int TOASTTIMEDATABASE = 1000;
+    // Used to set the display time for toasts
+    public static final int TOASTTIMEFACILITIES = 500;
+    public static final int TOASTTIMEDATABASE = 1000;
 
-    public static long QUERYTIMEOUT = 10000L;
-    public static long ASYNCTIMEOUT = 7000L;
+    public static final long QUERYTIMEOUT = 10000L;
+    public static final long ASYNCTIMEOUT = 7000L;
+
+    // SaveInstanceState Key
+    public static final String M_SITE_HAS_CHANGED = "site_changed";
 
     // Date format
     // Note there is also a Resources string version

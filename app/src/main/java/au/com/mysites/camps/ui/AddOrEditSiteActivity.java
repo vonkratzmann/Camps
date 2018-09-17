@@ -74,7 +74,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     private final static String TAG = AddOrEditSiteActivity.class.getSimpleName();
 
-    //Used to check if a field has changed
+    //Used to check if any field changed by the user
     private boolean mSiteHasChanged;
 
     // Captures the newly entered or edited data before saving to the Firestore database
@@ -118,7 +118,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     private FusedLocationProviderClient mFusedLocationClient;
     private AddressResultReceiver mResultReceiver;
-    private Location mLocationToBeDisplayed;    // Used to get and display location
     private Location mLocationAddress;          // Used to get location to look up address
 
     FirebaseFirestore mFirestore;
@@ -187,10 +186,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_site_add_edit);
         toolbar = findViewById(R.id.add_edit_site_toolbar);
         setSupportActionBar(toolbar);
-
-        /* Reset flag to say data has not changed, any editing this flag
-         * is set to true. Used to check the user has done a save before exiting. */
-        mSiteHasChanged = false;
 
         //Initialise Views and set up listeners
         initViews();
@@ -326,6 +321,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      */
     private void onSiteLoaded(Site site) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onSiteLoaded()");
+        // Save this as loading data from the Site instance to editText views, sets off TextWatcher
+        boolean savedMSiteHasChanged = mSiteHasChanged;
 
         mSite = site;   //so we can access site from any method
         mNameEditText.setText(site.getName());
@@ -371,7 +368,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         waterpresentImageView.setImageResource((site.checkIfFacilityPresent(Site.Facility.WATER))
                 ? R.mipmap.tick : R.mipmap.cross);
         //Reset as loading data from the Site instance to editText views, sets off the TextWatcher
-        mSiteHasChanged = false;
+        mSiteHasChanged = savedMSiteHasChanged;
     }
 
     /**
@@ -719,7 +716,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         } else {       //warn the user
             makeText(this, getString(R.string.ERROR_Photo_not_available), Toast.LENGTH_SHORT).show();
             if (Debug.DEBUG_SITE)
-                Log.d(TAG, "selectPhotoUpdateImageViews(): ERROR_Photo_not_available");
+                Log.w(TAG, "ERROR_Photo_not_available");
         }
     }
 
@@ -920,7 +917,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                         public void onSuccess(Location location) {
                             /* Got last known location. In some rare situations this can be null. */
                             if (location != null) {
-                                mLocationToBeDisplayed = location;
                                 getLocationDisplayCoordinates(location);
                             } else {
                                 Toast.makeText(getApplicationContext(),
@@ -1123,6 +1119,28 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onResume()");
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onRestoreInstanceState()");
+
+        mSiteHasChanged = savedInstanceState.getBoolean(Constants.M_SITE_HAS_CHANGED);
+    }
+
+    /**
+     *
+     * @param outState Instance state
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onSaveInstanceState()");
+
+        // Save as activity is stopped when take or select a photo
+        outState.putBoolean(Constants.M_SITE_HAS_CHANGED, mSiteHasChanged);
+
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(outState);
     }
 
     /**
