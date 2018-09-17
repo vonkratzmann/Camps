@@ -29,6 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,7 +71,8 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
  */
 public class AddOrEditSiteActivity extends AppCompatActivity implements
         EventListener<DocumentSnapshot>,
-        View.OnClickListener {
+        View.OnClickListener,
+        RatingBar.OnRatingBarChangeListener {
 
     private final static String TAG = AddOrEditSiteActivity.class.getSimpleName();
 
@@ -113,6 +115,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     private ImageView mSitePhotoImageView;
     private ImageView mThumbnailImageView;
 
+    private RatingBar mRatingBar;
+
     //used to store path to store image from camera
     private String mPhotoPath;
 
@@ -143,7 +147,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         }
 
         @Override
-        // Do not use this one
+// Do not use this one
         public void onTextChanged(CharSequence s, int start, int before, int count) {
         }
 
@@ -159,12 +163,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      */
     private final TextWatcher mNameTextWatcher = new TextWatcher() {
         @Override
-        // Do not use this one
+// Do not use this one
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
 
         @Override
-        // Do not use this one
+// Do not use this one
         public void onTextChanged(CharSequence s, int start, int before, int count) {
         }
 
@@ -197,8 +201,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         if (intent.hasExtra(getString(R.string.intent_site_name))) {
             siteId = Objects.requireNonNull(intent.getExtras()).getString(getString(R.string.intent_site_name));
 
-            //todo update to include case where activity restarted and partway through edit
-
             //this is an edit of an existing site
             mSite.setName(siteId);
 
@@ -215,9 +217,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         // Display and enable toggling of the facility presence, indicating if present or not
         displayStatusOfAllFacilities();
 
-       /* Hide the soft keyboard when you touch outside of an edit text.
-        * android.R.id.content gives you the root view of the activity,
-          so when you touch outside of edit text, the soft keyboard is hidden */
+        /* Hide the soft keyboard when you touch outside of an edit text.
+         * android.R.id.content gives you the root view of the activity,
+         * so when you touch outside of edit text, the soft keyboard is hidden */
         findViewById(android.R.id.content).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -226,6 +228,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             }
         });
     }
+
 
     /**
      * Initialise views and set up listeners. There is a common listener used for the buttons
@@ -292,6 +295,10 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         mFusedLocationClient = getFusedLocationProviderClient(this);
         mResultReceiver = new AddressResultReceiver(new Handler());
+
+        // Set up rating bar and listener
+        mRatingBar = findViewById(R.id.add_site_ratingBar);
+        mRatingBar.setOnRatingBarChangeListener(this);
     }
 
     /**
@@ -615,7 +622,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Called from {@link #takePhoto()}.
      */
     private void takePhotoCheckStoragePermissions() {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "takePhotoCheckStoragePermissions()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY)
+            Log.d(TAG, "takePhotoCheckStoragePermissions()");
 
         //check if external storage mounted and available
         if (!isExternalStorageAvailable()) {
@@ -906,7 +914,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * which displays longitude and latitude. If fails displays a message to the user.
      */
     void getLocationFusedProviderClient() {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getLocationFusedProviderClient()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY)
+            Log.d(TAG, "getLocationFusedProviderClient()");
 
         //sets up fused location client, which is API from Google Play Services
         mFusedLocationClient = getFusedLocationProviderClient(this);
@@ -944,7 +953,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @param location Display location coordinates
      */
     private void getLocationDisplayCoordinates(Location location) {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getLocationDisplayCoordinates()");
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY)
+            Log.d(TAG, "getLocationDisplayCoordinates()");
 
         TextView textView = findViewById(R.id.add_site_map_coordinates_lat);
         textView.setText(Location.convert(location.getLatitude(), Location.FORMAT_SECONDS));
@@ -1129,7 +1139,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     *
      * @param outState Instance state
      */
     @Override
@@ -1175,6 +1184,16 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             mSiteRegistration.remove();
             mSiteRegistration = null;
         }
+    }
+
+    /**
+     * @param ratingBar
+     * @param v
+     * @param b
+     */
+    public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+
+        //do something
     }
 
     /**

@@ -247,6 +247,8 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onBackPressed() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onBackPressed()");
+
+        finish();
     }
 
     private boolean shouldStartSignIn() {

@@ -102,5 +102,12 @@
         <item name="android:textSize">36sp</item>
     </style>
 
+
+    <style name="AppTheme.MySmallRatingBar" parent="Widget.MaterialRatingBar.RatingBar.Indicator.Small">
+        <item name="android:numStars">5</item>
+        <item name="android:stepSize">.5</item>
+        <item name="android:isIndicator">true</item>
+    </style>
+
 </resources>
 
