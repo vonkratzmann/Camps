@@ -1163,6 +1163,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      */
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if (mNameEditText.getText().hashCode() == s.hashCode()) mNameEditText.setHint("    ");
+
         if (mStreetEditText.getText().hashCode() == s.hashCode()) mStreetEditText.setHint("    ");
 
         if (mCityEditText.getText().hashCode() == s.hashCode()) mCityEditText.setHint("    ");
