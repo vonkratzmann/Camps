@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -17,7 +18,6 @@ import au.com.mysites.camps.models.Site;
 import au.com.mysites.camps.util.AppContextProvider;
 import au.com.mysites.camps.util.Debug;
 import au.com.mysites.camps.util.UtilDatabase;
-import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 /**
  * RecyclerView adapter for a list of Sites.
@@ -57,7 +57,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
 
         ImageView thumbnailView;        // sitePhoto is not displayed on this layout, only thumbnail
         TextView nameView;
-        MaterialRatingBar ratingBar;
+        RatingBar ratingBar;
         TextView numRatingsView;
         TextView streetView;
         TextView cityView;
@@ -87,7 +87,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
             if (site == null) return;
 
             nameView.setText(site.getName());
-            ratingBar.setRating((float) site.getAvgRating());
+            ratingBar.setRating((float) site.getRating());
             streetView.setText(site.getStreet());
             cityView.setText(site.getCity());
             postcodeView.setText(site.getPostcode());

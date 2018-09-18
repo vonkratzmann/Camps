@@ -43,15 +43,16 @@
         app:layout_constraintTop_toBottomOf="@id/site_details_guideline_fab"
         app:srcCompat="@drawable/ic_add_white_24px"/>
 
-    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+    <RatingBar
         android:id="@+id/site_detail_rating"
-        style="@style/Widget.MaterialRatingBar.RatingBar.Indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize=".5"
+        style="@style/Widget.AppCompat.RatingBar.Indicator"
+        android:layout_marginStart="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_name"
-        app:mrb_progressTint="@color/Gray"
-        app:mrb_secondaryProgressTint="@color/Gray"/>
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_name"/>
 
     <TextView
         android:id="@+id/site_detail_street"
@@ -59,7 +60,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@color/Gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/site_detail_rating"
         tools:text="Logan Road"/>
@@ -79,7 +79,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@color/Gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/site_detail_street"
         tools:text="Down Town Geelong"/>
@@ -90,7 +89,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@color/Gray"
         app:layout_constraintStart_toEndOf="@+id/site_detail_state_divider"
         app:layout_constraintTop_toBottomOf="@+id/site_detail_street"
         tools:text="postcode"/>
@@ -110,7 +108,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@color/Gray"
         app:layout_constraintStart_toEndOf="@+id/site_detail_city_divider"
         app:layout_constraintTop_toBottomOf="@+id/site_detail_street"
         tools:text="Vic"/>
@@ -122,7 +119,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/site_detail_facility_icons"
         android:text="@string/detail_site_map_coordinates_heading"
-        android:textColor="@color/Gray"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_coordinates"
         app:layout_constraintEnd_toEndOf="parent"
@@ -133,7 +129,6 @@
         style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/Gray"
         app:layout_constraintEnd_toStartOf="@+id/site_detail_coordinates_lat_divider"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
@@ -144,7 +139,6 @@
         android:id="@+id/site_detail_coordinates_lat_divider"
         style="@style/AppTheme.TextDivider"
         android:text="@string/add_edit_site_spacer"
-        android:textColor="@color/Gray"
         app:layout_constraintEnd_toStartOf="@+id/site_detail_map_coordinates_long"
         app:layout_constraintStart_toEndOf="@id/site_detail_map_coordinates_lat"
         app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_coordinates"/>
@@ -154,7 +148,6 @@
         style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/Gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/site_detail_coordinates_lat_divider"
         app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_coordinates"
@@ -189,10 +182,10 @@
         style="@style/AppTheme.PizzaGuy"
         android:contentDescription="@string/site_detail_image_pizza_hint"
         android:src="@drawable/pizza_monster"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_facilities"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_facilities"/>
 
     <TextView
         android:id="@+id/site_detail_empty_message"
@@ -217,7 +210,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.58"/>
+        app:layout_constraintGuide_percent="0.59"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/site_details_guideline_facilities"

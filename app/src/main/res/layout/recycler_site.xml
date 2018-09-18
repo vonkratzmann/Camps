@@ -27,9 +27,9 @@
         android:maxLines="1"
         tools:text="The big smoke"/>
 
-    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+    <RatingBar
         android:id="@+id/site_item_rating"
-        style="@style/AppTheme.MySmallRatingBar"
+        style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/site_item_name"

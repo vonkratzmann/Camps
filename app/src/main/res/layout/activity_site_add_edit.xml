@@ -11,11 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:logo="@drawable/caravan"
-        android:theme="@style/AppTheme.AppBarOverlay"
         app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
         app:title="@string/app_name"
         app:titleMarginStart="24dp"/>
@@ -66,17 +66,17 @@
         android:contentDescription="@string/add_edit_site_site_photo"
         android:scaleType="centerInside"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_edit_site_toolbar"
-        app:layout_constraintStart_toStartOf="@+id/guideline"/>
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/add_edit_site_toolbar"/>
 
     <RatingBar
         android:id="@+id/add_site_ratingBar"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="wrap_content"
         android:numStars="5"
-        android:stepSize="0.5"
-        android:rating="2.5"
+        android:stepSize=".5"
+        style="@style/Widget.AppCompat.RatingBar"
+        android:layout_marginStart="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineimage"/>
 
@@ -84,7 +84,8 @@
         android:id="@+id/add_site_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:alpha="0.5"
+        android:layout_marginTop="8dp"
+        android:alpha="0.75"
         android:background="@drawable/circle_background"
         android:fontFamily="sans-serif"
         android:gravity="center"
@@ -92,20 +93,18 @@
         android:textColor="#FFF"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/add_site_photo"
         app:layout_constraintEnd_toEndOf="@+id/add_site_photo"
-        app:layout_constraintHorizontal_bias="0.94"
+        app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/add_site_photo"
-        app:layout_constraintVertical_bias="0.13"/>
+        app:layout_constraintTop_toTopOf="@+id/guidelineimage"/>
 
     <ImageView
         android:id="@+id/add_site_thumbnail"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="8dp"
-        android:scaleType="centerInside"
         android:contentDescription="@string/add_edit_site_thumbnail"
+        android:scaleType="centerInside"
         app:layout_constraintEnd_toStartOf="@+id/add_site_name_text"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/guidelinesitename"
@@ -134,8 +133,8 @@
         android:inputType="textShortMessage"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
-        app:layout_constraintTop_toBottomOf="@+id/add_site_name_text"
-        app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"/>
+        app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_name_text"/>
 
     <EditText
         android:id="@+id/add_site_city_text"
@@ -240,8 +239,8 @@
         android:id="@+id/main_background_imageView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:contentDescription="@null"
         android:background="@color/grey_300"
+        android:contentDescription="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_site_map_coordinates_lat"/>
@@ -249,11 +248,11 @@
     <Button
         android:id="@+id/add_site_button_get_location"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:theme="@style/ThemeOverlay.MyDarkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_edit_site_get_location"
         android:textAppearance="?android:textAppearanceSmall"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         app:layout_constraintEnd_toStartOf="@+id/add_site_button_get_address"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toEndOf="@+id/guideline"
@@ -262,11 +261,11 @@
     <Button
         android:id="@+id/add_site_button_get_address"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:theme="@style/ThemeOverlay.MyDarkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_edit_site_get_address"
         android:textAppearance="?android:textAppearanceSmall"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         app:layout_constraintEnd_toStartOf="@+id/add_site_button_show_map"
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/add_site_button_get_location"
@@ -275,11 +274,11 @@
     <Button
         android:id="@+id/add_site_button_show_map"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:theme="@style/ThemeOverlay.MyDarkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_edit_site_show_map"
         android:textAppearance="?android:textAppearanceSmall"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/add_site_button_get_address"
@@ -563,8 +562,8 @@
         app:layout_constraintGuide_percent="0.46"/>
 
     <view
-        class="android.support.v7.widget.LinearLayoutCompat"
         android:id="@+id/view"
+        class="android.support.v7.widget.LinearLayoutCompat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

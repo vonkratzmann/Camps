@@ -339,9 +339,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         mStateEditText.setText(site.getState());
         mLatitudeEditText.setText(site.getLatitude());
         mLongitudeEditText.setText(site.getLongitude());
-        //todo finish
-        // mRatingIndicator.setRating((float) site.getAvgRating());
-        // mNumRatingsView.setText(getString(R.string.fmt_num_ratings, site.getNumRatings()));
+
+        mRatingBar.setRating((float) site.getRating());
 
         // If we have a file name stored, display the image of the site
         String sitePhoto = site.getSitePhoto();
@@ -390,26 +389,26 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      *
      * @return true if entered data is valid
      */
-    public boolean getSite() {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getSite()");
+    public boolean saveSite() {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSite()");
 
         if (!mSiteHasChanged) {
             // Warn user nothing entered into new site
             makeText(this, getString(R.string.ERROR_Nothing_entered), Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (!getSiteCheckNameEntered()) {
+        if (!saveSiteCheckNameEntered()) {
             // Name must be present to proceed, warn the user
             makeText(this, getString(R.string.No_Name_Entered), Toast.LENGTH_SHORT).show();
             return false;
         }
-        getSiteStoreTextFromViews();
+        saveSiteStoreTextFromViews();
 
-        getSiteSaveImages();
+        saveSiteSaveImages();
 
         // facilities already stored in site object, so need for anything
 
-        if (!getSiteStoreLatAndLong()) {
+        if (!saveSiteStoreLatAndLong()) {
             // If coordinates invalid, warn the user
             makeText(this, R.string.ERROR_Latitude_longitude_format_error, Toast.LENGTH_SHORT).show();
             return false;
@@ -423,12 +422,12 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Checks a name has been entered, if not returns false.
      * Must have a name as used as the key for documents in the database.
      * <p>
-     * Called by {@link #getSite()}.
+     * Called by {@link #saveSite()}.
      *
      * @return Boolean  true if data successfully stored in the Site instance
      */
-    boolean getSiteCheckNameEntered() {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getSiteCheckNameEntered()");
+    boolean saveSiteCheckNameEntered() {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSiteCheckNameEntered()");
 
         boolean state = true;
         // check name of site has been entered
@@ -443,10 +442,10 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     /**
      * Get the text input by user to the UI views and store in the Site instance
      * <p>
-     * Called by {@link #getSite()}.
+     * Called by {@link #saveSite()}.
      */
-    private void getSiteStoreTextFromViews() {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getSiteStoreTextFromViews()");
+    private void saveSiteStoreTextFromViews() {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSiteStoreTextFromViews()");
 
         // get site street
         mSite.setStreet(mStreetEditText.getText().toString());
@@ -474,6 +473,10 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             //save the new SiteName
             mSite.setName(mNameEditText.getText().toString());
         }
+
+        // Get the rating that was entered
+        double number = (double) mRatingBar.getRating();
+        mSite.setRating(number);
     }
 
     /**
@@ -491,10 +494,10 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * <p>
      * Checks external storage is available.
      * <p>
-     * Called by {@link #getSite()}.
+     * Called by {@link #saveSite()}.
      */
-    private void getSiteSaveImages() {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getSiteSaveImages()");
+    private void saveSiteSaveImages() {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSiteSaveImages()");
 
         // Check external storage is available
         if (!isExternalStorageAvailable()) {  // Warn the user.
@@ -531,8 +534,8 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      *
      * @return false if format or range invalid
      */
-    private boolean getSiteStoreLatAndLong() {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getSiteStoreLatAndLong()");
+    private boolean saveSiteStoreLatAndLong() {
+        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSiteStoreLatAndLong()");
 
         //Get GPS coordinates
         String latitude = mLatitudeEditText.getText().toString();
@@ -1187,13 +1190,15 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     }
 
     /**
-     * @param ratingBar
-     * @param v
-     * @param b
+     * Rating has changed so update mSiteHasChanged flag
+     * @param ratingBar The RatingBar whose rating has changed.
+     * @param v The current rating. This will be in the range 0..numStars.
+     * @param b True if the rating change was initiated by a user's touch gesture
+     *          or arrow key/horizontal trackbell movement.
      */
     public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+        mSiteHasChanged = true;
 
-        //do something
     }
 
     /**
@@ -1211,9 +1216,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 // Clear the soft keyboard
                 UtilGeneral.hideSoftKeyboard(this);
                 /* Flag mSiteHasBeenChanged is set to false if no errors during processing
-                 * by getSite(). Does not reflect if write to database was successful
+                 * by saveSite(). Does not reflect if write to database was successful
                  * as database write is done asynchronously. */
-                if (getSite()) {
+                if (saveSite()) {
                     mSiteHasChanged = false;
                 }
                 break;

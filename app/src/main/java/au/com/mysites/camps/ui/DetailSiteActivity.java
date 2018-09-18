@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +53,6 @@ import au.com.mysites.camps.util.DividerItemDecoration;
 import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.UtilMap;
 import au.com.mysites.camps.viewmodel.DetailSiteViewModel;
-import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static android.widget.RelativeLayout.CENTER_VERTICAL;
 import static android.widget.Toast.makeText;
@@ -61,6 +61,9 @@ import static android.widget.Toast.makeText;
  * Displays the detail for a single site with comments for that site.
  * The toolbar provides the option to edit the site, or display a map with a marker
  * for the site location.
+ *
+ * {@link #onStart()}initiates the snapshot listener, which creates a document snapshot
+ * returned in {@link #onEvent(DocumentSnapshot, FirebaseFirestoreException)}.
  */
 public class DetailSiteActivity extends AppCompatActivity implements View.OnClickListener,
         EventListener<DocumentSnapshot>, CommentDialogFragment.CommentListener {
@@ -77,7 +80,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     private TextView mLatitudeView;
     private TextView mLongitudeView;
 
-    MaterialRatingBar mRatingIndicator;
+    RatingBar mRatingIndicator;
     private RecyclerView mCommentsRecyclerView;
 
     private CommentDialogFragment mCommentDialog;
@@ -305,11 +308,11 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         mCityView.setText(site.getCity());
         mPostcodeView.setText(site.getPostcode());
         mStateView.setText(site.getState());
+
         mLatitudeView.setText(site.getLatitude());
         mLongitudeView.setText(site.getLongitude());
 
-        mRatingIndicator.setRating((float) site.getAvgRating());
-//        mNumRatingsView.setText(getString(R.string.fmt_num_ratings, site.getNumRatings()));
+        mRatingIndicator.setRating((float) site.getRating());
 
         // only process if site photo is valid
         if (site.getSitePhoto() != null && !site.getSitePhoto().isEmpty()) {

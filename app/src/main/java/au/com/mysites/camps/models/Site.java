@@ -33,8 +33,7 @@ public class Site {
     private String postcode;
     private String state;
 
-    private int numRatings;
-    private double avgRating;
+    private double rating;
     private int price;
     private String dateCreated;
 
@@ -79,7 +78,7 @@ public class Site {
     @SuppressLint("StringFormatInvalid")
     public Site(String name, String street, String city, String postcode, String state,
                 String sitePhoto, String thumbnail,
-                int numRatings, double avgRating, int price,
+                double rating, int price,
                 String latitude, String longitude,
                 boolean free, boolean dumpPoint, boolean mobile,
                 boolean playEquipment, boolean scenic, boolean showers,
@@ -93,8 +92,7 @@ public class Site {
         this.state = state;
         this.city = city;
         this.postcode = postcode;
-        this.numRatings = numRatings;
-        this.avgRating = avgRating;
+        this.rating = rating;
         this.price = price;
 
         //set date to today
@@ -163,20 +161,12 @@ public class Site {
         this.state = state;
     }
 
-    public int getNumRatings() {
-        return this.numRatings;
+    public double getRating() {
+        return this.rating;
     }
 
-    public void setNumRatings(int numRatings) {
-        this.numRatings = numRatings;
-    }
-
-    public double getAvgRating() {
-        return this.avgRating;
-    }
-
-    public void setAvgRating(double avgRating) {
-        this.avgRating = avgRating;
+    public void setRating(double avgRating) {
+        this.rating = avgRating;
     }
 
     public int getPrice() {
