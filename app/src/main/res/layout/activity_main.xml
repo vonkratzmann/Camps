@@ -106,7 +106,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline_buttons"/>
 
     <ImageView
-        android:id="@+id/main_background_imageView"
+        android:id="@+id/main_map_imageView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@color/grey_300"

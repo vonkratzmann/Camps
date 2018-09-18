@@ -1158,7 +1158,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Set up a text watcher to monitor if the EditText fields have changed.
      * <p>
      * Clear the hint: if the hint char count is longer than the entered character count,
-     * then the field width is too wide, as the field width is that of the hint.
+     * then the field width is too wide, as the field width is set to that of the hint.
      */
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
