@@ -63,6 +63,17 @@
         <item name="android:layout_height">150dp</item>
     </style>
 
+    <!-- Styles used in text displays for add edit site -->
+
+    <style name="AppTheme.TextEntry">
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:inputType">textNoSuggestions</item>
+        <item name="android:lineSpacingExtra">0dp</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+    </style>
+
     <!-- Dark Buttons -->
     <style name="ThemeOverlay.MyDarkButton" parent="ThemeOverlay.AppCompat.Dark">
         <item name="colorButtonNormal">@color/grey_500</item>

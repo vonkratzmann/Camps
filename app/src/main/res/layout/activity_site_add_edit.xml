@@ -27,6 +27,7 @@
         android:alpha="0.7"
         android:text="@string/add_edit_site_select_photo"
         android:textAppearance="?android:textAppearanceSmall"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         app:layout_constraintBottom_toBottomOf="@+id/guidelineimage"
         app:layout_constraintEnd_toStartOf="@+id/add_site_button_take_photo"
         app:layout_constraintHorizontal_bias="0.52"
@@ -41,6 +42,7 @@
         android:alpha="0.7"
         android:text="@string/add_edit_site_take_picture"
         android:textAppearance="?android:textAppearanceSmall"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         app:layout_constraintBottom_toBottomOf="@+id/guidelineimage"
         app:layout_constraintEnd_toStartOf="@+id/add_site_button_delete_photo"
         app:layout_constraintHorizontal_bias="0.7"
@@ -53,6 +55,7 @@
         android:alpha="0.7"
         android:text="@string/add_edit_site_delete_image"
         android:textAppearance="?android:textAppearanceSmall"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         app:layout_constraintBottom_toBottomOf="@+id/guidelineimage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_site_button_take_photo"/>
@@ -61,7 +64,7 @@
     <ImageView
         android:id="@+id/add_site_photo"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:alpha="1.0"
         android:contentDescription="@string/add_edit_site_site_photo"
         android:scaleType="centerInside"
@@ -71,12 +74,13 @@
 
     <RatingBar
         android:id="@+id/add_site_ratingBar"
+        style="@style/Widget.AppCompat.RatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:alpha="0.7"
         android:numStars="5"
         android:stepSize=".5"
-        style="@style/Widget.AppCompat.RatingBar"
-        android:layout_marginStart="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineimage"/>
 
@@ -106,6 +110,7 @@
         android:layout_marginStart="4dp"
         android:contentDescription="@string/add_edit_site_thumbnail"
         android:scaleType="centerInside"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/add_site_name_text"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/guidelinesitename"
@@ -113,79 +118,60 @@
 
     <EditText
         android:id="@+id/add_site_name_text"
+        style="@style/AppTheme.TextEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFF5E6E6"
         android:hint="@string/add_edit_site_name_hint"
-        android:imeOptions="actionDone"
-        android:inputType="textShortMessage"
-        android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
-        app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/guidelinesitename"/>
 
     <EditText
         android:id="@+id/add_site_street_text"
+        style="@style/AppTheme.TextEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFF5E6E6"
         android:hint="@string/add_edit_site_street_hint"
-        android:imeOptions="actionDone"
-        android:inputType="textShortMessage"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
-        app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
-        app:layout_constraintTop_toBottomOf="@+id/add_site_name_text"/>
+        app:layout_constraintStart_toEndOf="@+id/add_site_name_text"
+        app:layout_constraintTop_toTopOf="@+id/guidelinesitename"/>
 
     <EditText
         android:id="@+id/add_site_city_text"
+        style="@style/AppTheme.TextEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFF5E6E6"
         android:hint="@string/add_edit_site_city_hint"
-        android:imeOptions="actionDone"
-        android:inputType="textShortMessage"
-        android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
-        app:layout_constraintStart_toEndOf="@+id/add_site_thumbnail"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/add_site_street_text"/>
 
     <EditText
         android:id="@+id/add_site_postcode_text"
+        style="@style/AppTheme.TextEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="#FFF5E6E6"
         android:hint="@string/add_edit_site_postcode_hint"
-        android:imeOptions="actionDone"
-        android:inputType="textShortMessage"
-        android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
         app:layout_constraintStart_toEndOf="@+id/add_site_city_text"
         app:layout_constraintTop_toTopOf="@+id/add_site_city_text"/>
 
     <EditText
         android:id="@+id/add_site_state_text"
+        style="@style/AppTheme.TextEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="#FFF5E6E6"
         android:hint="@string/add_edit_site_state_hint"
-        android:imeOptions="actionDone"
-        android:inputType="textShortMessage"
-        android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
         app:layout_constraintStart_toEndOf="@+id/add_site_postcode_text"
         app:layout_constraintTop_toTopOf="@+id/add_site_city_text"/>
 
     <TextView
         android:id="@+id/add_site_map_latitude_heading"
+        style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFF5E6E6"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
         android:text="@string/add_edit_site_latitude"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/add_site_map_longitude_heading"
         app:layout_constraintHorizontal_bias="0.7"
@@ -195,14 +181,10 @@
 
     <EditText
         android:id="@+id/add_site_map_coordinates_lat"
+        style="@style/AppTheme.TextEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFF5E6E6"
         android:hint="@string/coordinateformat"
-        android:imeOptions="actionDone"
-        android:inputType="textShortMessage"
-        android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
         app:layout_constraintEnd_toStartOf="@+id/add_site_map_coordinates_long"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
@@ -210,12 +192,14 @@
 
     <TextView
         android:id="@+id/add_site_map_longitude_heading"
+        style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFF5E6E6"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
         android:text="@string/add_edit_site_longitude"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/add_site_map_latitude_heading"
@@ -223,14 +207,10 @@
 
     <EditText
         android:id="@+id/add_site_map_coordinates_long"
+        style="@style/AppTheme.TextEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFF5E6E6"
         android:hint="@string/coordinateformat"
-        android:imeOptions="actionDone"
-        android:inputType="textShortMessage"
-        android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/list_item_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/add_site_map_coordinates_lat"
@@ -250,9 +230,9 @@
         android:id="@+id/add_site_button_get_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/White"
         android:text="@string/add_edit_site_get_location"
         android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="@color/White"
         android:theme="@style/ThemeOverlay.MyDarkButton"
         app:layout_constraintEnd_toStartOf="@+id/add_site_button_get_address"
         app:layout_constraintHorizontal_bias="0.51"
@@ -282,7 +262,6 @@
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/add_site_button_get_address"
         app:layout_constraintTop_toBottomOf="@+id/add_site_map_coordinates_long"/>
-
 
     <ImageView
         android:id="@+id/dumppoint"
@@ -536,14 +515,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.56"/>
+        app:layout_constraintGuide_percent="0.47"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guidelinelocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.68"/>
+        app:layout_constraintGuide_percent="0.62"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/site_details_guideline_facilities"
@@ -557,7 +536,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.46"/>
+        app:layout_constraintGuide_percent="0.23"/>
 
     <view
         android:id="@+id/view"

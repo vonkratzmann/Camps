@@ -182,7 +182,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         });
     }
 
-
     /**
      * Initialise views and set up listeners. There is a common listener used for the buttons
      * and there is a common TextWatcher attached to the EditFields to flag if any of the fields
@@ -1163,16 +1162,15 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      */
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        if (mNameEditText.getText().hashCode() == s.hashCode()) mNameEditText.setHint("    ");
+        if (mNameEditText.getText().hashCode() == s.hashCode()) mNameEditText.setHint("   ");
 
-        if (mStreetEditText.getText().hashCode() == s.hashCode()) mStreetEditText.setHint("    ");
+        if (mStreetEditText.getText().hashCode() == s.hashCode()) mStreetEditText.setHint("   ");
 
-        if (mCityEditText.getText().hashCode() == s.hashCode()) mCityEditText.setHint("    ");
+        if (mCityEditText.getText().hashCode() == s.hashCode()) mCityEditText.setHint("   ");
 
-        if (mPostcodeEditText.getText().hashCode() == s.hashCode())
-            mPostcodeEditText.setHint("");
+        if (mPostcodeEditText.getText().hashCode() == s.hashCode()) mPostcodeEditText.setHint("  ");
 
-        if (mStateEditText.getText().hashCode() == s.hashCode()) mStateEditText.setHint("    ");
+        if (mStateEditText.getText().hashCode() == s.hashCode()) mStateEditText.setHint("   ");
     }
 
     // Do not use this one
@@ -1186,6 +1184,23 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         // Record the site has been changed
         mSiteHasChanged = true;
 
+        // If text has been cleared, display the hint so the user can see th purpose of the field
+
+        if (UtilGeneral.stringEmpty(mNameEditText.getText().toString()))
+            mNameEditText.setHint(getString(R.string.add_edit_site_name_hint));
+
+        if (UtilGeneral.stringEmpty(mStreetEditText.getText().toString()))
+            mStreetEditText.setHint(getString(R.string.add_edit_site_street_hint));
+
+        if (UtilGeneral.stringEmpty(mCityEditText.getText().toString()))
+            mCityEditText.setHint(getString(R.string.add_edit_site_city_hint));
+
+        if (UtilGeneral.stringEmpty(mPostcodeEditText.getText().toString()))
+            mPostcodeEditText.setHint(getString(R.string.add_edit_site_postcode_hint));
+
+        if (UtilGeneral.stringEmpty(mStateEditText.getText().toString()))
+            mStateEditText.setHint(getString(R.string.add_edit_site_state_hint));
+
         // Update the toolbar title if the name has changed
         String enteredName = mNameEditText.getText().toString();
         // If nothing entered returned
@@ -1195,7 +1210,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         String siteName = mSite.getName();
         // Check not null
         if (UtilGeneral.stringEmpty(siteName)) {
-            //Yes, just display the new entered text
+            //If nullYes, just display the new entered text
             updateTitle(enteredName);
         } else if (!siteName.equals(enteredName)) {
             // Only update if the title has changed
@@ -1209,7 +1224,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * @param newTitle new title to display
      */
     private void updateTitle(String newTitle) {
-        toolbar.setTitle( getString(R.string.add_edit_site_title) + newTitle);
+        toolbar.setTitle(getString(R.string.add_edit_site_title) + newTitle);
     }
 
 

@@ -64,6 +64,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/main_sign_in"
+        android:alpha="0.7"
         android:theme="@style/ThemeOverlay.MyDarkButton"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,6 +85,7 @@
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
         android:text="@string/sign_out"
+        android:alpha="0.7"
         android:theme="@style/ThemeOverlay.MyDarkButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -96,6 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/disconnect"
+        android:alpha="0.7"
         android:theme="@style/ThemeOverlay.MyDarkButton"
         app:layout_constraintEnd_toStartOf="@+id/main_sign_out_button"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -111,13 +114,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline_shadow"/>
 
-    <TextView
-        android:id="@+id/main_start_app"
+    <Button
+        android:id="@+id/main_start_app_button"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/main_start_app"
         android:layout_marginBottom="20dp"
+        android:alpha="0.7"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         app:layout_constraintBottom_toTopOf="@+id/guideline_buttons"
         app:layout_constraintEnd_toEndOf="@+id/main_sign_out_button"
         app:layout_constraintStart_toStartOf="@+id/main_disconnect_button"/>

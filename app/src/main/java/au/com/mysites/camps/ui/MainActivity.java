@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements
         findViewById(R.id.main_sign_in_button).setOnClickListener(this);
         findViewById(R.id.main_sign_out_button).setOnClickListener(this);
         findViewById(R.id.main_disconnect_button).setOnClickListener(this);
-        findViewById(R.id.main_start_app).setOnClickListener(this);
+        findViewById(R.id.main_start_app_button).setOnClickListener(this);
 
         // [START config_signin]
         // Configure Google Sign In
@@ -370,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.main_sign_out_button:
                 signOut();
                 break;
-            case R.id.main_start_app:
+            case R.id.main_start_app_button:
                 Intent startApp = new Intent(MainActivity.this, SummarySitesActivity.class);
                 startActivity(startApp);
                 break;
