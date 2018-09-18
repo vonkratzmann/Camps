@@ -71,7 +71,6 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     private static final String TAG = DetailSiteActivity.class.getSimpleName();
 
     private ImageView mPhotoView;
-    private TextView mNumRatingsView;
     private TextView mStreetView;
     private TextView mCityView;
     private TextView mPostcodeView;
@@ -160,7 +159,6 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initViews()");
 
         mPhotoView = findViewById(R.id.site_detail_photo);
-        mNumRatingsView = findViewById(R.id.site_num_ratings);
         mStreetView = findViewById(R.id.site_detail_street);
         mCityView = findViewById(R.id.site_detail_city);
         mPostcodeView = findViewById(R.id.site_detail_postcode);

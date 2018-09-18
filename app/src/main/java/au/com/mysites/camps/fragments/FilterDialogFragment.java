@@ -120,7 +120,7 @@ public class FilterDialogFragment extends DialogFragment {
 
         String selected = (String) mSortSpinner.getSelectedItem();
         if (getString(R.string.sort_by_rating).equals(selected)) {
-            return Site.FIELD_AVG_RATING;
+            return Site.FIELD_RATING;
         }
         if (getString(R.string.sort_by_state).equals(selected)) {
             return Site.FIELD_STATE;

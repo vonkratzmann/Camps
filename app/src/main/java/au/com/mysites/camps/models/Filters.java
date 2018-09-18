@@ -92,7 +92,7 @@ public class Filters {
 
             case Site.FIELD_STATE:
                 return context.getString(R.string.sorted_by_state);
-            case Site.FIELD_AVG_RATING:
+            case Site.FIELD_RATING:
                 return context.getString(R.string.sorted_by_rating);
             case Site.FIELD_NAME:
                 return context.getString(R.string.sorted_by_name);

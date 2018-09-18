@@ -24,6 +24,7 @@
 
     <!-- Signin screen -->
     <color name="grey_100">#F5F5F5</color>
+    <color name="grey_200">#ebebeb</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_500">#9E9E9E</color>
 
@@ -44,6 +45,5 @@
     <color name="Navy">#FF000080</color>
     <color name="Fuchsia">#FFFF00FF</color>
     <color name="Purple">#FF800080</color>
-
 
 </resources>

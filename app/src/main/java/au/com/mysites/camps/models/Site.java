@@ -24,7 +24,7 @@ import static au.com.mysites.camps.util.AppContextProvider.getContext;
 public class Site {
 
     public static final String FIELD_NAME = "name";
-    public static final String FIELD_AVG_RATING = "avgRating";
+    public static final String FIELD_RATING = "rating";
     public static final String FIELD_STATE = "state";
 
     private String name;
@@ -34,7 +34,6 @@ public class Site {
     private String state;
 
     private double rating;
-    private int price;
     private String dateCreated;
 
     //GPS coordinates
@@ -78,7 +77,7 @@ public class Site {
     @SuppressLint("StringFormatInvalid")
     public Site(String name, String street, String city, String postcode, String state,
                 String sitePhoto, String thumbnail,
-                double rating, int price,
+                double rating,
                 String latitude, String longitude,
                 boolean free, boolean dumpPoint, boolean mobile,
                 boolean playEquipment, boolean scenic, boolean showers,
@@ -93,7 +92,6 @@ public class Site {
         this.city = city;
         this.postcode = postcode;
         this.rating = rating;
-        this.price = price;
 
         //set date to today
         String format = getContext().getString(R.string.dateformat, Locale.ENGLISH);
@@ -165,16 +163,8 @@ public class Site {
         return this.rating;
     }
 
-    public void setRating(double avgRating) {
-        this.rating = avgRating;
-    }
-
-    public int getPrice() {
-        return this.price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public String getDateCreated() {

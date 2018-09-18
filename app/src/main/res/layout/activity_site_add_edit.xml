@@ -103,6 +103,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginStart="4dp"
         android:contentDescription="@string/add_edit_site_thumbnail"
         android:scaleType="centerInside"
         app:layout_constraintEnd_toStartOf="@+id/add_site_name_text"
@@ -239,7 +240,7 @@
         android:id="@+id/main_background_imageView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/grey_300"
+        android:background="@color/grey_200"
         android:contentDescription="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -247,9 +248,9 @@
 
     <Button
         android:id="@+id/add_site_button_get_location"
-        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/White"
         android:text="@string/add_edit_site_get_location"
         android:textAppearance="?android:textAppearanceSmall"
         android:theme="@style/ThemeOverlay.MyDarkButton"
@@ -260,7 +261,6 @@
 
     <Button
         android:id="@+id/add_site_button_get_address"
-        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_edit_site_get_address"
@@ -273,7 +273,6 @@
 
     <Button
         android:id="@+id/add_site_button_show_map"
-        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_edit_site_show_map"
@@ -505,7 +504,6 @@
         android:id="@+id/water"
         android:layout_width="35dp"
         android:layout_height="wrap_content"
-        android:background="#FFF5E6E6"
         android:contentDescription="@string/water"
         android:src="@mipmap/water"
         app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"

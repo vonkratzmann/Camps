@@ -71,7 +71,6 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
             thumbnailView = itemView.findViewById(R.id.site_item_thumbnail);
             nameView = itemView.findViewById(R.id.site_item_name);
             ratingBar = itemView.findViewById(R.id.site_item_rating);
-            numRatingsView = itemView.findViewById(R.id.site_item_num_ratings);
             streetView = itemView.findViewById(R.id.site_item_street);
             cityView = itemView.findViewById(R.id.site_item_city);
             postcodeView = itemView.findViewById(R.id.site_item_postcode);

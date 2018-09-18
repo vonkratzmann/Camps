@@ -40,20 +40,6 @@
         android:layout_marginBottom="2dp"/>
 
     <TextView
-        android:id="@+id/site_item_num_ratings"
-        style="@style/AppTheme.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/site_item_rating"
-        android:layout_alignTop="@+id/site_item_rating"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="-2dp"
-        android:layout_toEndOf="@+id/site_item_rating"
-        android:gravity="center_vertical"
-        android:textColor="@color/greyDisabled"
-        tools:text="(10)"/>
-
-    <TextView
         android:id="@+id/site_item_street"
         style="@style/AppTheme.Body1"
         android:layout_width="wrap_content"

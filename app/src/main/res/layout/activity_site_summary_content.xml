@@ -55,7 +55,7 @@
 
                     <TextView
                         android:id="@+id/summary_text_current_search"
-                        style="@style/AppTheme.Body1"
+                        style="@style/AppTheme.Subheader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/all_sites"
@@ -64,11 +64,11 @@
 
                     <TextView
                         android:id="@+id/summary_text_current_sort_by"
-                        style="@style/AppTheme.Caption"
+                        style="@style/AppTheme.Body1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/sorted_by_name"
-                        android:textColor="@color/greyDisabled"/>
+                        android:textColor="@color/greySecondary"/>
 
                 </LinearLayout>
 
