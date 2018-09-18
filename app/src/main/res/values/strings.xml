@@ -6,7 +6,7 @@
     <string name="site_detail_title">Camp Site</string>
     <string name="site_detail_map_title">Camp Map</string>
     <string name="add_comment_title">Add Comment</string>
-    <string name="add_edit_site_title">Add Edit Site</string>
+    <string name="add_edit_site_title">Editing: \u0020</string>
     <string name="backup_restore_database_title">Backup Restore Database</string>
     <string name="query_database_title">Query Database</string>
     <string name="ratings_title">Enter Rating</string>

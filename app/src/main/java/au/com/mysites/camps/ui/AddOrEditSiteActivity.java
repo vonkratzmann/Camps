@@ -72,7 +72,8 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 public class AddOrEditSiteActivity extends AppCompatActivity implements
         EventListener<DocumentSnapshot>,
         View.OnClickListener,
-        RatingBar.OnRatingBarChangeListener {
+        RatingBar.OnRatingBarChangeListener,
+        TextWatcher {
 
     private final static String TAG = AddOrEditSiteActivity.class.getSimpleName();
 
@@ -130,57 +131,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     Toolbar toolbar;
 
-    // Set up a text watcher to monitor if the EditText fields have changed.
-    private final TextWatcher mTextWatcher = new TextWatcher() {
-        @Override
-        /* Clear the hint: if the hint char count is longer than the entered character count,
-         *  then the field width is too wide, as the field width is that of the hint. */
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            if (mStreetEditText.getText().hashCode() == s.hashCode()) mStreetEditText.setHint("");
-
-            if (mCityEditText.getText().hashCode() == s.hashCode()) mCityEditText.setHint("");
-
-            if (mPostcodeEditText.getText().hashCode() == s.hashCode())
-                mPostcodeEditText.setHint("");
-
-            if (mStateEditText.getText().hashCode() == s.hashCode()) mStateEditText.setHint("");
-        }
-
-        @Override
-// Do not use this one
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // Record the site has been changed
-            mSiteHasChanged = true;
-        }
-    };
-
-    /* Set up a specific text watcher to monitor if the name edit text field has changed
-     * as the name of the site is displayed in the toolbar.
-     */
-    private final TextWatcher mNameTextWatcher = new TextWatcher() {
-        @Override
-// Do not use this one
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-// Do not use this one
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // Record the site has been changed
-            mSiteHasChanged = true;
-            // Update the toolbar title
-            if (s != null) toolbar.setTitle(s.toString());
-        }
-    };
-
     @Override
     @CallSuper
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +153,9 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
             //this is an edit of an existing site
             mSite.setName(siteId);
+
+            // Update title so know which site we are editing
+            updateTitle(siteId);
 
             // Initialize Firestore
             mFirestore = FirebaseFirestore.getInstance();
@@ -239,13 +192,13 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initViews()");
 
         //use a common TextChangeListener to monitor for changes to any EditText fields
-        (mNameEditText = findViewById(R.id.add_site_name_text)).addTextChangedListener(mNameTextWatcher);
-        (mStreetEditText = findViewById(R.id.add_site_street_text)).addTextChangedListener(mTextWatcher);
-        (mCityEditText = findViewById(R.id.add_site_city_text)).addTextChangedListener(mTextWatcher);
-        (mPostcodeEditText = findViewById(R.id.add_site_postcode_text)).addTextChangedListener(mTextWatcher);
-        (mStateEditText = findViewById(R.id.add_site_state_text)).addTextChangedListener(mTextWatcher);
-        (mLatitudeEditText = findViewById(R.id.add_site_map_coordinates_lat)).addTextChangedListener(mTextWatcher);
-        (mLongitudeEditText = findViewById(R.id.add_site_map_coordinates_long)).addTextChangedListener(mTextWatcher);
+        (mNameEditText = findViewById(R.id.add_site_name_text)).addTextChangedListener(this);
+        (mStreetEditText = findViewById(R.id.add_site_street_text)).addTextChangedListener(this);
+        (mCityEditText = findViewById(R.id.add_site_city_text)).addTextChangedListener(this);
+        (mPostcodeEditText = findViewById(R.id.add_site_postcode_text)).addTextChangedListener(this);
+        (mStateEditText = findViewById(R.id.add_site_state_text)).addTextChangedListener(this);
+        (mLatitudeEditText = findViewById(R.id.add_site_map_coordinates_lat)).addTextChangedListener(this);
+        (mLongitudeEditText = findViewById(R.id.add_site_map_coordinates_long)).addTextChangedListener(this);
         //where to display the image
         mSitePhotoImageView = findViewById(R.id.add_site_photo);
         mThumbnailImageView = findViewById(R.id.add_site_thumbnail);
@@ -328,6 +281,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      */
     private void onSiteLoaded(Site site) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onSiteLoaded()");
+
         // Save this as loading data from the Site instance to editText views, sets off TextWatcher
         boolean savedMSiteHasChanged = mSiteHasChanged;
 
@@ -347,7 +301,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         if (!UtilGeneral.stringEmpty(sitePhoto)) {
             UtilDatabase.getImageAndDisplay(this, sitePhoto, mSitePhotoImageView);
         }
-        // If we have a file name stored, display the thumbnail of the site
+        // If we have a thumbnail file name stored, display the thumbnail of the site
         String thumbnail = site.getThumbnail();
         if (!UtilGeneral.stringEmpty(thumbnail)) {
             UtilDatabase.getImageAndDisplay(this, thumbnail, mThumbnailImageView);
@@ -1168,7 +1122,6 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         super.onStart();
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onStart()");
 
-
         if (mSiteDocumentRef != null) {
             //if this a new site mSiteDocumentRef will be null, so don't start the listener
             mSiteRegistration = mSiteDocumentRef.addSnapshotListener(this);
@@ -1191,15 +1144,72 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
     /**
      * Rating has changed so update mSiteHasChanged flag
+     *
      * @param ratingBar The RatingBar whose rating has changed.
-     * @param v The current rating. This will be in the range 0..numStars.
-     * @param b True if the rating change was initiated by a user's touch gesture
-     *          or arrow key/horizontal trackbell movement.
+     * @param v         The current rating. This will be in the range 0..numStars.
+     * @param b         True if the rating change was initiated by a user's touch gesture
+     *                  or arrow key/horizontal trackbell movement.
      */
     public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
         mSiteHasChanged = true;
 
     }
+
+    /**
+     * Set up a text watcher to monitor if the EditText fields have changed.
+     * <p>
+     * Clear the hint: if the hint char count is longer than the entered character count,
+     * then the field width is too wide, as the field width is that of the hint.
+     */
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if (mStreetEditText.getText().hashCode() == s.hashCode()) mStreetEditText.setHint("");
+
+        if (mCityEditText.getText().hashCode() == s.hashCode()) mCityEditText.setHint("");
+
+        if (mPostcodeEditText.getText().hashCode() == s.hashCode())
+            mPostcodeEditText.setHint("");
+
+        if (mStateEditText.getText().hashCode() == s.hashCode()) mStateEditText.setHint("");
+    }
+
+    // Do not use this one
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        // Record the site has been changed
+        mSiteHasChanged = true;
+
+        // Update the toolbar title if the name has changed
+        String enteredName = mNameEditText.getText().toString();
+        // If nothing entered returned
+        if (UtilGeneral.stringEmpty(enteredName)) return;
+
+        // Get the old title
+        String siteName = mSite.getName();
+        // Check not null
+        if (UtilGeneral.stringEmpty(siteName)) {
+            //Yes, just display the new entered text
+            updateTitle(enteredName);
+        } else if (!siteName.equals(enteredName)) {
+            // Only update if the title has changed
+            updateTitle(enteredName);
+        }
+    }
+
+    /**
+     * Puts a prefix in front of the title to say we are editing
+     *
+     * @param newTitle new title to display
+     */
+    private void updateTitle(String newTitle) {
+        toolbar.setTitle( getString(R.string.add_edit_site_title) + newTitle);
+    }
+
 
     /**
      * General handler for onClick listener
@@ -1260,6 +1270,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
                 break;
         }
     }
+
 
     /**
      * Handles results from the Geocoder
