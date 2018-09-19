@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/site_detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="?android:attr/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:logo="@drawable/caravan"
+        app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
+        app:title="@string/app_name"
+        app:titleMarginStart="24dp"/>
+
+    <ImageView
+        android:id="@+id/site_detail_photo"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:alpha="1.0"
+        android:contentDescription="@string/site_detail_photo_hint"
+        android:scaleType="centerInside"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/site_detail_toolbar"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_show_comment_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        app:layout_constraintStart_toEndOf="@+id/site_detail_rating"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_name"
+        app:srcCompat="@drawable/ic_add_white_24px"/>
+
+    <RatingBar
+        android:id="@+id/site_detail_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize=".5"
+        style="@style/Widget.AppCompat.RatingBar.Indicator"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/site_details_guideline_name"/>
+
+    <TextView
+        android:id="@+id/site_detail_street"
+        style="@style/AppTheme.Subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/site_detail_rating"
+        tools:text="Logan Road"/>
+
+    <TextView
+        android:id="@+id/site_detail_city_divider"
+        style="@style/AppTheme.TextDivider"
+        android:layout_marginStart="8dp"
+        android:text="@string/divider_bullet"
+        android:textColor="@color/Gray"
+        app:layout_constraintStart_toEndOf="@+id/site_detail_postcode"
+        app:layout_constraintTop_toBottomOf="@+id/site_detail_street"/>
+
+    <TextView
+        android:id="@+id/site_detail_city"
+        style="@style/AppTheme.Subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/site_detail_street"
+        tools:text="Down Town Geelong"/>
+
+    <TextView
+        android:id="@+id/site_detail_postcode"
+        style="@style/AppTheme.Subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/site_detail_state_divider"
+        app:layout_constraintTop_toBottomOf="@+id/site_detail_street"
+        tools:text="postcode"/>
+
+    <TextView
+        android:id="@+id/site_detail_state_divider"
+        style="@style/AppTheme.TextDivider"
+        android:layout_marginStart="8dp"
+        android:text="@string/divider_bullet"
+        android:textColor="@color/Gray"
+        app:layout_constraintStart_toEndOf="@id/site_detail_city"
+        app:layout_constraintTop_toTopOf="@+id/site_detail_city"/>
+
+    <TextView
+        android:id="@+id/site_detail_state"
+        style="@style/AppTheme.Subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/site_detail_city_divider"
+        app:layout_constraintTop_toBottomOf="@+id/site_detail_street"
+        tools:text="Vic"/>
+
+    <TextView
+        android:id="@+id/site_detail_map_coordinates_heading"
+        style="@style/AppTheme.Subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/site_detail_facility_icons"
+        android:layout_marginStart="8dp"
+        android:text="@string/detail_site_map_coordinates_heading"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_coordinates"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/site_detail_map_coordinates_lat"
+        style="@style/AppTheme.Subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/site_detail_coordinates_lat_divider"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_coordinates"
+        tools:text="0:0:0.0"/>
+
+    <TextView
+        android:id="@+id/site_detail_coordinates_lat_divider"
+        style="@style/AppTheme.TextDivider"
+        android:text="@string/add_edit_site_spacer"
+        app:layout_constraintEnd_toStartOf="@+id/site_detail_map_coordinates_long"
+        app:layout_constraintStart_toEndOf="@id/site_detail_map_coordinates_lat"
+        app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_coordinates"/>
+
+    <TextView
+        android:id="@+id/site_detail_map_coordinates_long"
+        style="@style/AppTheme.Subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/site_detail_coordinates_lat_divider"
+        app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_coordinates"
+        tools:text="0:0:0.0"/>
+
+    <!-- layout that holds the facility images -->
+    <LinearLayout
+        android:id="@+id/site_detail_facility_icons"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_alignBottom="@+id/site_detail_photo"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/detail_border"
+        android:orientation="horizontal"
+        android:textAppearance="?android:textAppearanceMedium"
+        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <!-- Displays a list of comments -->
+
+    <!-- View for empty ratings -->
+
+    <android.support.constraint.Group
+        android:id="@+id/site_details_no_comments_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="site_detail_empty_image,site_detail_empty_message"/>
+
+    <ImageView
+        android:id="@+id/site_detail_empty_image"
+        style="@style/AppTheme.PizzaGuy"
+        android:contentDescription="@string/site_detail_image_pizza_hint"
+        android:src="@drawable/pizza_monster"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_facilities"/>
+
+    <TextView
+        android:id="@+id/site_detail_empty_message"
+        style="@style/AppTheme.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/site_detail_no_comments"
+        android:textColor="@color/greyDisabled"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_facilities"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/site_details_guideline_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.18"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/site_details_guideline_coordinates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/site_details_guideline_facilities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.68"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/site_details_guideline_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.22"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/site_detail_recycler_comments"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/recycler_comment"/>
+
+</android.support.constraint.ConstraintLayout>
