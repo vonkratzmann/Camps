@@ -814,7 +814,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             int commentCount = myComments.size();
             for (int i = 0; i < commentCount; i++) {
                 comment = myComments.get(i);
-                timeStamp = new SimpleDateFormat(BackUpRestoreActivity.this.getString(R.string.Image_File_Name)).format(new Date());
+                timeStamp = new SimpleDateFormat(BackUpRestoreActivity.this.getString(R.string.Time_Stamp_Format)).format(new Date());
 
                 //uses Google play Task API
                 Task<Void> task = FirebaseFirestore

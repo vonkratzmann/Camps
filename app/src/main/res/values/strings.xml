@@ -228,7 +228,7 @@
     <string name="google_title_text">Google Sign In</string>
 
     <!-- File name for image files -->
-    <string name="Image_File_Name">yyyyMMdd_HHmmss</string>
+    <string name="Time_Stamp_Format">yyyyMMdd_HHmmssSS</string>
 
     <!-- filter strings -->
     <string name="label_state">State</string>

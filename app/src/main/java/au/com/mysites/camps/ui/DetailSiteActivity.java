@@ -39,7 +39,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Objects;
 
 import au.com.mysites.camps.R;
@@ -338,12 +340,14 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
 
         // Add site id for this comment
         comment.setSiteId(mSiteId);
+        String timeStamp = new SimpleDateFormat(getString(R.string.Time_Stamp_Format)).format(new Date());
 
         mFirestore.collection(getString(R.string.collection_comments))
-                .add(comment) // Firebase automatically generates a comment Id
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .document(comment.getSiteId() + " " + timeStamp)
+                .set(comment) // Firebase automatically generates a comment Id
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void aVoid) {
                         // Hide keyboard and scroll to top
                         hideKeyboard();
                         mCommentsRecyclerView.smoothScrollToPosition(0);

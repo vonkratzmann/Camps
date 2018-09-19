@@ -40,7 +40,7 @@ public class UtilImage {
 
         // Create a unique image file name
         @SuppressLint("SimpleDateFormat")
-        String timeStamp = new SimpleDateFormat(context.getString(R.string.Image_File_Name)).format(new Date());
+        String timeStamp = new SimpleDateFormat(context.getString(R.string.Time_Stamp_Format)).format(new Date());
         String imageFileName = timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
