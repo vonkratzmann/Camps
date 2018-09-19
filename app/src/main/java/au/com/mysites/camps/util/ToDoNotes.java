@@ -2,21 +2,10 @@ package au.com.mysites.camps.util;
 
 public class ToDoNotes {
 
-    //todo Created 20/6/201 Take api key out of android manifest
-    //remove repository from github, once above fixed add back to repository
 
     //todo Created 20/6/201 update database backup and restore so they handle ratings
-    //todo Created 20/6/201 convert latitude/Longitude so stored in the database
-    //  in the native Geographical point
-    //todo Created 20/6/201 in backup and restore break transactions into manageable sizes
-    //todo Created 20/6/201 check while addsite handles restarts correctly, may loose data eg
-        // if (savedInstanceState == null) {
-        //restore variables image paths etc
-        //fix so firebase listeners are unregistered on activity lifecycle changes, then restored
-    //  when activity restarts
-    // Created 20/6/2018 Done 26/8/2017 move storage of photos away from database into cloud
-    //  and just have thumbnail in the database
 
+    //TODO fix b
     // LOW PRIORITY
     //todo Created 20/6/201 add directions to google maps
 
@@ -31,6 +20,10 @@ public class ToDoNotes {
 
     4. Created 20/6/20 1n Detail site, comments recycler view have to set fixed size
         otherwise doesn't scroll
+
+    5. Created 19/9/2019 rating does not display the correct sort type
+
+    6. Firebase console hangs, not sure of circumstances
 
     */
 }

@@ -1184,7 +1184,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         // Record the site has been changed
         mSiteHasChanged = true;
 
-        // If text has been cleared, display the hint so the user can see th purpose of the field
+        // If text has been cleared, display the hint so the user can see the purpose of the field
 
         if (UtilGeneral.stringEmpty(mNameEditText.getText().toString()))
             mNameEditText.setHint(getString(R.string.add_edit_site_name_hint));
@@ -1203,14 +1203,14 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
 
         // Update the toolbar title if the name has changed
         String enteredName = mNameEditText.getText().toString();
-        // If nothing entered returned
+        // If nothing entered return
         if (UtilGeneral.stringEmpty(enteredName)) return;
 
         // Get the old title
         String siteName = mSite.getName();
         // Check not null
         if (UtilGeneral.stringEmpty(siteName)) {
-            //If nullYes, just display the new entered text
+            //If null, just display the new entered text
             updateTitle(enteredName);
         } else if (!siteName.equals(enteredName)) {
             // Only update if the title has changed

@@ -187,7 +187,10 @@ public class XmlParser {
                     getFacility(p, site);
                 } else if (p.getName().equals(context.getString(R.string.xml_site_thumbnail))) {
                     site.setThumbnail(readThumbnail(p));
-                } else if (p.getName().equals(context.getString(R.string.xml_site_photo))) {
+                } else if (p.getName().equals(context.getString(R.string.xml_site_rating))) {
+                    site.setRating(Double.valueOf(readRating(p)));
+                }
+                else if (p.getName().equals(context.getString(R.string.xml_site_photo))) {
                     site.setSitePhoto(readPhoto(p));
                 } else {
                     skip(p);
@@ -546,7 +549,7 @@ public class XmlParser {
      * Checks if the facilities are available and updates the site
      *
      * @param XmlPP  parser
-     * @param mySite site to store th efacility availability
+     * @param mySite site to store the facility availability
      */
     private void getFacility(XmlPullParser XmlPP, Site mySite) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getFacility()");
@@ -556,7 +559,7 @@ public class XmlParser {
 
             String facilityAttribute;
             facilityAttribute = XmlPP.getAttributeValue(null, context.getString(R.string.facilitytype));
-            if (facilityAttribute != null) {
+            if (facilityAttribute == null) {
                 return;
             }
             // Check which facility and store if available
@@ -612,6 +615,26 @@ public class XmlParser {
         return myThumbnail;
     }
 
+    /**
+     * read the rating which is a double
+     *
+     * @param XmlPP parser
+     * @return street text
+     * @throws IOException            handle any exceptions
+     * @throws XmlPullParserException handle any exceptions
+     */
+
+    private String readRating(XmlPullParser XmlPP) throws IOException, XmlPullParserException {
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "readRating()");
+
+        String myRating;
+        XmlPP.require(XmlPullParser.START_TAG, null, (context.getString(R.string.xml_site_rating)));
+        myRating = readText(XmlPP);
+        XmlPP.require(XmlPullParser.END_TAG, null, (context.getString(R.string.xml_site_rating)));
+
+        if (Debug.DEBUG_PARSING) Log.d(TAG, "rating: " + myRating);
+        return myRating;
+    }
     /**
      * read the photo which is a filename
      *

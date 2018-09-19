@@ -16,7 +16,7 @@
     <string name="collection_sites" translatable="false">sites</string>
     <string name="collection_comments" translatable="false">comments</string>
     <string name="collection_users" translatable="false">users</string>
-    <string name="collection_ratings" translatable="false">ratings</string>
+
 
     <!-- Folder names for Firebase storage -->
     <string name="firebase_photos" translatable="false">photos</string>
@@ -61,6 +61,7 @@
     <string name="xml_site_longitude" translatable="false">longitude</string>
     <string name="xml_site_thumbnail" translatable="false">thumbnail</string>
     <string name="xml_site_photo" translatable="false">photo</string>
+    <string name="xml_site_rating" translatable="false">rating</string>
 
     <!-- XML comment file tag names -->
     <string name="xml_comment" translatable="false">comment</string>

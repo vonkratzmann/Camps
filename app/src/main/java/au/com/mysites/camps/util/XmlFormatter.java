@@ -61,13 +61,20 @@ class XmlFormatter {
         xmlElement(buffer, context.getString(R.string.xml_site_date_created), site.getDateCreated());
         buffer.append('\n');
 
-        //Format latitude and latitude and store in buffer
-        //Convert latitude to xml and store
+        // Format latitude and latitude and store in buffer
+        // Convert latitude to xml and store
         xmlElement(buffer, context.getString(R.string.xml_site_latitude), site.getLatitude());
         buffer.append('\n');
-        //Convert longitude to xml and store
+
+        //Convert rating to xml and store
+        xmlElement(buffer, context.getString(R.string.xml_site_rating),
+                Double.toString(site.getRating()));
+        buffer.append('\n');
+
+        // Convert longitude to xml and store
         xmlElement(buffer, context.getString(R.string.xml_site_longitude), site.getLongitude());
         buffer.append('\n');
+
 
         // convert the facilities to xml
         // add true or false if present or not present
@@ -323,6 +330,8 @@ class XmlFormatter {
     private void xmlElement(StringBuilder buffer, String name, String text) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlElement()");
 
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG,name + " " + text);
+
         xmlStartTag(buffer, name);
         buffer.append(text);
         xmlEndTag(buffer, name);
@@ -339,6 +348,7 @@ class XmlFormatter {
     void xmlStartTag(StringBuilder buffer, String name) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlStartTag()");
 
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG,name);
         buffer.append('<').append(name).append(">");
     }
 
