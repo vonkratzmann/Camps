@@ -18,9 +18,15 @@ import java.util.Objects;
 
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.Filters;
-import au.com.mysites.camps.models.Site;
+import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
 
+/**
+ * Allows for filtering of sites on the summary activity UI
+ * Options are:
+ *   Filter by site
+ *   Order by, Name, or State or Rating
+ */
 public class FilterDialogFragment extends DialogFragment {
 
     public static final String TAG = "FilterDialog";
@@ -61,10 +67,10 @@ public class FilterDialogFragment extends DialogFragment {
     void initViews() {
         if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "initViews()");
 
-        mStateSpinner = mRootView.findViewById(R.id.spinner_state);
-        mSortSpinner = mRootView.findViewById(R.id.spinner_sort);
+        mStateSpinner = mRootView.findViewById(R.id.filter_spinner_state);
+        mSortSpinner = mRootView.findViewById(R.id.filter_spinner_sort);
 
-        mButtonCancel = mRootView.findViewById(R.id.button_cancel);
+        mButtonCancel = mRootView.findViewById(R.id.filter_button_cancel);
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +78,7 @@ public class FilterDialogFragment extends DialogFragment {
             }
         });
 
-        mButtonSearch = mRootView.findViewById(R.id.button_search);
+        mButtonSearch = mRootView.findViewById(R.id.filter_button_search);
         mButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,26 +126,29 @@ public class FilterDialogFragment extends DialogFragment {
 
         String selected = (String) mSortSpinner.getSelectedItem();
         if (getString(R.string.sort_by_rating).equals(selected)) {
-            return Site.FIELD_RATING;
+            return Constants.FIELD_RATING;
         }
         if (getString(R.string.sort_by_state).equals(selected)) {
-            return Site.FIELD_STATE;
+            return Constants.FIELD_STATE;
         }
         if (getString(R.string.sort_by_name).equals(selected)) {
-            return Site.FIELD_NAME;
+            return Constants.FIELD_NAME;
         }
         return null;
     }
 
     @Nullable
     private Query.Direction getSortDirection() {
-        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "Query.Direction getSortDirection()");
+        if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "getSortDirection()");
 
         String selected = (String) mSortSpinner.getSelectedItem();
         if (getString(R.string.sort_by_rating).equals(selected)) {
             return Query.Direction.DESCENDING;
         }
         if (getString(R.string.sort_by_state).equals(selected)) {
+            return Query.Direction.ASCENDING;
+        }
+        if (getString(R.string.sort_by_name).equals(selected)) {
             return Query.Direction.ASCENDING;
         }
 

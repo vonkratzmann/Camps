@@ -23,10 +23,6 @@ import static au.com.mysites.camps.util.AppContextProvider.getContext;
 @IgnoreExtraProperties
 public class Site {
 
-    public static final String FIELD_NAME = "name";
-    public static final String FIELD_RATING = "rating";
-    public static final String FIELD_STATE = "state";
-
     private String name;
     private String street;
     private String city;

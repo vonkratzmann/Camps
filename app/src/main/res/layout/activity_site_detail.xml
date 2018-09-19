@@ -229,13 +229,15 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/site_detail_recycler_comments"
         android:layout_width="match_parent"
-        android:layout_height="301dp"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintVertical_bias="0.01999998"
         tools:listitem="@layout/recycler_comment"/>
 
 </android.support.constraint.ConstraintLayout>

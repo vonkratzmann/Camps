@@ -171,8 +171,8 @@ public class SummarySitesActivity extends AppCompatActivity implements
         mFirestore.setFirestoreSettings(settings);
 
         // Get the 50 highest rated sites
-        mQuery = mFirestore.collection("sites")
-                .orderBy("state", Query.Direction.DESCENDING)
+        mQuery = mFirestore.collection(getString(R.string.collection_sites))
+                .orderBy(Constants.FIELD_STATE, Query.Direction.DESCENDING)
                 .limit(Constants.LIMIT);
     }
 
@@ -274,11 +274,11 @@ public class SummarySitesActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onFilter()");
 
         // Construct query basic query
-        Query query = mFirestore.collection("sites");
+        Query query = mFirestore.collection(getString(R.string.collection_sites));
 
         // Category (equality filter)
         if (filters.hasState()) {
-            query = query.whereEqualTo("state", filters.getState());
+            query = query.whereEqualTo(Constants.FIELD_STATE, filters.getState());
         }
 
         // Sort by and order by direction

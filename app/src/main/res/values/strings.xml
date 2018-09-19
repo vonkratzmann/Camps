@@ -94,6 +94,7 @@
     <string name="detail_site_button_back_hint">Back to main screen</string>
     <string name="site_detail_image_pizza_hint">Site picture</string>
     <string name="site_detail_photo_hint">site photo</string>
+    <string name="site_detail_comment_hint">What\'s your comment?</string>
 
     <!-- Add Edit Site layout text -->
     <string name="add_edit_site_show_map">Show Map</string>
@@ -122,6 +123,7 @@
     <string name="comment_textheading">Comment:</string>
     <string name="comment_authorheading">Author:</string>
     <string name="comment_dateheading">Date: </string>
+    <string name="comment_add_comment_title">Add comment</string>
 
     <!-- Detail Site Map layout text -->
     <string name="detail_site_map_coordinates_heading">Coordinates:</string>
@@ -248,16 +250,14 @@
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
     <string name="message_no_results">Oops, couldn\'t find any results\nthat matched your filter</string>
-    <string name="hint_comment">What\'s your comment?</string>
     <string name="submit">Submit</string>
-    <string name="filter_add_rating">Add rating</string>
-    <string name="filter_add_comment">Add comment</string>
 
     <string name="value_any_state">All states</string>
     <string name="No_Name_Entered">Name must be entered.</string>
 
     <!-- Array filters -->
     <string-array name="states">
+        <item>@string/value_any_state</item>
         <item>ACT</item>
         <item>NSW</item>
         <item>NT</item>

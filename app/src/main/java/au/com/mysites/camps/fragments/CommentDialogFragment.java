@@ -60,8 +60,8 @@ public class CommentDialogFragment extends DialogFragment {
     void initViews() {
         if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "initViews()");
 
-        mCommentText = getDialog().findViewById(R.id.site_form_text);
-        mSiteFormSubmit = getDialog().findViewById(R.id.site_form_button_submit);
+        mCommentText = getDialog().findViewById(R.id.comment_form_text);
+        mSiteFormSubmit = getDialog().findViewById(R.id.comment_button_submit);
         mSiteFormSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { 
@@ -81,7 +81,7 @@ public class CommentDialogFragment extends DialogFragment {
             }
         });
         //cancel comment entry
-        mSiteFormCancel = getDialog().findViewById(R.id.site_form_button_cancel);
+        mSiteFormCancel = getDialog().findViewById(R.id.comment_button_cancel);
         mSiteFormCancel.setOnClickListener(new View.OnClickListener()
         {
             @Override

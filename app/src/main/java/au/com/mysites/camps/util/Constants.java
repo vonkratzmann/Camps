@@ -42,4 +42,10 @@ public final class Constants {
     public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
     public static final String RESULT_DATA_KEY = PACKAGE_NAME + ".RESULT_DATA_KEY";
     public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME + ".LOCATION_DATA_EXTRA";
+
+
+    // Used if filter dialog and filter code in summary activity
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_RATING = "rating";
+    public static final String FIELD_STATE = "state";
 }
