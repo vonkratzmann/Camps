@@ -1,0 +1,232 @@
+<camps>
+<site>
+<name>Barbour Park Rest Area</name>
+<street>Newell A31</street>
+<city>Gunning</city>
+<postcode>null</postcode>
+<state>NSW</state>
+<date>05/09/2018</date>
+<latitude>-34:46:46</latitude>
+<rating>3.0</rating>
+<longitude>149:16:0</longitude>
+<facilities type="dumppoint">false</facilities>
+<facilities type="free">false</facilities>
+<facilities type="mobile">true</facilities>
+<facilities type="playequipment">false</facilities>
+<facilities type="scenic">false</facilities>
+<facilities type="showers">false</facilities>
+<facilities type="swimming">false</facilities>
+<facilities type="toilets">true</facilities>
+<facilities type="tvreception">true</facilities>
+<facilities type="water">true</facilities>
+<thumbnail>20180918_161519_1756193878.jpg</thumbnail>
+<photo>20180918_161519_1104245777.jpg</photo>
+</site>
+<site>
+<name>Ellendale Rest Area</name>
+<street>Great Northern Highway A1</street>
+<city>Fitzroy Crossing</city>
+<postcode>null</postcode>
+<state>WA</state>
+<date>05/09/2018</date>
+<latitude>-17:34:25.68</latitude>
+<rating>2.5</rating>
+<longitude>124:30:3.6</longitude>
+<facilities type="dumppoint">true</facilities>
+<facilities type="free">false</facilities>
+<facilities type="mobile">false</facilities>
+<facilities type="playequipment">false</facilities>
+<facilities type="scenic">true</facilities>
+<facilities type="showers">false</facilities>
+<facilities type="swimming">false</facilities>
+<facilities type="toilets">true</facilities>
+<facilities type="tvreception">false</facilities>
+<facilities type="water">false</facilities>
+<thumbnail>20180918_161757_578810289.jpg</thumbnail>
+<photo>20180918_161757_962517484.jpg</photo>
+</site>
+<site>
+<name>Green Hill Lake Reserve</name>
+<street>Western Highway A8</street>
+<city>Ararat</city>
+<postcode>null</postcode>
+<state>VIC</state>
+<date>05/09/2018</date>
+<latitude>-37:17:45</latitude>
+<rating>4.0</rating>
+<longitude>142:58:59</longitude>
+<facilities type="dumppoint">false</facilities>
+<facilities type="free">false</facilities>
+<facilities type="mobile">true</facilities>
+<facilities type="playequipment">true</facilities>
+<facilities type="scenic">false</facilities>
+<facilities type="showers">true</facilities>
+<facilities type="swimming">true</facilities>
+<facilities type="toilets">true</facilities>
+<facilities type="tvreception">true</facilities>
+<facilities type="water">false</facilities>
+<thumbnail>20180919_165011_17712006.jpg</thumbnail>
+<photo>20180919_165011_1554491051.jpg</photo>
+</site>
+<site>
+<name>Home</name>
+<street>Teasdale Court</street>
+<city>Highton</city>
+<postcode>3216</postcode>
+<state>Victoria</state>
+<date>06/09/2018</date>
+<latitude>-38:9:35.48988</latitude>
+<rating>5.0</rating>
+<longitude>144:19:6.06216</longitude>
+<facilities type="dumppoint">true</facilities>
+<facilities type="free">false</facilities>
+<facilities type="mobile">true</facilities>
+<facilities type="playequipment">false</facilities>
+<facilities type="scenic">true</facilities>
+<facilities type="showers">true</facilities>
+<facilities type="swimming">false</facilities>
+<facilities type="toilets">true</facilities>
+<facilities type="tvreception">true</facilities>
+<facilities type="water">true</facilities>
+<thumbnail>20180919_181047_1751658996.jpg</thumbnail>
+<photo>20180919_181047_131315350.jpg</photo>
+</site>
+<site>
+<name>Lake Bonney</name>
+<street></street>
+<city>Renmark</city>
+<postcode></postcode>
+<state>SA</state>
+<date>18/09/2018</date>
+<latitude>null</latitude>
+<rating>2.5</rating>
+<longitude>null</longitude>
+<facilities type="dumppoint">false</facilities>
+<facilities type="free">false</facilities>
+<facilities type="mobile">false</facilities>
+<facilities type="playequipment">false</facilities>
+<facilities type="scenic">false</facilities>
+<facilities type="showers">false</facilities>
+<facilities type="swimming">false</facilities>
+<facilities type="toilets">false</facilities>
+<facilities type="tvreception">false</facilities>
+<facilities type="water">false</facilities>
+<thumbnail>20180918_105608_1261790523.jpg</thumbnail>
+<photo>null</photo>
+</site>
+<site>
+<name>Lake Ratzcastle</name>
+<street></street>
+<city></city>
+<postcode></postcode>
+<state></state>
+<date>18/09/2018</date>
+<latitude>null</latitude>
+<rating>3.0</rating>
+<longitude>null</longitude>
+<facilities type="dumppoint">false</facilities>
+<facilities type="free">false</facilities>
+<facilities type="mobile">false</facilities>
+<facilities type="playequipment">false</facilities>
+<facilities type="scenic">false</facilities>
+<facilities type="showers">false</facilities>
+<facilities type="swimming">false</facilities>
+<facilities type="toilets">false</facilities>
+<facilities type="tvreception">false</facilities>
+<facilities type="water">false</facilities>
+<thumbnail>20180918_105419_1490214528.jpg</thumbnail>
+<photo>null</photo>
+</site>
+<site>
+<name>Moonlight Bay</name>
+<street></street>
+<city>Ayre Pennisula</city>
+<postcode></postcode>
+<state></state>
+<date>18/09/2018</date>
+<latitude>null</latitude>
+<rating>4.0</rating>
+<longitude>null</longitude>
+<facilities type="dumppoint">false</facilities>
+<facilities type="free">false</facilities>
+<facilities type="mobile">false</facilities>
+<facilities type="playequipment">false</facilities>
+<facilities type="scenic">false</facilities>
+<facilities type="showers">false</facilities>
+<facilities type="swimming">false</facilities>
+<facilities type="toilets">false</facilities>
+<facilities type="tvreception">false</facilities>
+<facilities type="water">false</facilities>
+<thumbnail>20180918_105829_1885595512.jpg</thumbnail>
+<photo>null</photo>
+</site>
+<site>
+<name>Ngumban Cliffs Rest Area</name>
+<street>Great Northern Highway A1</street>
+<city>Fitzroy Crossing</city>
+<postcode>null</postcode>
+<state>WA</state>
+<date>05/09/2018</date>
+<latitude>-18:44:54.6</latitude>
+<rating>2.5</rating>
+<longitude>126:6:32.04</longitude>
+<facilities type="dumppoint">true</facilities>
+<facilities type="free">false</facilities>
+<facilities type="mobile">false</facilities>
+<facilities type="playequipment">false</facilities>
+<facilities type="scenic">true</facilities>
+<facilities type="showers">false</facilities>
+<facilities type="swimming">false</facilities>
+<facilities type="toilets">true</facilities>
+<facilities type="tvreception">false</facilities>
+<facilities type="water">false</facilities>
+<thumbnail>20180918_161831_1218421083.jpg</thumbnail>
+<photo>20180918_161831_946520222.jpg</photo>
+</site>
+<site>
+<name>Racetrack Rec Reserve</name>
+<street>Western Highway A87</street>
+<city>Great Western </city>
+<postcode>null</postcode>
+<state>VIC</state>
+<date>05/09/2018</date>
+<latitude>37:9:54.3996</latitude>
+<rating>3.5</rating>
+<longitude>142:51:15.4584</longitude>
+<facilities type="dumppoint">false</facilities>
+<facilities type="free">false</facilities>
+<facilities type="mobile">true</facilities>
+<facilities type="playequipment">false</facilities>
+<facilities type="scenic">false</facilities>
+<facilities type="showers">true</facilities>
+<facilities type="swimming">false</facilities>
+<facilities type="toilets">true</facilities>
+<facilities type="tvreception">true</facilities>
+<facilities type="water">true</facilities>
+<thumbnail>20180918_161709_947164397.jpg</thumbnail>
+<photo>20180918_161709_356375259.jpg</photo>
+</site>
+<site>
+<name>WWII Ruins</name>
+<street>Stuart Highway A87</street>
+<city>Near Barrow Creek</city>
+<postcode>null</postcode>
+<state>NT</state>
+<date>05/09/2018</date>
+<latitude>-21:18:33</latitude>
+<rating>1.5</rating>
+<longitude>134:3:25</longitude>
+<facilities type="dumppoint">false</facilities>
+<facilities type="free">false</facilities>
+<facilities type="mobile">false</facilities>
+<facilities type="playequipment">false</facilities>
+<facilities type="scenic">false</facilities>
+<facilities type="showers">false</facilities>
+<facilities type="swimming">false</facilities>
+<facilities type="toilets">false</facilities>
+<facilities type="tvreception">false</facilities>
+<facilities type="water">false</facilities>
+<thumbnail>20180919_121418_2060430789.jpg</thumbnail>
+<photo>20180919_121418_176570565.jpg</photo>
+</site>
+</camps>
