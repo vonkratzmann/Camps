@@ -28,12 +28,10 @@
         android:text="@string/add_edit_site_select_photo"
         android:textAppearance="?android:textAppearanceSmall"
         android:theme="@style/ThemeOverlay.MyDarkButton"
-        app:layout_constraintBottom_toBottomOf="@+id/add_site_guideline_image"
-        app:layout_constraintEnd_toStartOf="@+id/add_site_button_take_photo"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toEndOf="@+id/add_site_guideline_location_buttons"
-        app:layout_constraintStart_toStartOf="@+id/add_site_guideline_location_buttons"/>
+        app:layout_constraintEnd_toEndOf="@+id/add_site_photo"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/add_site_photo"
+        app:layout_constraintTop_toTopOf="@+id/add_site_photo"/>
 
     <Button
         android:id="@+id/add_site_button_take_photo"
@@ -43,10 +41,11 @@
         android:text="@string/add_edit_site_take_picture"
         android:textAppearance="?android:textAppearanceSmall"
         android:theme="@style/ThemeOverlay.MyDarkButton"
-        app:layout_constraintBottom_toBottomOf="@+id/add_site_guideline_image"
-        app:layout_constraintEnd_toStartOf="@+id/add_site_button_delete_photo"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/add_site_button_grab_photo"/>
+        app:layout_constraintBottom_toTopOf="@+id/add_site_button_delete_photo"
+        app:layout_constraintEnd_toEndOf="@+id/add_site_button_grab_photo"
+        app:layout_constraintStart_toStartOf="@+id/add_site_button_grab_photo"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_button_grab_photo"
+        app:layout_constraintVertical_chainStyle="spread"/>
 
     <Button
         android:id="@+id/add_site_button_delete_photo"
@@ -56,38 +55,43 @@
         android:text="@string/add_edit_site_delete_image"
         android:textAppearance="?android:textAppearanceSmall"
         android:theme="@style/ThemeOverlay.MyDarkButton"
-        app:layout_constraintBottom_toBottomOf="@+id/add_site_guideline_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/add_site_button_take_photo"/>
-
+        app:layout_constraintBottom_toBottomOf="@+id/add_site_photo"
+        app:layout_constraintEnd_toEndOf="@+id/add_site_button_take_photo"
+        app:layout_constraintStart_toStartOf="@+id/add_site_button_take_photo"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_button_take_photo"/>
 
     <ImageView
         android:id="@+id/add_site_photo"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:alpha="1.0"
         android:contentDescription="@string/add_edit_site_site_photo"
         android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/add_site_facilities_imageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/add_site_guideline_location_buttons"
-        app:layout_constraintTop_toBottomOf="@id/add_site_toolbar"/>
+        app:layout_constraintStart_toEndOf="@+id/add_site_barrier_address"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_toolbar"/>
 
     <RatingBar
         android:id="@+id/add_site_ratingBar"
         style="@style/Widget.AppCompat.RatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="8dp"
         android:alpha="0.7"
         android:numStars="5"
         android:stepSize=".5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_image"/>
+        app:layout_constraintTop_toBottomOf="@+id/add_site_toolbar"/>
 
     <TextView
         android:id="@+id/add_site_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:alpha="0.75"
         android:background="@drawable/circle_background"
@@ -97,43 +101,39 @@
         android:textColor="#FFF"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/add_site_photo"
-        app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toStartOf="@+id/add_site_guideline_location_buttons"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_image"/>
+        app:layout_constraintStart_toEndOf="@+id/add_site_ratingBar"
+        app:layout_constraintTop_toTopOf="@+id/add_site_ratingBar"/>
 
     <ImageView
         android:id="@+id/add_site_thumbnail"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="4dp"
         android:contentDescription="@string/add_edit_site_thumbnail"
         android:scaleType="centerInside"
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/add_site_name_text"
-        app:layout_constraintStart_toStartOf="@+id/add_site_guideline_location_buttons"
         app:layout_constraintTop_toTopOf="@+id/add_site_guideline_sitename"
         app:srcCompat="@mipmap/ic_launcher"/>
 
     <ImageView
         android:id="@+id/add_site_address_imageView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="75dp"
         android:background="@color/grey_200"
         android:contentDescription="@null"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/add_site_barrier_address"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/add_site_name_text"/>
-
 
     <EditText
         android:id="@+id/add_site_name_text"
         style="@style/AppTheme.TextEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:hint="@string/add_edit_site_name_hint"
-        app:layout_constraintStart_toStartOf="@+id/add_site_guideline_location_buttons"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/add_site_guideline_sitename"/>
 
     <EditText
@@ -151,8 +151,9 @@
         style="@style/AppTheme.TextEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:hint="@string/add_edit_site_city_hint"
-        app:layout_constraintStart_toStartOf="@+id/add_site_guideline_location_buttons"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_site_street_text"/>
 
     <EditText
@@ -175,11 +176,12 @@
 
     <ImageView
         android:id="@+id/add_site_lat_long_imageView"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@color/grey_200"
         android:contentDescription="@null"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/add_site_map_coordinates_lat"
+        app:layout_constraintEnd_toEndOf="@id/add_site_barrier_location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/add_site_map_latitude_heading"/>
 
@@ -188,16 +190,15 @@
         style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:includeFontPadding="false"
         android:lineSpacingExtra="0dp"
         android:text="@string/add_edit_site_latitude"
         android:textAppearance="?android:textAppearanceSmall"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/add_site_map_longitude_heading"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/add_site_guideline_location_buttons"
-        app:layout_constraintStart_toStartOf="@+id/add_site_guideline_location_buttons"
+        app:layout_constraintEnd_toEndOf="@+id/add_site_map_coordinates_lat"
+        app:layout_constraintStart_toStartOf="@+id/add_site_map_coordinates_lat"
         app:layout_constraintTop_toTopOf="@+id/add_site_guideline_coordinates"/>
 
     <EditText
@@ -205,9 +206,8 @@
         style="@style/AppTheme.TextEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:hint="@string/coordinateformat"
-        app:layout_constraintEnd_toStartOf="@+id/add_site_map_coordinates_long"
-        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_site_map_latitude_heading"/>
 
@@ -216,14 +216,15 @@
         style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:includeFontPadding="false"
         android:lineSpacingExtra="0dp"
         android:text="@string/add_edit_site_longitude"
         android:textAppearance="?android:textAppearanceSmall"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/add_site_map_latitude_heading"
+        app:layout_constraintEnd_toEndOf="@+id/add_site_map_coordinates_long"
+        app:layout_constraintStart_toStartOf="@+id/add_site_map_coordinates_long"
         app:layout_constraintTop_toTopOf="@+id/add_site_guideline_coordinates"/>
 
     <EditText
@@ -232,45 +233,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/coordinateformat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/add_site_map_coordinates_lat"
         app:layout_constraintTop_toBottomOf="@+id/add_site_map_longitude_heading"/>
 
     <ImageView
         android:id="@+id/add_site_map_imageView"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@color/grey_200"
         android:contentDescription="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_site_map_coordinates_lat"/>
+        app:layout_constraintBottom_toBottomOf="@id/add_site_button_show_map"
+        app:layout_constraintEnd_toEndOf="@id/add_site_button_get_address"
+        app:layout_constraintStart_toStartOf="@id/add_site_button_get_location"
+        app:layout_constraintTop_toTopOf="@id/add_site_button_get_location"/>
 
     <Button
         android:id="@+id/add_site_button_get_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:text="@string/add_edit_site_get_location"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/White"
         android:theme="@style/ThemeOverlay.MyDarkButton"
-        app:layout_constraintEnd_toStartOf="@+id/add_site_button_get_address"
-        app:layout_constraintHorizontal_bias="0.51"
-        app:layout_constraintStart_toEndOf="@+id/add_site_guideline_location_buttons"
-        app:layout_constraintTop_toBottomOf="@+id/add_site_map_coordinates_lat"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"/>
 
     <Button
         android:id="@+id/add_site_button_get_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:text="@string/add_edit_site_get_address"
         android:textAppearance="?android:textAppearanceSmall"
         android:theme="@style/ThemeOverlay.MyDarkButton"
-        app:layout_constraintEnd_toStartOf="@+id/add_site_button_show_map"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/add_site_button_get_location"
-        app:layout_constraintTop_toBottomOf="@+id/add_site_map_coordinates_long"/>
+        app:layout_constraintBottom_toBottomOf="@id/add_site_button_get_location"
+        app:layout_constraintStart_toEndOf="@id/add_site_button_get_location"/>
 
     <Button
         android:id="@+id/add_site_button_show_map"
@@ -279,19 +276,18 @@
         android:text="@string/add_edit_site_show_map"
         android:textAppearance="?android:textAppearanceSmall"
         android:theme="@style/ThemeOverlay.MyDarkButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/add_site_button_get_address"
-        app:layout_constraintTop_toBottomOf="@+id/add_site_map_coordinates_long"/>
+        app:layout_constraintStart_toStartOf="@id/add_site_button_get_location"
+        app:layout_constraintTop_toBottomOf="@id/add_site_button_get_location"/>
 
     <ImageView
         android:id="@+id/add_site_facilities_imageView"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@color/grey_200"
         android:contentDescription="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/dumppointpresent"
+        app:layout_constraintEnd_toEndOf="@id/water"
+        app:layout_constraintStart_toStartOf="@id/dumppoint"
         app:layout_constraintTop_toTopOf="@+id/dumppoint"/>
 
     <ImageView
@@ -301,9 +297,7 @@
         android:contentDescription="@string/dumppoint"
         android:src="@mipmap/dumppoint"
         app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
-        app:layout_constraintEnd_toStartOf="@+id/free"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="@id/add_site_guideline_location_buttons"/>
+        app:layout_constraintStart_toEndOf="@+id/add_site_map_imageView"/>
 
     <ImageView
         android:id="@+id/dumppointpresent"
@@ -311,10 +305,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/dumppoint"
         android:src="@mipmap/cross"
-        app:layout_constraintEnd_toStartOf="@+id/freepresent"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="@id/add_site_guideline_location_buttons"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_facilities"/>
+        app:layout_constraintEnd_toEndOf="@id/dumppoint"
+        app:layout_constraintStart_toStartOf="@id/dumppoint"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <ImageView
         android:id="@+id/free"
@@ -324,7 +317,6 @@
         android:src="@mipmap/free"
         app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
         app:layout_constraintEnd_toStartOf="@+id/mobile"
-        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/dumppoint"/>
 
     <ImageView
@@ -333,10 +325,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/free"
         android:src="@mipmap/cross"
-        app:layout_constraintEnd_toStartOf="@+id/mobilepresent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/dumppointpresent"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_facilities"/>
+        app:layout_constraintEnd_toEndOf="@+id/free"
+        app:layout_constraintStart_toStartOf="@+id/free"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <ImageView
         android:id="@+id/mobile"
@@ -346,7 +337,6 @@
         android:src="@mipmap/mobile"
         app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
         app:layout_constraintEnd_toStartOf="@+id/playequipment"
-        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/free"/>
 
     <ImageView
@@ -355,10 +345,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/mobile"
         android:src="@mipmap/cross"
-        app:layout_constraintEnd_toStartOf="@+id/playequipmentpresent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/freepresent"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_facilities"/>
+        app:layout_constraintEnd_toEndOf="@+id/mobile"
+        app:layout_constraintStart_toStartOf="@+id/mobile"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <ImageView
         android:id="@+id/playequipment"
@@ -368,7 +357,6 @@
         android:src="@mipmap/playequipment"
         app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
         app:layout_constraintEnd_toStartOf="@+id/scenic"
-        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/mobile"/>
 
     <ImageView
@@ -377,10 +365,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/playequipment"
         android:src="@mipmap/cross"
-        app:layout_constraintEnd_toStartOf="@+id/scenicpresent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/mobilepresent"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_facilities"/>
+        app:layout_constraintEnd_toEndOf="@+id/playequipment"
+        app:layout_constraintStart_toStartOf="@+id/playequipment"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <ImageView
         android:id="@+id/scenic"
@@ -390,7 +377,6 @@
         android:src="@mipmap/scenic"
         app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
         app:layout_constraintEnd_toStartOf="@+id/showers"
-        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/playequipment"/>
 
     <ImageView
@@ -399,10 +385,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/scenic"
         android:src="@mipmap/cross"
-        app:layout_constraintEnd_toStartOf="@+id/showerspresent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/playequipmentpresent"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_facilities"/>
+        app:layout_constraintEnd_toStartOf="@+id/showers"
+        app:layout_constraintStart_toStartOf="@+id/scenic"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <ImageView
         android:id="@+id/showers"
@@ -412,7 +397,6 @@
         android:src="@mipmap/shower"
         app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
         app:layout_constraintEnd_toStartOf="@+id/swimming"
-        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/scenic"/>
 
     <ImageView
@@ -421,10 +405,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/showers"
         android:src="@mipmap/cross"
-        app:layout_constraintEnd_toStartOf="@+id/swimmingpresent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/scenicpresent"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_facilities"/>
+        app:layout_constraintEnd_toEndOf="@+id/showers"
+        app:layout_constraintStart_toStartOf="@+id/showers"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <ImageView
         android:id="@+id/swimming"
@@ -434,19 +417,18 @@
         android:src="@mipmap/swimming"
         app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
         app:layout_constraintEnd_toStartOf="@+id/toilets"
-        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/showers"/>
 
     <ImageView
         android:id="@+id/swimmingpresent"
         android:layout_width="35dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:contentDescription="@string/swimming"
         android:src="@mipmap/cross"
-        app:layout_constraintEnd_toStartOf="@+id/toiletspresent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/showerspresent"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_facilities"/>
+        app:layout_constraintEnd_toEndOf="@+id/swimming"
+        app:layout_constraintStart_toStartOf="@+id/swimming"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <ImageView
         android:id="@+id/toilets"
@@ -456,7 +438,7 @@
         android:src="@mipmap/toilets"
         app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
         app:layout_constraintEnd_toStartOf="@+id/tvreception"
-        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/swimming"/>
 
     <ImageView
@@ -465,10 +447,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/toilets"
         android:src="@mipmap/cross"
-        app:layout_constraintEnd_toStartOf="@+id/tvreceptionpresent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/swimmingpresent"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_facilities"/>
+        app:layout_constraintEnd_toEndOf="@+id/toilets"
+        app:layout_constraintStart_toStartOf="@+id/toilets"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <ImageView
         android:id="@+id/tvreception"
@@ -478,7 +459,7 @@
         android:src="@mipmap/tvreception"
         app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
         app:layout_constraintEnd_toStartOf="@+id/water"
-        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/toilets"/>
 
     <ImageView
@@ -487,10 +468,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/tvreception"
         android:src="@mipmap/cross"
-        app:layout_constraintEnd_toStartOf="@+id/waterpresent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/toiletspresent"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_facilities"/>
+        app:layout_constraintEnd_toEndOf="@+id/tvreception"
+        app:layout_constraintStart_toStartOf="@+id/tvreception"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <ImageView
         android:id="@+id/water"
@@ -500,7 +480,6 @@
         android:src="@mipmap/water"
         app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/tvreception"/>
 
     <ImageView
@@ -509,56 +488,48 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/water"
         android:src="@mipmap/cross"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/tvreceptionpresent"
-        app:layout_constraintTop_toTopOf="@+id/add_site_guideline_facilities"/>
+        app:layout_constraintEnd_toEndOf="@+id/water"
+        app:layout_constraintStart_toStartOf="@+id/water"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
-    <android.support.constraint.Guideline
-        android:id="@+id/add_site_guideline_location_buttons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintGuide_begin="0dp"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/add_site_guideline_sitename"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.47"/>
+        app:layout_constraintGuide_percent="0.31"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/add_site_guideline_coordinates"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.62"/>
+        app:layout_constraintGuide_percent=".55"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/add_site_guideline_facilities"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.91"/>
+        app:layout_constraintGuide_percent=".88"/>
 
-    <android.support.constraint.Guideline
-        android:id="@+id/add_site_guideline_image"
+    <android.support.constraint.Barrier
+        android:id="@+id/add_site_barrier_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.23"/>
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="add_site_street_text,add_site_state_text"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <view
-        android:id="@+id/add_site_view"
-        class="android.support.v7.widget.LinearLayoutCompat"
+    <android.support.constraint.Barrier
+        android:id="@+id/add_site_barrier_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/add_site_photo"/>
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="add_site_map_longitude_heading,add_site_map_coordinates_long"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 
 </android.support.constraint.ConstraintLayout>

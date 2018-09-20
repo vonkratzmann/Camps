@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements
         // Views
         mStatusTextView = findViewById(R.id.main_status);
         mDetailTextView = findViewById(R.id.main_detail);
-        mProfilePhotoImageView = findViewById(R.id.main_map_imageView);
+        mProfilePhotoImageView = findViewById(R.id.add_site_map_imageView);
 
         // Progress Dialog
         mProgressDialog = new ProgressDialog(this);

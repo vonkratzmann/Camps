@@ -163,7 +163,7 @@
         android:background="@drawable/detail_border"
         android:orientation="horizontal"
         android:textAppearance="?android:textAppearanceMedium"
-        app:layout_constraintBottom_toTopOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -185,7 +185,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_facilities"/>
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <TextView
         android:id="@+id/site_detail_empty_message"
@@ -196,7 +196,7 @@
         android:textColor="@color/greyDisabled"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_facilities"/>
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/site_details_guideline_name"
@@ -213,7 +213,7 @@
         app:layout_constraintGuide_percent="0.59"/>
 
     <android.support.constraint.Guideline
-        android:id="@+id/site_details_guideline_facilities"
+        android:id="@+id/add_site_guideline_facilities"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -236,7 +236,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/site_details_guideline_facilities"
+        app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"
         app:layout_constraintVertical_bias="0.01999998"
         tools:listitem="@layout/recycler_comment"/>
 

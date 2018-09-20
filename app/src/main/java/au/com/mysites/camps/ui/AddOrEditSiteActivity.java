@@ -138,7 +138,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onCreate()");
 
         setContentView(R.layout.activity_site_add_edit);
-        toolbar = findViewById(R.id.add_edit_site_toolbar);
+        toolbar = findViewById(R.id.add_site_toolbar);
         setSupportActionBar(toolbar);
 
         //Initialise Views and set up listeners
