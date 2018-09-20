@@ -28,7 +28,6 @@ import android.widget.Toast;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 
 import au.com.mysites.camps.R;
@@ -89,9 +88,6 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
         // Retain filters information over the activity lifecycle using ViewModel
         mViewModel = ViewModelProviders.of(this).get(SummarySiteActivityViewModel.class);
-
-        // Enable Firestore logging
-        FirebaseFirestore.setLoggingEnabled(true);
 
         // Initialize Firestore and the main RecyclerView
         initFirestore();
@@ -164,11 +160,6 @@ public class SummarySitesActivity extends AppCompatActivity implements
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initFirestore()");
 
         mFirestore = FirebaseFirestore.getInstance();
-        // Added so timestamps stored in Cloud Firestore will be read back as com.google.firebase.Timestamp
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setTimestampsInSnapshotsEnabled(true)
-                .build();
-        mFirestore.setFirestoreSettings(settings);
 
         // Get the 50 highest rated sites
         mQuery = mFirestore.collection(getString(R.string.collection_sites))

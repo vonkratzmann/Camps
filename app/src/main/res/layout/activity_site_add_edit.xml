@@ -238,7 +238,7 @@
         app:layout_constraintTop_toBottomOf="@+id/add_site_map_longitude_heading"/>
 
     <ImageView
-        android:id="@+id/add_site_map_imageView"
+        android:id="@+id/main_imageView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/grey_200"

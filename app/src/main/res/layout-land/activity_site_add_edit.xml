@@ -237,7 +237,7 @@
         app:layout_constraintTop_toBottomOf="@+id/add_site_map_longitude_heading"/>
 
     <ImageView
-        android:id="@+id/add_site_map_imageView"
+        android:id="@+id/main_imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/grey_200"
@@ -297,7 +297,7 @@
         android:contentDescription="@string/dumppoint"
         android:src="@mipmap/dumppoint"
         app:layout_constraintBottom_toTopOf="@+id/add_site_guideline_facilities"
-        app:layout_constraintStart_toEndOf="@+id/add_site_map_imageView"/>
+        app:layout_constraintStart_toEndOf="@+id/main_imageView"/>
 
     <ImageView
         android:id="@+id/dumppointpresent"

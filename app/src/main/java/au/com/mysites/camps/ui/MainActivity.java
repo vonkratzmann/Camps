@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.io.File;
 
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private File mFile;
 
+    private FirebaseFirestore mFirestore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,8 +85,8 @@ public class MainActivity extends AppCompatActivity implements
 
         // Views
         mStatusTextView = findViewById(R.id.main_status);
-        mDetailTextView = findViewById(R.id.main_detail);
-        mProfilePhotoImageView = findViewById(R.id.add_site_map_imageView);
+        mDetailTextView = findViewById(R.id.main_user_id);
+        mProfilePhotoImageView = findViewById(R.id.main_profile_photo_imageView);
 
         // Progress Dialog
         mProgressDialog = new ProgressDialog(this);
@@ -135,6 +138,15 @@ public class MainActivity extends AppCompatActivity implements
                     .load(photoUri)
                     .into(mProfilePhotoImageView);
         }
+
+        // Initialize Firestore
+        mFirestore = FirebaseFirestore.getInstance();
+
+        // Added so timestamps stored in Cloud Firestore will be read back as com.google.firebase.Timestamp
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        mFirestore.setFirestoreSettings(settings);
 
         // Check if a request to sign out
         Intent intent = getIntent();
@@ -247,9 +259,6 @@ public class MainActivity extends AppCompatActivity implements
     private void saveUserToFirestore(String docId, User user) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveUserToFirestore()");
 
-        // Initialize Firestore
-        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-
         assert docId != null;
 
         mFirestore.collection(getString(R.string.collection_users))
@@ -327,13 +336,13 @@ public class MainActivity extends AppCompatActivity implements
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
             findViewById(R.id.main_sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.main_sign_out_and_disconnect).setVisibility(View.VISIBLE);
+            findViewById(R.id.main_sign_out_disconnect_start_group).setVisibility(View.VISIBLE);
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
 
             findViewById(R.id.main_sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.main_sign_out_and_disconnect).setVisibility(View.GONE);
+            findViewById(R.id.main_sign_out_disconnect_start_group).setVisibility(View.GONE);
         }
     }
 
