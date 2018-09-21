@@ -221,6 +221,8 @@
     <string name="sure">Are you sure?</string>
     <string name="no">No</string>
 
+    <string name="allow_access">You need to allow access to Storage</string>
+
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
 

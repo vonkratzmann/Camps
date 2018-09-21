@@ -174,6 +174,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
          * android.R.id.content gives you the root view of the activity,
          * so when you touch outside of edit text, the soft keyboard is hidden */
         findViewById(android.R.id.content).setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 UtilGeneral.hideSoftKeyboard(AddOrEditSiteActivity.this);

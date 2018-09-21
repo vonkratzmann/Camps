@@ -1,5 +1,6 @@
 package au.com.mysites.camps.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,6 +35,7 @@ public class UtilDatabase {
     private final static String TAG = UtilDatabase.class.getSimpleName();
 
     // Initialize Firestore database
+    @SuppressLint("StaticFieldLeak")
     private final static FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
 

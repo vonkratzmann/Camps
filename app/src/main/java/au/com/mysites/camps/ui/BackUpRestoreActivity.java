@@ -1,6 +1,7 @@
 package au.com.mysites.camps.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -81,6 +83,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
     boolean mResult;
 
+    @SuppressLint("ShowToast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,7 +122,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
         mProgressTextView = findViewById(R.id.backup_restore_progress_textView);
 
-        mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        mToast = new Toast(this);
     }
 
     /**
@@ -443,7 +446,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
             if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                showMessageOKCancel("You need to allow access to Storage",
+                showMessageOKCancel(getString(R.string.allow_access),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -744,6 +747,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     }
 
     /* class AddSiteAsyncTask  */
+    @SuppressLint("StaticFieldLeak")
     private class AddSiteAsyncTask extends AsyncTask<ArrayList, Void, Boolean> {
         private final String TAG = AddSiteAsyncTask.class.getSimpleName();
 
@@ -793,6 +797,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
 
     /* class AddCommentAsyncTask */
+    @SuppressLint("StaticFieldLeak")
     private class AddCommentAsyncTask extends AsyncTask<ArrayList, Void, Boolean> {
         private final String TAG = AddCommentAsyncTask.class.getSimpleName();
 
@@ -814,7 +819,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
             int commentCount = myComments.size();
             for (int i = 0; i < commentCount; i++) {
                 comment = myComments.get(i);
-                timeStamp = new SimpleDateFormat(BackUpRestoreActivity.this.getString(R.string.Time_Stamp_Format)).format(new Date());
+                timeStamp = new SimpleDateFormat(BackUpRestoreActivity.this.getString(R.string.Time_Stamp_Format), Locale.ENGLISH).format(new Date());
 
                 //uses Google play Task API
                 Task<Void> task = FirebaseFirestore
@@ -844,6 +849,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     /* End Class */
 
     /* Class AddUsersAsyncTask */
+    @SuppressLint("StaticFieldLeak")
     private class AddUserAsyncTask extends AsyncTask<ArrayList, Void, Boolean> {
         private final String TAG = AddUserAsyncTask.class.getSimpleName();
 
