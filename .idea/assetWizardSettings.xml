@@ -65,7 +65,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="134" />
+                                                <entry key="scalingPercent" value="63" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -77,6 +77,8 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="foregroundImage" value="E:\Documents\Kirk\AndroidStudioProjects\Camps\caravan_colour_v4.png" />
+                                      <entry key="legacyIconShape" value="NONE" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -95,11 +97,6 @@
                                 </PersistentState>
                               </value>
                             </entry>
-                          </map>
-                        </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
                           </map>
                         </option>
                       </PersistentState>
