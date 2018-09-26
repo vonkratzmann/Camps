@@ -4,6 +4,14 @@ def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
+    signingConfigs {
+        defaultConfig {
+            keyAlias 'camps'
+            keyPassword '00oyaw00_Camps'
+            storeFile file('E:/Documents/Kirk/AndroidStudioProjects/keystore.jks')
+            storePassword '00oyaw00_SpeedDisplay'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "au.com.mysites.camps"
@@ -17,6 +25,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.defaultConfig
         }
         debug {
             minifyEnabled false

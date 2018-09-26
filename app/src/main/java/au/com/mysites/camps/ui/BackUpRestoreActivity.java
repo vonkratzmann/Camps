@@ -452,13 +452,13 @@ public class BackUpRestoreActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 ActivityCompat.requestPermissions(BackUpRestoreActivity.this,
                                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                        Constants.RC_EXTERNAL_STORAGE);
+                                        Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
                             }
                         });
                 return;
             }
             ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE,
-                    Constants.RC_EXTERNAL_STORAGE);
+                    Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
             return;
         }
         // Permission granted, so do it
@@ -500,7 +500,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onRequestPermissionsResult()");
 
         switch (requestCode) {
-            case Constants.RC_EXTERNAL_STORAGE:
+            case Constants.PERMISSIONS_REQUEST_EXTERNAL_STORAGE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted, so do it
                     switch (mBackupRestoreFlag) {

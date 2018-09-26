@@ -4,14 +4,12 @@ public final class Constants {
 
     private static final String PACKAGE_NAME = "au.com.mysites.camps";
 
-    // Storage Permissions request code
-    public static final int RC_EXTERNAL_STORAGE = 10;
-
     // Intent request codes
     public static final int RC_IMAGE_CAPTURE = 20;
     public static final int RC_PICK_IMAGE = 30;
     public static final int RC_SIGN_IN = 9001;
 
+    // Database query limit
     public static final int LIMIT = 50;
 
     // Used to set the display time for toasts
@@ -28,7 +26,7 @@ public final class Constants {
     // Note there is also a Resources string version
     public static final String DATEFORMAT = "dd/MM/yyyy";
 
-    // Permission requests
+    // Storage Permissions request code
     public final static int PERMISSIONS_REQUEST_CAMERA = 10;
     public final static int PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 20;
     public final static int PERMISSIONS_REQUEST_EXTERNAL_STORAGE_CAMERA = 30;
@@ -43,8 +41,7 @@ public final class Constants {
     public static final String RESULT_DATA_KEY = PACKAGE_NAME + ".RESULT_DATA_KEY";
     public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME + ".LOCATION_DATA_EXTRA";
 
-
-    // Used if filter dialog and filter code in summary activity
+    // Used in filter dialog and filter code in summary activity
     public static final String FIELD_NAME = "name";
     public static final String FIELD_RATING = "rating";
     public static final String FIELD_STATE = "state";
