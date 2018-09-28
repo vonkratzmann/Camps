@@ -7,7 +7,7 @@ public final class Constants {
     // Intent request codes
     public static final int RC_IMAGE_CAPTURE = 20;
     public static final int RC_PICK_IMAGE = 30;
-    public static final int RC_SIGN_IN = 9001;
+    public static final int RC_SIGN_IN = 40;
 
     // Database query limit
     public static final int LIMIT = 50;

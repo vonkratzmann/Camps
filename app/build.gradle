@@ -6,10 +6,10 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     signingConfigs {
         defaultConfig {
-            keyAlias 'camps'
-            keyPassword '00oyaw00_Camps'
-            storeFile file('E:/Documents/Kirk/AndroidStudioProjects/keystore.jks')
-            storePassword '00oyaw00_SpeedDisplay'
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
     compileSdkVersion 27

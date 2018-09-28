@@ -10,3 +10,6 @@
 .externalNativeBuild
 ./app/src/main/res/values/google_maps_api.xml
 ./app/src/main/res/values/secrets.xml
+keystore.properties
+app/src/main/res/values/secrets.xml
+

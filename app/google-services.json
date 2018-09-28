@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "229460877776-taal75n86eubv5arqcpbsss1g99ksgq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "au.com.mysites.camps",
+            "certificate_hash": "6edfb486000efbe3036221602d78c2e4a3b29e2b"
+          }
+        },
+        {
+          "client_id": "229460877776-2v11lt9c3ck6bq8igo3bdq3j4bn69oat.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "au.com.mysites.camps",
+            "certificate_hash": "e72093afaefdbc1b491746f6e8ab3dc262941c1f"
+          }
+        },
+        {
           "client_id": "229460877776-nt7fjopbqmokn02og7bkp40tto5jb40d.apps.googleusercontent.com",
           "client_type": 3
         }

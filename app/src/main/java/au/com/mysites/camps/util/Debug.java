@@ -19,6 +19,7 @@ public final class Debug {
     public static final boolean DEBUG_BACKUP_RESTORE = false;
     public static final boolean DEBUG_FILE = false;
     public static final boolean DEBUG_PARSING = false;
+    public static final boolean DEBUG_UI = false;
     public static final boolean DEBUG_UTIL = false;
     public static final boolean DEBUG_SITE = false;
     public static final boolean DEBUG_SERVICE_ADDRESS = false;

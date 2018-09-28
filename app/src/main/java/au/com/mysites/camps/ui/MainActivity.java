@@ -38,7 +38,6 @@ import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.User;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
-import au.com.mysites.camps.util.UtilDatabase;
 import au.com.mysites.camps.util.UtilDialog;
 import au.com.mysites.camps.util.UtilGeneral;
 
@@ -114,11 +113,10 @@ public class MainActivity extends AppCompatActivity implements
 
     /**
      * Check if a users is signed in and update the display to show appropriate buttons.
-     * If a user is signed in, updates the user last used date.
-     * If called by SummarySitesActivity and if there was a request to sign out,
+     * If called by SummarySitesActivity means user may want to sign out,
      * stay in this activity so user can use the sign out buttons,
-     * otherwise the app has just started. If no request to sign out and the user is signed in
-     * then start the SummarySitesActivity to display a list of sites.
+     * otherwise the app has just started. If not called by SummarySitesActivity
+     * and the user is signed in then start the SummarySitesActivity to display a list of sites.
      */
     @Override
     public void onStart() {
@@ -148,14 +146,14 @@ public class MainActivity extends AppCompatActivity implements
                 .build();
         mFirestore.setFirestoreSettings(settings);
 
-        // Check if a request to sign out
+        // Check if come from SummarySitesActivity
         Intent intent = getIntent();
-        boolean signOutRequest;
+        boolean possibleSignOutRequest;
         if (intent != null) {
-            signOutRequest = intent.getBooleanExtra(getString(R.string.intent_sign_out), false);
+            possibleSignOutRequest = intent.getBooleanExtra(getString(R.string.intent_sign_out), false);
 
-            if (!signOutRequest && currentUser != null) {
-                //Not a request to sign out, and if signed in, go to summary site activity
+            if (!possibleSignOutRequest && currentUser != null) {
+                //Not from SummarySitesActivity, and if signed in, go to summary site activity
                 Intent SummarySite = new Intent(MainActivity.this, SummarySitesActivity.class);
                 startActivity(SummarySite);
             }
@@ -174,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "onActivityResult()");
-
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == Constants.RC_SIGN_IN) {
@@ -209,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+                            if (Debug.DEBUG_UI) Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                             /* Save the user profile in Firestore database,
@@ -231,7 +228,6 @@ public class MainActivity extends AppCompatActivity implements
 
     /**
      * Saves user profile information to Firestore database in case it has changed.
-     * Saves user profile photo to local storage, so photo can be displayed as part of the comments.
      */
     private void saveUserProfile() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveUserProfile()");
@@ -269,11 +265,7 @@ public class MainActivity extends AppCompatActivity implements
                     public void onSuccess(Void aVoid) {
                         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY)
                             Log.d(TAG, "saveUserProfile() document successfully written");
-                        //   Now save the photo to firebase storage
-                        if (mFile != null)
-                            UtilDatabase.saveFileFirebaseStorage(MainActivity.this, mFile,
-                                    getString(R.string.collection_users));
-                    }
+                       }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
