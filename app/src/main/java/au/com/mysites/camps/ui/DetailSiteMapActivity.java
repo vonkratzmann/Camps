@@ -30,8 +30,6 @@ public class DetailSiteMapActivity extends FragmentActivity implements OnMapRead
     private String mLongitude;
     private String mName;
 
-    final float zoomLevel = 16.0F;
-
     /**
      * Gets the site, latitude, longitude and name from the intent,
      * loads the view with the map and requests the map.
@@ -80,6 +78,7 @@ public class DetailSiteMapActivity extends FragmentActivity implements OnMapRead
         googleMap.addMarker(new MarkerOptions()
                 .position(location)
                 .title(mName));     //name of the site
+        float zoomLevel = 16.0F;
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoomLevel));
     }
 }

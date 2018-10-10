@@ -113,7 +113,6 @@
         tools:text="Vic"/>
 
     <TextView
-        android:id="@+id/site_detail_map_coordinates_heading"
         style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -178,10 +177,10 @@
         android:id="@+id/site_details_no_comments_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="site_detail_empty_image,site_detail_empty_message"/>
+        app:constraint_referenced_ids="site_details_empty_image,site_details_empty_message"/>
 
     <ImageView
-        android:id="@+id/site_detail_empty_image"
+        android:id="@+id/site_details_empty_image"
         style="@style/AppTheme.PizzaGuy"
         android:contentDescription="@string/site_detail_image_pizza_hint"
         android:src="@drawable/pizza_monster"
@@ -191,7 +190,7 @@
         app:layout_constraintTop_toBottomOf="@+id/add_site_guideline_facilities"/>
 
     <TextView
-        android:id="@+id/site_detail_empty_message"
+        android:id="@+id/site_details_empty_message"
         style="@style/AppTheme.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

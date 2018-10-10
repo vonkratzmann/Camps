@@ -2,13 +2,10 @@ package au.com.mysites.camps.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -147,48 +144,6 @@ public class UtilImage {
             }
         }
         return inSampleSize;
-    }
-
-    /**
-     * Extract path from URI
-     *
-     * @param context    context of caller
-     * @param contentUri URI of file
-     * @return path of file
-     */
-    public static String getRealPathFromUri(Context context, Uri contentUri) {
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getRealPathFromUri()");
-
-
-            if (Debug.DEBUG_UTIL) Log.d(TAG, "contentUri.getAuthority(): " + contentUri.getAuthority());
-        else
-            if (Debug.DEBUG_UTIL) Log.d(TAG, "contentUri.getAuthority(): " + contentUri.getAuthority());
-
-        Cursor cursor = null;
-        try {
-            String[] projection = {MediaStore.Images.Media.DATA};
-            cursor = context.getContentResolver().query(contentUri,
-                    projection,   // Which columns to return
-                    null,   // WHERE clause; which rows to return (all rows)
-                    null,   // WHERE clause selection arguments (none)
-                    null);  // Order-by clause (ascending by name)
-
-            if (cursor == null) { // Source is Dropbox or other similar local filepath
-                if (Debug.DEBUG_UTIL)
-                    Log.d(TAG, "getRealPathFromURI : cursor null. Path: " + contentUri.getPath());
-                return contentUri.getPath();
-            }
-
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-                //copy file to drawable
-
-            }
-        }
     }
 
     /**

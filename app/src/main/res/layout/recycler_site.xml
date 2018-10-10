@@ -8,6 +8,7 @@
 
     <ImageView
         android:id="@+id/site_item_thumbnail"
+        android:contentDescription="@string/site_thumbnail_photo"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/gradient_up"
@@ -20,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/site_item_thumbnail"
         android:layout_marginBottom="2dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="-6dp"
         android:layout_toEndOf="@+id/site_item_thumbnail"
         android:ellipsize="end"
@@ -34,7 +35,7 @@
         android:layout_height="wrap_content"
         android:numStars="5"
         android:stepSize=".5"
-        android:layout_alignLeft="@+id/site_item_name"
+        android:layout_alignStart="@+id/site_item_name"
         android:layout_below="@+id/site_item_name"
         android:layout_marginTop="-4dp"
         android:layout_marginBottom="2dp"/>
@@ -44,7 +45,7 @@
         style="@style/AppTheme.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/site_item_name"
+        android:layout_alignStart="@+id/site_item_name"
         android:layout_below="@+id/site_item_rating"
         android:textColor="@color/greySecondary"
         android:maxLines="1"
@@ -57,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/site_item_street"
-        android:layout_alignLeft="@+id/site_item_name"
+        android:layout_alignStart="@+id/site_item_name"
         android:textColor="@color/greySecondary"
         android:maxLines="1"
         tools:text="Brisbane"/>

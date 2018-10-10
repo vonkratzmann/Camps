@@ -10,7 +10,9 @@ import au.com.mysites.camps.R;
 /**
  * Various dialog methods
  */
+@SuppressWarnings("unused")
 public class UtilDialog {
+    @SuppressWarnings("unused")
     private static final String TAG = UtilDialog.class.getSimpleName();
 
     public static void showProgressDialog(ProgressDialog progressDialog) {

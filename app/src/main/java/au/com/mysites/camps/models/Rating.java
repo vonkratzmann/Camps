@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * Model POJO for a rating.
  */
-public class Rating {
+class Rating {
 
     private String userId;
     private String userName;
@@ -18,9 +18,11 @@ public class Rating {
     private @ServerTimestamp
     Date timestamp;
 
+    @SuppressWarnings("unused")
     public Rating() {
     }
 
+    @SuppressWarnings("unused")
     public Rating(FirebaseUser user, double rating) {
         this.userId = user.getUid();
         this.userName = user.getDisplayName();
@@ -30,34 +32,42 @@ public class Rating {
         this.rating = rating;
     }
 
+    @SuppressWarnings("unused")
     public String getUserId() {
         return userId;
     }
 
+    @SuppressWarnings("unused")
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
+    @SuppressWarnings("unused")
     public String getUserName() {
         return userName;
     }
 
+    @SuppressWarnings("unused")
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    @SuppressWarnings("unused")
     public double getRating() {
         return rating;
     }
 
+    @SuppressWarnings("unused")
     public void setRating(double rating) {
         this.rating = rating;
     }
 
+    @SuppressWarnings("unused")
     public Date getTimestamp() {
         return timestamp;
     }
 
+    @SuppressWarnings("unused")
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }

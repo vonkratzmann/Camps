@@ -32,16 +32,16 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
     private Query mQuery;
     private ListenerRegistration mRegistration;
 
-    private ArrayList<DocumentSnapshot> mSnapshots = new ArrayList<>();
+    private final ArrayList<DocumentSnapshot> mSnapshots = new ArrayList<>();
 
-    public FirestoreAdapter(Query query) {
+    FirestoreAdapter(Query query) {
         mQuery = query;
     }
 
     public void startListening() {
         if (mQuery != null && mRegistration == null) {
             //noinspection unchecked
-            mRegistration = mQuery.addSnapshotListener((EventListener<QuerySnapshot>) this);
+            mRegistration = mQuery.addSnapshotListener(this);
         }
     }
 
@@ -69,7 +69,7 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
         // Dispatch the event
         for (DocumentChange change : documentSnapshots.getDocumentChanges()) {
             // Snapshot of the changed document
-            DocumentSnapshot snapshot = change.getDocument();
+            @SuppressWarnings("unused") DocumentSnapshot snapshot = change.getDocument();
 
             switch (change.getType()) {
                 case ADDED:
@@ -134,6 +134,7 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
         return mSnapshots.get(index);
     }
 
+    @SuppressWarnings("unused")
     protected void onError(FirebaseFirestoreException e) {
     }
 

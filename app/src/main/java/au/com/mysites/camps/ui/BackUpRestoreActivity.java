@@ -58,7 +58,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     private final static String TAG = BackUpRestoreActivity.class.getSimpleName();
 
     //Required permissions
-    private static String[] PERMISSIONS_STORAGE = {
+    private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
@@ -68,20 +68,18 @@ public class BackUpRestoreActivity extends AppCompatActivity {
     private static final int RESTORE = 1;
     private static int mBackupRestoreFlag = 0;
 
-    XmlUtils mXmlUtils;
+    private XmlUtils mXmlUtils;
 
     // Set up storage for sites to be read from file
-    public final ArrayList<Site> mSiteList = new ArrayList<>();
+    private final ArrayList<Site> mSiteList = new ArrayList<>();
     // Set up storage for comments to be read from file
-    public final ArrayList<Comment> mCommentList = new ArrayList<>();
+    private final ArrayList<Comment> mCommentList = new ArrayList<>();
     // Set up storage for users to be read from file
-    public final ArrayList<User> mUserList = new ArrayList<>();
+    private final ArrayList<User> mUserList = new ArrayList<>();
 
-    TextView mProgressTextView;
+    private Toast mToast;
 
-    Toast mToast;
-
-    boolean mResult;
+    private boolean mResult;
 
     @SuppressLint("ShowToast")
     @Override
@@ -120,7 +118,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
         //get instance of utilities
         mXmlUtils = new XmlUtils();
 
-        mProgressTextView = findViewById(R.id.backup_restore_progress_textView);
+        @SuppressWarnings("unused") TextView mProgressTextView = findViewById(R.id.backup_restore_progress_textView);
 
         mToast = new Toast(this);
     }
@@ -140,7 +138,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      * Each read of the database is done in an async task, so that task is blocked
      * until the read is complete.
      */
-    public void backupDatabase() {
+    private void backupDatabase() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "backupDatabase()");
 
         //Get the view of where the filename is entered by the user
@@ -194,7 +192,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
      *
      * @param context context of calling activity
      */
-    public void restoreDatabase(final Context context) {
+    private void restoreDatabase(final Context context) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "restoreDatabase()");
 
         //Get the view of where the filename is entered by the user
@@ -528,7 +526,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
 
     //Start class GetSitesAsyncTask
-    public final static class GetSitesAsyncTask extends AsyncTask<String, Void, ArrayList> {
+    final static class GetSitesAsyncTask extends AsyncTask<String, Void, ArrayList> {
         private final String TAG = GetSitesAsyncTask.class.getSimpleName();
 
         /**
@@ -577,7 +575,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
 
     /* Class GetCommentsAsyncTask */
-    public static class GetCommentsAsyncTask extends AsyncTask<String, Void, ArrayList> {
+    static class GetCommentsAsyncTask extends AsyncTask<String, Void, ArrayList> {
         private final String TAG = GetCommentsAsyncTask.class.getSimpleName();
 
         /**
@@ -626,7 +624,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
 
     /* Class GetUsersAsyncTask */
-    public static class GetUsersAsyncTask extends AsyncTask<String, Void, ArrayList> {
+    static class GetUsersAsyncTask extends AsyncTask<String, Void, ArrayList> {
         private final String TAG = GetUsersAsyncTask.class.getSimpleName();
 
         /**
@@ -674,7 +672,7 @@ public class BackUpRestoreActivity extends AppCompatActivity {
 
 
     /* class DeleteDatabaseAsyncTask */
-    public static class DeleteDatabaseAsyncTask extends AsyncTask<String, Void, Boolean> {
+    static class DeleteDatabaseAsyncTask extends AsyncTask<String, Void, Boolean> {
         private final String TAG = DeleteDatabaseAsyncTask.class.getSimpleName();
 
         /**

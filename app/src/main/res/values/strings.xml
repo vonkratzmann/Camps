@@ -5,11 +5,8 @@
     <string name="summary_sites_title">Camps</string>
     <string name="site_detail_title">Camp Site</string>
     <string name="site_detail_map_title">Camp Map</string>
-    <string name="add_comment_title">Add Comment</string>
     <string name="add_edit_site_title">Editing: \u0020</string>
     <string name="backup_restore_database_title">Backup Restore Database</string>
-    <string name="query_database_title">Query Database</string>
-    <string name="ratings_title">Enter Rating</string>
 
     <!-- Collection names for Firestore database,
          these are also used for extensions of the file names in backup and restore) -->
@@ -22,13 +19,10 @@
     <string name="firebase_photos" translatable="false">photos</string>
 
     <!-- Intent Extras -->
-    <string name="intent_site_number" translatable="false">siteNumber</string>
-    <string name="intent_edit_site_number" translatable="false">editSiteNumber</string>
     <string name="intent_site_name" translatable="false">siteName</string>
     <string name="intent_sign_out" translatable="false">signout</string>
 
     <!-- Preference keys -->
-    <string name="pref_key_site_id" translatable="false">pref_key_site_id</string>
     <string name="pref_key_lat" translatable="false">pref_key_lat</string>
     <string name="pref_key_long" translatable="false">pref_key_long</string>
     <string name="pref_key_name" translatable="false">pref_key_name</string>
@@ -48,13 +42,11 @@
 
     <!-- XML site file tag names -->
     <string name="xml_site" translatable="false">site</string>
-    <string name="xml_site_site" translatable="false">site</string>
     <string name="xml_site_name" translatable="false">name</string>
     <string name="xml_site_street" translatable="false">street</string>
     <string name="xml_site_city" translatable="false">city</string>
     <string name="xml_site_postcode" translatable="false">postcode</string>
     <string name="xml_site_state" translatable="false">state</string>
-    <string name="xml_site_comment" translatable="false">comment</string>
     <string name="xml_site_facilities" translatable="false">facilities</string>
     <string name="xml_site_date_created" translatable="false">date</string>
     <string name="xml_site_latitude" translatable="false">latitude</string>
@@ -67,7 +59,6 @@
     <string name="xml_comment" translatable="false">comment</string>
     <string name="xml_comment_author" translatable="false">author</string>
     <string name="xml_comment_date_created" translatable="false">date</string>
-    <string name="xml_comment_photo" translatable="false">photo</string>
     <string name="xml_comment_siteid" translatable="false">siteid</string>
     <string name="xml_comment_text" translatable="false">text</string>
 
@@ -75,15 +66,17 @@
     <string name="xml_user" translatable="false">user</string>
     <string name="xml_user_name" translatable="false">name</string>
     <string name="xml_user_email" translatable="false">email</string>
-    <string name="xml_user_photo" translatable="false">photo</string>
     <string name="xml_user_lastused" translatable="false">lastused</string>
 
     <string name="facilitytype" translatable="false">type</string>
 
     <!-- Main layout text -->
     <string name="main_sign_in">Sign In</string>
-    <string name="main_sign_out">Sign Out</string>
     <string name="main_start_app">Start Camps</string>
+    <string name="main_user_photo">User Photo</string>
+
+    <!-- Summary Site layout text -->
+    <string name="site_thumbnail_photo">Site Photo</string>
 
     <string name="divider_bullet">•</string>
 
@@ -91,7 +84,6 @@
     <string name="site_detail_no_comments">Be the first to leave a comment!</string>
 
     <!-- Detail Site layout hints -->
-    <string name="detail_site_button_back_hint">Back to main screen</string>
     <string name="site_detail_image_pizza_hint">Site picture</string>
     <string name="site_detail_photo_hint">site photo</string>
     <string name="site_detail_comment_hint">What\'s your comment?</string>
@@ -110,24 +102,18 @@
     <string name="add_edit_site_thumbnail">Thumbnail</string>
     <string name="add_edit_site_spacer"> </string>
 
-
     <!-- Add Edit Site layout hints -->
     <string name="add_edit_site_name_hint">Enter name</string>
     <string name="add_edit_site_city_hint">Enter town/city</string>
     <string name="add_edit_site_street_hint">Enter street</string>
     <string name="add_edit_site_postcode_hint">Enter postcode</string>
     <string name="add_edit_site_state_hint">Enter state</string>
-    <string name="add_edit_comment_hint">Enter comment</string>
 
     <!-- Comment dialogue layout text -->
-    <string name="comment_textheading">Comment:</string>
-    <string name="comment_authorheading">Author:</string>
-    <string name="comment_dateheading">Date: </string>
     <string name="comment_add_comment_title">Add comment</string>
 
     <!-- Detail Site Map layout text -->
     <string name="detail_site_map_coordinates_heading">Coordinates:</string>
-    <string name="detail_site_map_show">Show Map</string>
 
     <!-- Backup Restore layout text -->
     <string name="maint_backup_database">Backup database</string>
@@ -145,29 +131,20 @@
     <string name="toilets">toilets</string>
     <string name="tvreception">tvreception</string>
     <string name="water">water</string>
-    <string name="site_image">water Site Image</string>
 
     <!-- Error and Status Messages -->
     <string name="ERROR_Address">Error: address not available"</string>
-    <string name="ERROR_Camera_image_unavailable">Error: camera image not available"</string>
     <string name="ERROR_Camera_unavailable">Error: camera unavailable"</string>
     <string name="ERROR_Comment_not_saved">Error: comment not saved</string>
-    <string name="ERROR_Contacts">Error: contacts and accounts access denied</string>
-    <string name="ERROR_Database">Error: database site not saved</string>
     <string name="ERROR_Database_sites_backup_failed">Database sites backup failed</string>
     <string name="ERROR_Database_comments_backup_failed">Database comments backup failed</string>
     <string name="ERROR_Database_users_backup_failed">Database users backup failed</string>
     <string name="ERROR_Database_no_filename">Database no filename entered</string>
-    <string name="ERROR_Database_unable_read_file">Database error reading file</string>
     <string name="ERROR_Database_unable_delete_documents">Database error deleting documents</string>
     <string name="ERROR_Database_restore_failed">Database restore failed</string>
-    <string name="ERROR_File_not_available">Error: file not available</string>
     <string name="ERROR_File_not_saved">Error: file not saved</string>
     <string name="ERROR_File_format">Error: file format incorrect</string>
     <string name="ERROR_File_error">Error: could not read or write file</string>
-    <string name="ERROR_GPS_latitude">Error: latitude incorrect format, latitude longitude zeroed</string>
-    <string name="ERROR_GPS_longitude">Error: longitude incorrect format, latitude longitude zeroed</string>
-    <string name="ERROR_GPS_map">Error: Google maps not installed</string>
     <string name="ERROR_GPS_error">Error: satellite positioning system error</string>
     <string name="ERROR_GPS_null">Error: invalid location coordinates</string>
     <string name="ERROR_GPS_coordinates">Error: coordinates invalid</string>
@@ -178,15 +155,7 @@
     <string name="ERROR_Photo_not_available">Error: photo not available</string>
     <string name="ERROR_Security_exception">Error: location security error</string>
     <string name="ERROR_Site_not_saved">Error: site not saved</string>
-    <string name="ERROR_Site_not_edited">Error: site not able to be edited</string>
-    <string name="ERROR_Site_not_updated">Error: site not updated</string>
-    <string name="ERROR_Site_not_deleted">Error: site not deleted</string>
     <string name="ERROR_Storage_external_unavailable">Error: external storage unavailable</string>
-    <string name="ERROR_Storage_permission_failure">Error: permission to access storage denied</string>
-    <string name="Comment_updated">Comment: has been updated</string>
-    <string name="Comment_saved">Comment: saved to database</string>
-    <string name="Database_backup_null">Database: nothing to backup</string>
-    <string name="Database_backup_started">Database backup started</string>
     <string name="Database_backup_success">Database: backup success</string>
     <string name="Database_backup_failed">Database: backup failed</string>
     <string name="Database_restore_started">Database restore started</string>
@@ -196,18 +165,14 @@
     <string name="Document_saved">Document written to database: </string>
     <string name="Document_not_saved">Document not written to database: </string>
     <string name="Exiting_application">Exiting Application</string>
-    <string name="Location_null">"Location: empty</string>
-    <string name="Site_deleted">Site: has been deleted</string>
     <string name="Site_saved">Site: has been saved</string>
 
     <!-- Menu items -->
-    <string name="summary_settings">Settings</string>
     <string name="summary_sign_out">Sign Out</string>
     <string name="summary_database_manage">Manage Database</string>
     <string name="detail_edit_site">Edit site</string>
 
     <string name="firebase_status_fmt">Firebase User: %s</string>
-    <string name="firebase_user_management">Firebase User Management</string>
     <string name="desc_firebase_lockup">Firebase logo and name</string>
 
     <!-- Sign in -->
@@ -223,9 +188,6 @@
 
     <string name="allow_access">You need to allow access to Storage</string>
 
-    <string name="label_google_sign_in">Firebase + Google Sign In</string>
-    <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
-
     <string name="google_status_fmt">Google User: %s</string>
     <string name="google_title_text">Google Sign In</string>
 
@@ -233,13 +195,9 @@
     <string name="Time_Stamp_Format">yyyyMMdd_HHmmssSS</string>
 
     <!-- filter strings -->
-    <string name="label_state">State</string>
-    <string name="label_sort_by">Sort By</string>
 
-    <string name="fmt_num_ratings" translatable="false">(%d)</string>
     <string name="all_sites">All sites</string>
     <string name="header_filters">Filter</string>
-    <string name="search">Search</string>
 
     <string name="sort_by_rating">Sort by Rating</string>
     <string name="sort_by_name">Sort by Name</string>

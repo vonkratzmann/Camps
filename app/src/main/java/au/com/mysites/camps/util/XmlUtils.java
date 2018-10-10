@@ -35,8 +35,6 @@ public class XmlUtils {
         mXmlformatter.xmlStartTag(mBuffer, context.getString(R.string.xml_camps));
         mBuffer.append('\n');
 
-        UtilFile mFop = new UtilFile();
-
         //get the path for the file
         mPath = Environment.getExternalStoragePublicDirectory(context.getString
                 (R.string.directory)).getAbsolutePath();

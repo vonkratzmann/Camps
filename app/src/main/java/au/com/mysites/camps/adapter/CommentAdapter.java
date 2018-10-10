@@ -47,9 +47,9 @@ public class CommentAdapter extends FirestoreAdapter<CommentAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView dateView;
-        TextView authorView;
-        TextView textView;
+        final TextView dateView;
+        final TextView authorView;
+        final TextView textView;
 
         ViewHolder(View itemView) {
             super(itemView);

@@ -26,7 +26,8 @@
             android:clickable="true"
             android:elevation="8dp"
             android:foreground="?android:attr/selectableItemBackground"
-            android:padding="12dp">
+            android:padding="12dp"
+            tools:ignore="KeyboardInaccessibleWidget">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -40,10 +41,10 @@
                     android:layout_centerVertical="true"
                     android:padding="8dp"
                     android:tint="@color/greySecondary"
-                    app:srcCompat="@drawable/ic_filter_list_white_24px"/>
+                    app:srcCompat="@drawable/ic_filter_list_white_24px"
+                    tools:ignore="ContentDescription"/>
 
                 <LinearLayout
-                    android:id="@+id/summary_text_current_search_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -80,7 +81,8 @@
                     android:layout_centerVertical="true"
                     android:padding="8dp"
                     android:tint="@color/greySecondary"
-                    app:srcCompat="@drawable/ic_close_white_24px"/>
+                    app:srcCompat="@drawable/ic_close_white_24px"
+                    tools:ignore="ContentDescription"/>
 
             </RelativeLayout>
 
@@ -119,7 +121,8 @@
 
         <ImageView
             style="@style/AppTheme.PizzaGuy"
-            android:src="@drawable/pizza_monster"/>
+            android:src="@drawable/pizza_monster"
+            tools:ignore="ContentDescription"/>
 
         <TextView
             style="@style/AppTheme.Body1"
@@ -132,7 +135,6 @@
     </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/summary_progress_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/summary_recycler_sites"

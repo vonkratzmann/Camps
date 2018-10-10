@@ -14,7 +14,6 @@ public final class Constants {
 
     // Used to set the display time for toasts
     public static final int TOASTTIMEFACILITIES = 500;
-    public static final int TOASTTIMEDATABASE = 1000;
 
     public static final long QUERYTIMEOUT = 10000L;
     public static final long ASYNCTIMEOUT = 7000L;

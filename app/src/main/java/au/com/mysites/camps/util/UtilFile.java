@@ -24,6 +24,7 @@ import au.com.mysites.camps.R;
 /**
  * Methods to read and write files
  */
+@SuppressWarnings("ALL")
 public class UtilFile {
     private final static String TAG = UtilFile.class.getSimpleName();
 
@@ -106,6 +107,7 @@ public class UtilFile {
     /**
      * Checks if external storage is available
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isExternalStorageAvailable() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "isExternalStorageAvailable()");
 
@@ -113,25 +115,13 @@ public class UtilFile {
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
-    /*
-     * Checks if external storage is available to read
-     */
-    public static boolean isExternalStorageReadable() {
-        if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "isExternalStorageReadable()");
-
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
-    }
-
     /**
      * Simple method to convert InputStream to OutputStream.
      *
      * @param in    input stream
      * @param out   output stream
-     * @throws IOException  stream error
      */
-    public static void copyStream(InputStream in, OutputStream out) throws IOException {
+    private static void copyStream(InputStream in, OutputStream out) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "copyStream()");
 
         byte[] buffer = new byte[1024];

@@ -29,7 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        android:imeOptions="actionDone"
         android:text="@string/maint_backup_database"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/list_item_text"
@@ -54,7 +53,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/backup_restore_guideline_backup"/>
+        app:layout_constraintTop_toTopOf="@+id/backup_restore_guideline_backup"
+        tools:ignore="Autofill"/>
 
     <Button
         android:id="@+id/restore"
@@ -86,7 +86,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/backup_restore_guideline_restore"/>
+        app:layout_constraintTop_toTopOf="@+id/backup_restore_guideline_restore"
+        tools:ignore="Autofill"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/backup_restore_guideline_backup"

@@ -1,6 +1,7 @@
 package au.com.mysites.camps.util;
 
-public class ToDoNotes {
+@SuppressWarnings("unused")
+class ToDoNotes {
 
 
     //todo Created 20/6/201 update database backup and restore so they handle ratings

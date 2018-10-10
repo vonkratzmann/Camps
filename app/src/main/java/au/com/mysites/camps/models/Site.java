@@ -20,6 +20,7 @@ import static au.com.mysites.camps.util.AppContextProvider.getContext;
  * Site POJO.
  */
 
+@SuppressWarnings("ALL")
 @IgnoreExtraProperties
 public class Site {
 

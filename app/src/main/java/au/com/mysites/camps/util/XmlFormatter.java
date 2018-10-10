@@ -13,9 +13,10 @@ import au.com.mysites.camps.models.User;
  * Converts data to xml format to save to a xml file
  */
 
+@SuppressWarnings("unused")
 class XmlFormatter {
     private final static String TAG = XmlFormatter.class.getSimpleName();
-    private Context context;
+    private final Context context;
 
     /**
      * Constructor
@@ -250,11 +251,11 @@ class XmlFormatter {
     /**
      * Takes a comment and formats into XML
      *
-     * @param buffer    Buffer to add site XML description of the site
-     * @param comment   Comment to be converted to XML format
+     * @param buffer  Buffer to add site XML description of the site
+     * @param comment Comment to be converted to XML format
      */
 
-    public void formatComment( StringBuilder buffer, Comment comment) {
+    void formatComment(StringBuilder buffer, Comment comment) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "formatComment()");
 
         // Start with a comment start tag and add to the buffer
@@ -286,11 +287,11 @@ class XmlFormatter {
     /**
      * Takes a comment and formats into XML
      *
-     * @param buffer    Buffer to add site XML description of the site
+     * @param buffer Buffer to add site XML description of the site
      * @param user   user to be converted to XML format
      */
 
-    public void formatUser( StringBuilder buffer, User user) {
+    void formatUser(StringBuilder buffer, User user) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "formatuser()");
 
         // Start with a user start tag and add to the buffer
@@ -330,7 +331,7 @@ class XmlFormatter {
     private void xmlElement(StringBuilder buffer, String name, String text) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlElement()");
 
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG,name + " " + text);
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, name + " " + text);
 
         xmlStartTag(buffer, name);
         buffer.append(text);
@@ -348,7 +349,7 @@ class XmlFormatter {
     void xmlStartTag(StringBuilder buffer, String name) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlStartTag()");
 
-        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG,name);
+        if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, name);
         buffer.append('<').append(name).append(">");
     }
 
@@ -422,6 +423,7 @@ class XmlFormatter {
      * @param attributeName name of attribute tag
      */
 
+    @SuppressWarnings("unused")
     private void xmlAttributeName(StringBuilder buffer, String attributeName) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL_XMLFORMATTER) Log.d(TAG, "xmlAttributeName()");
 

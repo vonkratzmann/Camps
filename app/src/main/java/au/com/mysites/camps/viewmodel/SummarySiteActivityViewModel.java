@@ -17,10 +17,12 @@ public class SummarySiteActivityViewModel extends ViewModel {
         mFilters = Filters.getDefault();
     }
 
+    @SuppressWarnings("unused")
     public boolean getIsSigningIn() {
         return mIsSigningIn;
     }
 
+    @SuppressWarnings("unused")
     public void setIsSigningIn(boolean mIsSigningIn) {
         this.mIsSigningIn = mIsSigningIn;
     }

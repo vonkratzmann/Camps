@@ -163,7 +163,7 @@ public class UtilDatabase {
                 localFile.createNewFile();
                 // Get the file from Firebase storage, display it, and store locally
                 UtilDatabase.getFileOffFirebaseStorageAndDisplay(context, fileName, localFile,
-                        storageDir, imageView);
+                        imageView);
                 if (Debug.DEBUG_UTIL) {
                     Log.d(TAG, "get file from Firebase storage: " + fileName);
                     Log.d(TAG, "get file from Firebase store in: " + localFile.toString());
@@ -178,17 +178,15 @@ public class UtilDatabase {
     /**
      * Gets a file from storage, store on the local storage directory,
      * and displays it on the imageView.
-     *
-     * @param context    of calling routine
+     *  @param context    of calling routine
      * @param fileName   name of file in firebase storage containing image
      * @param localFile  store image retrieved from firebase storage in this file
-     * @param storageDir directory where the local file is to be stored
      * @param imageView  view where image is to be displayed
      */
     private static void
     getFileOffFirebaseStorageAndDisplay(final Context context, final String fileName,
                                         final File localFile,
-                                        final File storageDir, final ImageView imageView) {
+                                        final ImageView imageView) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "getFileFirebaseOffStorageDisplay()");
         // Get a reference to the remote file
         try {

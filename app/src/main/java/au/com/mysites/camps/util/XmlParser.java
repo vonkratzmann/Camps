@@ -22,10 +22,10 @@ import au.com.mysites.camps.models.User;
  * Methods to parse the data from site XML file and store the result in the list of sites
  */
 
-public class XmlParser {
+class XmlParser {
 
     private final static String TAG = XmlParser.class.getSimpleName();
-    private Context context;
+    private final Context context;
 
     /**
      * Constructor
@@ -58,6 +58,7 @@ public class XmlParser {
                 }
                 //skip over the initial <camps> tag
                 if (xpp.getName().equals(context.getString(R.string.xml_camps))) {
+                    //noinspection UnnecessaryContinue
                     continue;
                 } else if (xpp.getName().equals(context.getString(R.string.xml_site))) {
                     addSite(xpp, mySites);
@@ -95,6 +96,7 @@ public class XmlParser {
                 }
                 //skip over the initial <camps> tag
                 if (xpp.getName().equals(context.getString(R.string.xml_camps))) {
+                    //noinspection UnnecessaryContinue
                     continue;
                 } else if (xpp.getName().equals(context.getString(R.string.xml_comment))) {
                     addComment(xpp, myComments);
@@ -133,6 +135,7 @@ public class XmlParser {
                 }
                 //skip over the initial <camps> tag
                 if (xpp.getName().equals(context.getString(R.string.xml_camps))) {
+                    //noinspection UnnecessaryContinue
                     continue;
                 } else if (xpp.getName().equals(context.getString(R.string.xml_user))) {
                     addUser(xpp, myUsers);
@@ -702,6 +705,7 @@ public class XmlParser {
      *
      * @param id string reference id of message to be displayed
      */
+    @SuppressWarnings("SameParameterValue")
     private void exiting(final int id) {
         if (Debug.DEBUG_METHOD_ENTRY_UTIL) Log.d(TAG, "exiting()");
 

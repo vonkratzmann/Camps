@@ -20,18 +20,20 @@ import java.util.Locale;
 import au.com.mysites.camps.util.Constants;
 import au.com.mysites.camps.util.Debug;
 
+@SuppressWarnings("unused")
 public class FetchAddressService extends IntentService {
     public FetchAddressService() {
         super("FetchAddressIntentService");
     }
 
     private final static String TAG = FetchAddressService.class.getSimpleName();
-    protected ResultReceiver mReceiver;
+    private ResultReceiver mReceiver;
 
     private String street;
     private String locality;
     private String state;
     private String postCode;
+    @SuppressWarnings("unused")
     private String country;
 
     /**

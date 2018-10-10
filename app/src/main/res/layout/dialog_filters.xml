@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:id="@+id/filters_form"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
@@ -23,13 +23,14 @@
             style="@style/AppTheme.FilterIcon"
             android:layout_centerVertical="true"
             android:tint="@color/greySecondary"
-            app:srcCompat="@drawable/caravan" />
+            app:srcCompat="@drawable/caravan"
+            tools:ignore="ContentDescription"/>
 
         <Spinner
             android:id="@+id/filter_spinner_state"
             style="@style/AppTheme.FilterSpinner"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/filter_icon_state"
+            android:layout_toEndOf="@+id/filter_icon_state"
             android:entries="@array/states" />
 
     </RelativeLayout>
@@ -44,13 +45,14 @@
             style="@style/AppTheme.FilterIcon"
             android:layout_centerVertical="true"
             android:tint="@color/greySecondary"
-            app:srcCompat="@drawable/ic_sort_white_24px" />
+            app:srcCompat="@drawable/ic_sort_white_24px"
+            tools:ignore="ContentDescription"/>
 
         <Spinner
             android:id="@+id/filter_spinner_sort"
             style="@style/AppTheme.FilterSpinner"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/filter_icon_sort"
+            android:layout_toEndOf="@+id/filter_icon_sort"
             android:entries="@array/sort_by" />
     </RelativeLayout>
 
@@ -73,7 +75,8 @@
             android:layout_weight="1"
             android:text="@string/cancel"
             android:textColor="@color/greySecondary"
-            android:theme="@style/ThemeOverlay.FilterButton" />
+            android:theme="@style/ThemeOverlay.FilterButton"
+            tools:ignore="ButtonOrder"/>
 
         <Button
             android:id="@+id/filter_button_search"

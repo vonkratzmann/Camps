@@ -32,8 +32,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
-import java.io.File;
-
 import au.com.mysites.camps.R;
 import au.com.mysites.camps.models.User;
 import au.com.mysites.camps.util.Constants;
@@ -44,8 +42,7 @@ import au.com.mysites.camps.util.UtilGeneral;
 /**
  * Firebase Authentication using a Google ID Token.
  * Whenever there is a new sign in, saves the users profile information in the database under
- * the collection users with the user email string as the document name. The user
- * profile picture is save to firebase storage with the name of the photo stored in the database.
+ * the collection users with the user email string as the document name.
  * <p>
  * Each time the application is started the last used date for the user is updated
  * in the Firestore database.
@@ -70,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements
     private ImageView mProfilePhotoImageView;
 
     private ProgressDialog mProgressDialog;
-
-    private File mFile;
 
     private FirebaseFirestore mFirestore;
 

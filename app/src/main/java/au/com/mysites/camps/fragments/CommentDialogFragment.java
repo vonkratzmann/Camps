@@ -24,9 +24,7 @@ import au.com.mysites.camps.util.Debug;
 public class CommentDialogFragment extends DialogFragment {
     public static final String TAG = CommentDialogFragment.class.getSimpleName();
 
-    EditText mCommentText;
-    Button mSiteFormSubmit;
-    Button mSiteFormCancel;
+    private EditText mCommentText;
 
     /**
      * The activity that creates an instance of this dialog fragment must
@@ -57,11 +55,11 @@ public class CommentDialogFragment extends DialogFragment {
      * The submit button generates the comment using the entered data 
      * and sends it to the calling activity using the comment listener
       */
-    void initViews() {
+    private void initViews() {
         if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "initViews()");
 
         mCommentText = getDialog().findViewById(R.id.comment_form_text);
-        mSiteFormSubmit = getDialog().findViewById(R.id.comment_button_submit);
+        Button mSiteFormSubmit = getDialog().findViewById(R.id.comment_button_submit);
         mSiteFormSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { 
@@ -81,7 +79,7 @@ public class CommentDialogFragment extends DialogFragment {
             }
         });
         //cancel comment entry
-        mSiteFormCancel = getDialog().findViewById(R.id.comment_button_cancel);
+        Button mSiteFormCancel = getDialog().findViewById(R.id.comment_button_cancel);
         mSiteFormCancel.setOnClickListener(new View.OnClickListener()
         {
             @Override

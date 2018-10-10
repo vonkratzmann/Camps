@@ -54,15 +54,12 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
     private static final String TAG = SummarySitesActivity.class.getSimpleName();
 
-    Toolbar mToolbar;
-    TextView mCurrentSearchView;
-    TextView mCurrentSortByView;
-    RecyclerView mSitesRecyclerView;
-    ViewGroup mEmptyView;
-    CardView mFilterBar;
-    ImageView mFilterClear;
+    private TextView mCurrentSearchView;
+    private TextView mCurrentSortByView;
+    private RecyclerView mSitesRecyclerView;
+    private ViewGroup mEmptyView;
 
-    public FirebaseFirestore mFirestore;
+    private FirebaseFirestore mFirestore;
     private Query mQuery;
 
     private FilterDialogFragment mFilterDialog;
@@ -107,10 +104,10 @@ public class SummarySitesActivity extends AppCompatActivity implements
         });
     }
 
-    void initViews() {
+    private void initViews() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initViews()");
 
-        mToolbar = findViewById(R.id.site_summary_toolbar);
+        @SuppressWarnings("unused") Toolbar mToolbar = findViewById(R.id.site_summary_toolbar);
         // Used to display the search criteria in the search container at the top of the UI
         mCurrentSearchView = findViewById(R.id.summary_text_current_search);
 
@@ -121,10 +118,10 @@ public class SummarySitesActivity extends AppCompatActivity implements
 
         mEmptyView = findViewById(R.id.summary_view_empty);
 
-        mFilterBar = findViewById(R.id.summary_filter_bar);
+        CardView mFilterBar = findViewById(R.id.summary_filter_bar);
         mFilterBar.setOnClickListener(this);
 
-        mFilterClear = findViewById(R.id.summary_button_clear_filter);
+        ImageView mFilterClear = findViewById(R.id.summary_button_clear_filter);
         mFilterClear.setOnClickListener(this);
     }
 

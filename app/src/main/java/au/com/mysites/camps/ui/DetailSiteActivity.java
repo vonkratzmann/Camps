@@ -82,7 +82,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     private TextView mLatitudeView;
     private TextView mLongitudeView;
 
-    RatingBar mRatingIndicator;
+    private RatingBar mRatingIndicator;
     private RecyclerView mCommentsRecyclerView;
 
     private CommentDialogFragment mCommentDialog;
@@ -158,7 +158,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
     /**
      * Initialise the views and attach listeners
      */
-    void initViews() {
+    private void initViews() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "initViews()");
 
         mPhotoView = findViewById(R.id.site_detail_photo);
@@ -386,7 +386,7 @@ public class DetailSiteActivity extends AppCompatActivity implements View.OnClic
      * @param site    site to store data
      * @param context context of calling activity
      */
-    public void displayFacilities(Site site, final Context context) {
+    private void displayFacilities(Site site, final Context context) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "displayFacilities");
 
         //get the view and set up new linear layout

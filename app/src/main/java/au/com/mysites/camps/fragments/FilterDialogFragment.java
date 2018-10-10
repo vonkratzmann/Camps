@@ -42,11 +42,8 @@ public class FilterDialogFragment extends DialogFragment {
 
     private View mRootView;
 
-    Spinner mStateSpinner;
-    Spinner mSortSpinner;
-
-    Button mButtonCancel;
-    Button mButtonSearch;
+    private Spinner mStateSpinner;
+    private Spinner mSortSpinner;
 
     private FilterListener mFilterListener;
 
@@ -64,13 +61,13 @@ public class FilterDialogFragment extends DialogFragment {
         return mRootView;
     }
 
-    void initViews() {
+    private void initViews() {
         if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "initViews()");
 
         mStateSpinner = mRootView.findViewById(R.id.filter_spinner_state);
         mSortSpinner = mRootView.findViewById(R.id.filter_spinner_sort);
 
-        mButtonCancel = mRootView.findViewById(R.id.filter_button_cancel);
+        Button mButtonCancel = mRootView.findViewById(R.id.filter_button_cancel);
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +75,7 @@ public class FilterDialogFragment extends DialogFragment {
             }
         });
 
-        mButtonSearch = mRootView.findViewById(R.id.filter_button_search);
+        Button mButtonSearch = mRootView.findViewById(R.id.filter_button_search);
         mButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +160,7 @@ public class FilterDialogFragment extends DialogFragment {
         }
     }
 
-    public Filters getFilters() {
+    private Filters getFilters() {
         if (Debug.DEBUG_METHOD_ENTRY_FRAGMENT) Log.d(TAG, "getFilters()");
 
         Filters filters = new Filters();

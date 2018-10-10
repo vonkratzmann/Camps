@@ -18,7 +18,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
     private static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
 
-    private Drawable mDivider;
+    private final Drawable mDivider;
     private int mOrientation;
 
     public DividerItemDecoration(Context context, int orientation) {
@@ -28,7 +28,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         setOrientation(orientation);
     }
 
-    public void setOrientation(int orientation) {
+    private void setOrientation(int orientation) {
         if (orientation != HORIZONTAL_LIST && orientation != VERTICAL_LIST) {
             throw new IllegalArgumentException("invalid orientation");
         }

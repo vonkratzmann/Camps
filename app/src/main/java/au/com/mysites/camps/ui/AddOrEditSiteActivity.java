@@ -125,11 +125,10 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
     private AddressResultReceiver mResultReceiver;
     private Location mLocationAddress;          // Used to get location to look up address
 
-    FirebaseFirestore mFirestore;
     private DocumentReference mSiteDocumentRef;
     private ListenerRegistration mSiteRegistration;
 
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
     @Override
     @CallSuper
@@ -158,7 +157,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
             updateTitle(siteId);
 
             // Initialize Firestore
-            mFirestore = FirebaseFirestore.getInstance();
+            FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
             // Get reference to this site in the database
             assert siteId != null;
@@ -343,7 +342,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      *
      * @return true if entered data is valid
      */
-    public boolean saveSite() {
+    private boolean saveSite() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSite()");
 
         if (!mSiteHasChanged) {
@@ -380,7 +379,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      *
      * @return Boolean  true if data successfully stored in the Site instance
      */
-    boolean saveSiteCheckNameEntered() {
+    private boolean saveSiteCheckNameEntered() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "saveSiteCheckNameEntered()");
 
         boolean state = true;
@@ -776,7 +775,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * Displays all facilities on the UI, indicating if the facility is present or not
      * at the site.
      */
-    public void displayStatusOfAllFacilities() {
+    private void displayStatusOfAllFacilities() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "displayStatusOfAllFacilities()");
 
         displayFacility(dumppointImageView, dumppointpresentImageView, R.string.dumppoint,
@@ -870,7 +869,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      * for success and failure. If success calls {@link #getLocationDisplayCoordinates(Location)}
      * which displays longitude and latitude. If fails displays a message to the user.
      */
-    void getLocationFusedProviderClient() {
+    private void getLocationFusedProviderClient() {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY)
             Log.d(TAG, "getLocationFusedProviderClient()");
 
@@ -963,7 +962,7 @@ public class AddOrEditSiteActivity extends AppCompatActivity implements
      *
      * @param address address to be displayed
      */
-    void getAddressDisplay(String address) {
+    private void getAddressDisplay(String address) {
         if (Debug.DEBUG_METHOD_ENTRY_ACTIVITY) Log.d(TAG, "getAddressDisplay()");
 
         if (UtilGeneral.stringEmpty(address))

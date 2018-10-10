@@ -29,7 +29,7 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
         void onSiteSelected(DocumentSnapshot site);
     }
 
-    private OnSiteSelectedListener mListener;
+    private final OnSiteSelectedListener mListener;
 
     protected SiteAdapter(Query query, OnSiteSelectedListener listener) {
         super(query);
@@ -55,14 +55,13 @@ public class SiteAdapter extends FirestoreAdapter<SiteAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
         private final static String TAG = ViewHolder.class.getSimpleName();
 
-        ImageView thumbnailView;        // sitePhoto is not displayed on this layout, only thumbnail
-        TextView nameView;
-        RatingBar ratingBar;
-        TextView numRatingsView;
-        TextView streetView;
-        TextView cityView;
-        TextView postcodeView;
-        TextView stateView;
+        final ImageView thumbnailView;        // sitePhoto is not displayed on this layout, only thumbnail
+        final TextView nameView;
+        final RatingBar ratingBar;
+        final TextView streetView;
+        final TextView cityView;
+        final TextView postcodeView;
+        final TextView stateView;
 
         ViewHolder(View itemView) {
             super(itemView);

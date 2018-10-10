@@ -1,5 +1,9 @@
 package au.com.mysites.camps.models;
 
+import android.util.Log;
+
+import au.com.mysites.camps.util.Debug;
+
 /**
  * Tracks users that use the system.
  * <p>
@@ -20,6 +24,7 @@ public class User {
     public User(String displayName,
                 String email,
                 String lastUsed) {
+        if (Debug.DEBUG_METHOD_ENTRY_MODEL) Log.d(TAG, "User()");
         this.name = displayName;
         this.email = email;
         this.lastUsed = lastUsed;

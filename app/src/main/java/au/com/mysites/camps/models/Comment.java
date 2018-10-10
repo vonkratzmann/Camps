@@ -57,7 +57,7 @@ public class Comment {
      * @param date   date created for the comment
      * @param author author of comment
      */
-    public Comment(String text, String date, String format, String author, String siteId) {
+    public Comment(String text, String date, String author, String siteId) {
 
         this.text = text;
         this.createdDate = date;
